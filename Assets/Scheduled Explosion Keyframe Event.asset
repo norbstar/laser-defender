@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec2c581116522ea499ed873aecca68f0, type: 3}
+  m_Name: Scheduled Explosion Keyframe Event
+  m_EditorClassIdentifier: 
+  keyframe: 0.5
+  propertyDictionary: {fileID: 0}
+  prefab: {fileID: 6884796582507641571, guid: eda3a6581b2247a4ea73cfd822bd2c3f, type: 3}
+  position: {x: 4.5, y: 8, z: 0}
+  rotation: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  destroyAfter: 0.5

@@ -1,0 +1,80 @@
+Collider2D[] colliders = Physics2D.OverlapCircleAll(VectorFunctions.ToVector2(transform.position), range);
+
+if ((colliders != null) && (colliders.Length > 0))
+{
+    foreach (Collider2D collider in colliders)
+    {
+        GameObject trigger = collider.gameObject;
+    }
+}
+
+RaycastHit2D[] hits;
+hits = Physics2D.CircleCastAll(transform.position, 0.1f, up, Mathf.Infinity/*, layerMask*/);
+
+RaycastHit2D[] hits;
+hits = Physics2D.RaycastAll(transform.position, up, Mathf.Infinity/*, layerMask*/);
+
+foreach (RaycastHit2D hit in hits)
+{
+    Debug.Log($"Hit: {hit.collider.gameObject.name}");
+}
+
+
+if (configuration.GetType().IsInstanceOfType(typeof(AbstractConfiguration))) { }
+
+if (typeof(AbstractConfiguration).IsAssignableFrom(configuration.GetType()))
+
+using System;
+
+using UnityEngine;
+
+public class GameObjectMonoBehaviour : MonoBehaviour
+{
+    private string guid;
+
+    protected string Signature {
+        get
+        {
+            guid = (guid == null) ? Guid.NewGuid().ToString() : guid;
+            return guid;
+        }
+    }
+}
+
+using System;
+
+using UnityEngine;
+
+public class Signature
+{
+    public Signature(GameObject gameObject)
+    {
+        Id = Guid.NewGuid().ToString();
+        GameObject = gameObject;
+    }
+
+    public string Id { get; }
+
+    public GameObject GameObject { get; }
+}
+
+Checklist for targetting
+
+Detect objects in range (infinite) that are contained on a list of viable targets (i.e. tag Projectile / Player)
+
+foreach viable target
+    if (Projectile) Calculate the projectory of the object (if a Projectile) to ensure it poses a viable threat
+    Ensure that the viable targets can be fired upon
+
+Speed is relative.
+Duration is absolute.
+
+
+
+
+Background Layer
+Sub Gameplay Layer
+Surface Gameplay Layer
+Foreground Layer
+
+3539a9d410

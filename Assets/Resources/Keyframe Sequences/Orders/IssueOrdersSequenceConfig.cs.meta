@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 013ed3dae2b4dae43a3f098f285a0e7b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - issueOrdersSequencePrefab: {fileID: 6884145747261538024, guid: d620995023c4f1f4a927adfa14abf1c5,
+      type: 3}
+  - cockpitAsset: {fileID: 21300000, guid: ace4100b61982a246893bfca12100d9f, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

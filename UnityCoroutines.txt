@@ -1,0 +1,44 @@
+Coroutines
+
+a) from Start
+
+IEnumerator Start()
+{
+    ConfigGUIStyle();
+
+    do
+    {
+        yield return StartCoroutine(SpawnAllWaves());
+    }
+    while (true);
+}
+
+IEnumerator SpawnAllWaves(float delay = 0.0f)
+{
+    waveConfig = waveConfigs[waveIndex];
+    yield return StartCoroutine(SpawnAllEmemiesInWave(waveConfig));
+
+    waveIndex = ((waveIndex + 1) <= (waveConfigs.Length - 1)) ? waveIndex + 1 : 0;
+    yield return new WaitForSeconds(delay);
+}
+
+b) from local method
+
+// Start is called before the first frame update
+void Start()
+{
+    ConfigGUIStyle();
+    StartCoroutine(SpawnAllWaves());
+}
+
+IEnumerator SpawnAllWaves(float delay = 0.0f)
+{
+    while (true)
+    {
+        waveConfig = waveConfigs[waveIndex];
+        yield return StartCoroutine(SpawnAllEmemiesInWave(waveConfig));
+
+        waveIndex = ((waveIndex + 1) <= (waveConfigs.Length - 1)) ? waveIndex + 1 : 0;
+        yield return new WaitForSeconds(delay);
+    }
+}

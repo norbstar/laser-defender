@@ -1,0 +1,103 @@
+Pitch Scale
+2.0, 1.25, 0.5
+
+Volume Scale
+0.25, 0.625, 1.0
+
+Equations
+d = t - o
+where d is Direction
+where t is Target (right most value on Scale)
+where o is Origin (left most value on Scale)
+
+Pitch Calculation
+0.5 - 2.0 = -1.5
+
+Volume Calculation
+1.0 - 0.25 = 0.75
+
+r = o + (f * d)
+where v is result
+where o is Origin (left most value on Scale)
+where f is fraction on the Scale
+where d is distance
+
+Pitch Calculation
+2.0 + (0.5 * -1.5) = 1.25 (half way between 2.0 and 0.5)
+
+Volume Calculation
+0.25 + (0.5 * 0.75) = 0.625 (half way between 0.25 and 1.0)
+
+Here f (fraction on the Scale) is actually Thrust which falls within the range 0 to 1
+
+Sustain Health
+Inflict Damage
+
+/var abstractConfigurationType = typeof(AbstractConfiguration);
+        //if (abstractConfigurationType.GetType().IsInstanceOfType(configuration.GetType()))
+        
+        //if (configuration is Configuration)
+
+    //public void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    foreach (ContactPoint2D contact in collision.contacts)
+    //    {
+    //        Debug.DrawRay(contact.point, contact.normal, Color.white);
+    //    }
+    //}
+
+
+
+
+
+    //public override float GetDamageMetric(GameObjectBehaviour gameObjectBehaviour, Collider2D collider)
+    //{
+    //    Vector2? contactPoint = null;
+
+    //    if (collider != null)
+    //    {
+    //        ContactPoint2D[] contacts = { };
+    //        collider.GetContacts(contacts);
+    //        contactPoint = contacts[0].point;
+    //    }
+
+    //    float damageMetric = propagationWaveController.GetDamageMetric(gameObjectBehaviour.GetTransform(), contactPoint);
+    //    SetDamageMetric(damageMetric);
+
+    //    return damageMetric;
+    //}
+
+                //MunitionController.Mode mode = (MunitionController.Mode) Enum.GetValues(typeof(MunitionController.Mode)).GetValue(UnityEngine.Random.Range(0, Enum.GetValues(typeof(MunitionController.Mode)).Length));
+                //MunitionController.Type type = (MunitionController.Type) Enum.GetValues(typeof(MunitionController.Type)).GetValue(UnityEngine.Random.Range(0, Enum.GetValues(typeof(MunitionController.Type)).Length));
+                //FireMunitions(mode, type);
+
+
+for (int itr = 0; itr < startAtCount; ++itr)
+        {
+            textUIManager.SetText((startAtCount - itr).ToString());
+            yield return new WaitForSeconds(activationIntervalDelay);
+        }
+
+
+        #if (false)
+    private int labelIndex;
+
+    public override void SetGUIAttributes(GUIStyle guiStyle)
+    {
+        labelIndex = 0;
+
+        //PublishLabel($"Body Health: {bodyHealthAttributes.GetHealthMetric()}");
+
+        //foreach (KeyValuePair<string, HealthAttributes> keyPair in turretHealthAttributes)
+        //{
+        //    PublishLabel($"{keyPair.Key} Health: {keyPair.Value.GetHealthMetric()}");
+        //}
+    }
+
+    private void PublishLabel(string text = null)
+    {
+        text = (text != null) ? text : "";
+        GUI.Label(new Rect(20, 25 + (25 * labelIndex + 1), 200, 40), text, guiStyle);
+        ++labelIndex;
+    }
+#endif

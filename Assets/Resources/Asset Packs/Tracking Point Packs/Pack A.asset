@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be4861e321a6dc40b9c52f07ca80cb4, type: 3}
+  m_Name: Pack A
+  m_EditorClassIdentifier: 
+  groups:
+  - id: 0
+    trackingPoints:
+    - prefab: {fileID: 4945582458708604424, guid: e76b201928bbf014b8e86d63ff115dca,
+        type: 3}
+      position: {x: 4.5, y: -2.5, z: 0}
+      scale: {x: 3, y: 3, z: 1}
+      rotation: {x: 0, y: 0, z: 0}
+  - id: 1
+    trackingPoints:
+    - prefab: {fileID: 4610471420696543363, guid: 84481034700e3444fad5f024b90c4367,
+        type: 3}
+      position: {x: 5.5, y: 8, z: 0}
+      scale: {x: 1.75, y: 1.75, z: 1}
+      rotation: {x: 0, y: 0, z: 45}
+    - prefab: {fileID: 6032942669092245066, guid: ff936de9079f0f4479ad324da5422365,
+        type: 3}
+      position: {x: 1.5, y: 9, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+      rotation: {x: 0, y: 0, z: 45}

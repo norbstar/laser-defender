@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - UI Menu Item
+  - Boundary
+  - Enemy
+  - Turret
+  - Boss Actuator
+  - Wave Actuator
+  - Wave Sequence Actuator
+  - Actuator
+  - Prefab Keyframe
+  - Keyframe
+  - Mine
+  - Projectile
+  - Munition
+  - Input Keyframe
+  - Buddy
+  - Issue Orders Sequence Actuator
+  - Active Menu Item
+  - Passive Menu Item
+  - Asteroid
+  - Asteroid Layer Boundary
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Canvas Surface
+  - Background Surface
+  - Gameplay Subsurface
+  - Gameplay Surface
+  - Foreground Surface
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Canvas Surface
+    uniqueID: 2072440143
+    locked: 0
+  - name: Background Surface
+    uniqueID: 611988933
+    locked: 0
+  - name: Gameplay Subsurface
+    uniqueID: 3196335491
+    locked: 0
+  - name: Gameplay Surface
+    uniqueID: 1887258257
+    locked: 0
+  - name: Foreground Surface
+    uniqueID: 793475475
+    locked: 0

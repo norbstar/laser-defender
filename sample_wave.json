@@ -1,0 +1,29 @@
+{"waves":[{"id":1,"spawnCount":3,"logs":[{"timestamp":"0.0000","delta":"","message":"Start"},{"timestamp":"7.1135","delta":"1.0156","message":"End"}]},{"id":2,"spawnCount":5,"logs":[]}]}
+
+{
+    "waves":[
+       {
+          "id":1,
+          "spawnCount":3,
+          "logs":[
+             {
+                "timestamp":"0.0000",
+                "delta":"",
+                "message":"Start"
+             },
+             {
+                "timestamp":"7.1135",
+                "delta":"1.0156",
+                "message":"End"
+             }
+          ]
+       },
+       {
+          "id":2,
+          "spawnCount":5,
+          "logs":[
+ 
+          ]
+       }
+    ]
+ }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Single Engine Guns Buddy Improved Override
+  m_Controller: {fileID: 9100000, guid: 036fd667805ce364c854da2eaa155313, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 2d47a851292559f40afbadb75064f901, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 14477546bd0667c42b836fa5f91b915a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5e1c0ac691627dc40ad4f03088ca2670, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 231483742db66ea4a8750138821b73b1, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: b5adaf0ac3094bf4891a2a397abc74d1, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b81ce698d674a2c40ad3e730242d4715, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 20b7ba66513845e4095aa315d872d14a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f68b5046466a91b48a4a5f44e2918875, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: df813a04398eddb46bf25925c212161d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: ba0155884794f8e45a104eb35f6c1dd8, type: 2}

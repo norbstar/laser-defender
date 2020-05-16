@@ -1,0 +1,35 @@
+Completes Classes
+
+HealthAttributes
+DamageAttributes
+
+ExplosionController
+
+PropagationWaveController
+PropagationWaveDamageAttributes
+
+MineController
+ProximityMineController
+
+#if (false)
+    private int labelIndex;
+
+    public override void SetGUIAttributes(GUIStyle guiStyle)
+    {
+        labelIndex = 0;
+
+        //PublishLabel($"Body Health: {bodyHealthAttributes.GetHealthMetric()}");
+
+        //foreach (KeyValuePair<string, HealthAttributes> keyPair in turretHealthAttributes)
+        //{
+        //    PublishLabel($"{keyPair.Key} Health: {keyPair.Value.GetHealthMetric()}");
+        //}
+    }
+
+    private void PublishLabel(string text = null)
+    {
+        text = (text != null) ? text : "";
+        GUI.Label(new Rect(20, 25 + (25 * labelIndex + 1), 200, 40), text, guiStyle);
+        ++labelIndex;
+    }
+#endif

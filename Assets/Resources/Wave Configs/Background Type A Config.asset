@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52dceb1ef558ea744a62c72f0ef112a2, type: 3}
+  m_Name: Background Type A Config
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 1652328545621943801, guid: f56af37b9fbe2114f81f39b11830bfc1,
+    type: 3}
+  enemyPrefabLeft: {fileID: 0}
+  enemyPrefabFarLeft: {fileID: 0}
+  enemyPrefabRight: {fileID: 0}
+  enemyPrefabFarRight: {fileID: 0}
+  pathPrefab: {fileID: 6145983170664038704, guid: 3d72e8564fada46498aab3a9119cd69c,
+    type: 3}
+  animationClip: {fileID: 0}
+  timeBetweenSpawns: 0.75
+  waveSize: 4
+  timeBetweenWaves: 1
+  speed: 0.25
+  invertX: 0
+  invertY: 0
+  enableBuffeting: 0

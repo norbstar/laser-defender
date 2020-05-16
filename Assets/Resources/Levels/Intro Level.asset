@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f66dbf76f721a2746a80b06a986d3489, type: 3}
+  m_Name: Intro Level
+  m_EditorClassIdentifier: 
+  backdropAssetPack: {fileID: 11400000, guid: f19f7905961d1ee449bf5827a28cddc2, type: 2}
+  backgroundLayerPack: {fileID: 0}
+  gameplayLayerPack: {fileID: 11400000, guid: 9bfcf62836d7b5c48943fe337c614b97, type: 2}
+  foregroundLayerPack: {fileID: 11400000, guid: 56e04de507f14b44e9b4d7c9b193d1a2,
+    type: 2}
+  waveConfigPack: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: 8b18aa783bb8af24dba5626fa2906fe9, type: 3}
+  expositionPack: {fileID: 11400000, guid: 8d2297717871ec640aaa4e795df7d699, type: 2}

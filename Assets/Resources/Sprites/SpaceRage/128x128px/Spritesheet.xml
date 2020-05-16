@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:d9e46fca4498c4ea66ea86109434a4de:3850c0669920fb9442f28c52b0f1b342:a1929a8f749b136480c5b68af6e01cdb$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="Spritesheet.png" width="947" height="1062">
+    <sprite n="Bullets/Laser_Large.png" x="106" y="57" w="18" h="54" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Laser_Medium.png" x="309" y="1" w="15" h="44" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Laser_Small.png" x="180" y="1" w="13" h="37" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Minigun_Large.png" x="126" y="57" w="18" h="54" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Minigun_Medium.png" x="284" y="1" w="23" h="42" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Minigun_Small.png" x="165" y="1" w="13" h="34" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Plasma_Large.png" x="779" y="57" w="19" h="62" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Plasma_Medium.png" x="807" y="1" w="17" h="52" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Plasma_Small.png" x="686" y="1" w="15" h="47" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Proton_Large.png" x="79" y="1" w="26" h="25" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Proton_Medium.png" x="58" y="1" w="19" h="20" pX="0.5" pY="0.5"/>
+    <sprite n="Bullets/Proton_Small.png" x="1" y="1" w="13" h="13" pX="0.5" pY="0.5"/>
+    <sprite n="Enemy_01/Enemy01_Green_Frame_1.png" x="818" y="222" w="128" h="107" pX="0.5" pY="0.5" oX="0" oY="10" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Green_Frame_2.png" x="570" y="222" w="122" h="106" pX="0.5" pY="0.5" oX="2" oY="11" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Green_Frame_3.png" x="328" y="222" w="116" h="105" pX="0.5" pY="0.5" oX="6" oY="12" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Red_Frame_1.png" x="1" y="331" w="128" h="107" pX="0.5" pY="0.5" oX="0" oY="10" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Red_Frame_2.png" x="694" y="222" w="122" h="106" pX="0.5" pY="0.5" oX="2" oY="11" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Red_Frame_3.png" x="92" y="222" w="116" h="105" pX="0.5" pY="0.5" oX="6" oY="12" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Shadow_Frame_1.png" x="1" y="552" w="128" h="109" pX="0.5" pY="0.5" oX="0" oY="9" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Shadow_Frame_2.png" x="480" y="441" w="125" h="108" pX="0.5" pY="0.5" oX="1" oY="10" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Shadow_Frame_3.png" x="521" y="331" w="119" h="107" pX="0.5" pY="0.5" oX="5" oY="11" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Teal_Frame_1.png" x="391" y="331" w="128" h="107" pX="0.5" pY="0.5" oX="0" oY="10" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Teal_Frame_2.png" x="446" y="222" w="122" h="106" pX="0.5" pY="0.5" oX="2" oY="11" oW="128" oH="128"/>
+    <sprite n="Enemy_01/Enemy01_Teal_Frame_3.png" x="210" y="222" w="116" h="105" pX="0.5" pY="0.5" oX="6" oY="12" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02_Shadow_Frame_1.png" x="240" y="552" w="128" h="111" pX="0.5" pY="0.5" oX="0" oY="16" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02_Shadow_Frame_2.png" x="370" y="552" w="124" h="111" pX="0.5" pY="0.5" oX="4" oY="16" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02_Shadow_Frame_3.png" x="131" y="552" w="107" h="111" pX="0.5" pY="0.5" oX="12" oY="16" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02_Teal_Frame_1.png" x="642" y="331" w="128" h="107" pX="0.5" pY="0.5" oX="0" oY="18" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02_Teal_Frame_2.png" x="1" y="441" w="122" h="108" pX="0.5" pY="0.5" oX="5" oY="17" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02_Teal_Frame_3.png" x="772" y="331" w="105" h="108" pX="0.5" pY="0.5" oX="13" oY="18" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02Green_Frame_1.png" x="261" y="331" w="128" h="107" pX="0.5" pY="0.5" oX="0" oY="18" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02Green_Frame_2.png" x="232" y="441" w="122" h="108" pX="0.5" pY="0.5" oX="5" oY="17" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02Green_Frame_3.png" x="607" y="441" w="105" h="108" pX="0.5" pY="0.5" oX="13" oY="18" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02Red_Frame_1.png" x="131" y="331" w="128" h="107" pX="0.5" pY="0.5" oX="0" oY="18" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02Red_Frame_2.png" x="356" y="441" w="122" h="108" pX="0.5" pY="0.5" oX="5" oY="17" oW="128" oH="128"/>
+    <sprite n="Enemy_02/Enemy02Red_Frame_3.png" x="125" y="441" w="105" h="108" pX="0.5" pY="0.5" oX="13" oY="18" oW="128" oH="128"/>
+    <sprite n="Exhaust/Exhaust_Frame_01.png" x="194" y="57" w="45" h="57" pX="0.5" pY="0.5"/>
+    <sprite n="Exhaust/Exhaust_Frame_02.png" x="731" y="57" w="46" h="60" pX="0.5" pY="0.5"/>
+    <sprite n="Exhaust/Exhaust_Frame_03.png" x="826" y="1" w="31" h="52" pX="0.5" pY="0.5"/>
+    <sprite n="Exhaust/Exhaust_Frame_04.png" x="1" y="57" w="47" h="54" pX="0.5" pY="0.5"/>
+    <sprite n="Exhaust/Exhaust_Frame_05.png" x="146" y="57" w="46" h="55" pX="0.5" pY="0.5"/>
+    <sprite n="Exhaust/Exhaust_Frame_06.png" x="703" y="1" w="30" h="47" pX="0.5" pY="0.5"/>
+    <sprite n="Explosions/Explosion01_Frame_01.png" x="16" y="1" w="19" h="19" pX="0.5" pY="0.5" oX="53" oY="57" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion01_Frame_02.png" x="136" y="1" w="27" h="27" pX="0.5" pY="0.5" oX="49" oY="53" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion01_Frame_03.png" x="239" y="1" w="43" h="42" pX="0.5" pY="0.5" oX="42" oY="44" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion01_Frame_04.png" x="859" y="1" w="55" h="54" pX="0.5" pY="0.5" oX="36" oY="37" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion01_Frame_05.png" x="388" y="121" w="69" h="69" pX="0.5" pY="0.5" oX="29" oY="29" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion01_Frame_06.png" x="726" y="121" w="80" h="83" pX="0.5" pY="0.5" oX="23" oY="23" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion01_Frame_07.png" x="808" y="121" w="90" h="99" pX="0.5" pY="0.5" oX="19" oY="18" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion01_Frame_08.png" x="814" y="441" w="98" h="109" pX="0.5" pY="0.5" oX="15" oY="13" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion01_Frame_09.png" x="112" y="675" w="109" h="121" pX="0.5" pY="0.5" oX="10" oY="7" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_01.png" x="37" y="1" w="19" h="19" pX="0.5" pY="0.5" oX="52" oY="57" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_02.png" x="107" y="1" w="27" h="27" pX="0.5" pY="0.5" oX="48" oY="53" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_03.png" x="195" y="1" w="42" h="42" pX="0.5" pY="0.5" oX="42" oY="44" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_04.png" x="50" y="57" w="54" h="54" pX="0.5" pY="0.5" oX="36" oY="37" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_05.png" x="317" y="121" w="69" h="69" pX="0.5" pY="0.5" oX="28" oY="29" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_06.png" x="643" y="121" w="81" h="83" pX="0.5" pY="0.5" oX="22" oY="23" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_07.png" x="1" y="222" w="89" h="99" pX="0.5" pY="0.5" oX="19" oY="18" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_08.png" x="714" y="441" w="98" h="109" pX="0.5" pY="0.5" oX="14" oY="13" oW="129" oH="128"/>
+    <sprite n="Explosions/Explosion02_Frame_09.png" x="1" y="675" w="109" h="121" pX="0.5" pY="0.5" oX="9" oY="7" oW="129" oH="128"/>
+    <sprite n="GunTurret/GunTurret_ExampleGun.png" x="459" y="121" w="17" h="77" pX="0.5" pY="0.5"/>
+    <sprite n="GunTurret/GunTurret_Green.png" x="238" y="121" w="77" h="66" pX="0.5" pY="0.5"/>
+    <sprite n="GunTurret/GunTurret_Orange.png" x="80" y="121" w="77" h="66" pX="0.5" pY="0.5"/>
+    <sprite n="GunTurret/GunTurret_Red.png" x="1" y="121" w="77" h="66" pX="0.5" pY="0.5"/>
+    <sprite n="GunTurret/GunTurret_Teal.png" x="159" y="121" w="77" h="66" pX="0.5" pY="0.5"/>
+    <sprite n="GunTurret/GunTurretMount.png" x="802" y="675" w="126" h="126" pX="0.5" pY="0.5"/>
+    <sprite n="Mine_01/Cover_Blue.png" x="326" y="1" w="70" h="46" pX="0.5" pY="0.5" oX="27" oY="44" oW="129" oH="128"/>
+    <sprite n="Mine_01/Cover_Green.png" x="470" y="1" w="70" h="46" pX="0.5" pY="0.5" oX="27" oY="44" oW="129" oH="128"/>
+    <sprite n="Mine_01/Cover_Red.png" x="398" y="1" w="70" h="46" pX="0.5" pY="0.5" oX="27" oY="44" oW="129" oH="128"/>
+    <sprite n="Mine_01/Rotor.png" x="559" y="121" w="82" h="81" pX="0.5" pY="0.5" oX="21" oY="26" oW="129" oH="128"/>
+    <sprite n="Mine_02/Cover_Blue.png" x="735" y="1" w="70" h="47" pX="0.5" pY="0.5" oX="27" oY="43" oW="129" oH="128"/>
+    <sprite n="Mine_02/Cover_Green.png" x="614" y="1" w="70" h="47" pX="0.5" pY="0.5" oX="27" oY="43" oW="129" oH="128"/>
+    <sprite n="Mine_02/Cover_Red.png" x="542" y="1" w="70" h="47" pX="0.5" pY="0.5" oX="27" oY="43" oW="129" oH="128"/>
+    <sprite n="Mine_02/Rotor.png" x="478" y="121" w="79" h="79" pX="0.5" pY="0.5" oX="22" oY="26" oW="129" oH="128"/>
+    <sprite n="PlatformTiles/Platform_01.png" x="1" y="803" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_02.png" x="720" y="803" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_03.png" x="261" y="933" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_04.png" x="651" y="933" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_Corner.png" x="521" y="933" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_Corner_NorthEast.png" x="781" y="933" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_Corner_NorthWest.png" x="391" y="933" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_Corner_SouthEast.png" x="131" y="933" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_Corner_SouthWest.png" x="1" y="933" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/Platform_Edge.png" x="131" y="803" w="67" h="128" pX="0.5" pY="0.5" oX="0" oY="0" oW="128" oH="128"/>
+    <sprite n="PlatformTiles/PlatformCorner_NorthEast.png" x="460" y="803" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/PlatformCorner_NorthWest.png" x="330" y="803" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/PlatformCorner_SouthEast.png" x="590" y="803" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="PlatformTiles/PlatformCorner_SouthWest.png" x="200" y="803" w="128" h="128" pX="0.5" pY="0.5"/>
+    <sprite n="Player/PlayerBlue_Frame_01.png" x="223" y="675" w="116" h="122" pX="0.5" pY="0.5" oX="6" oY="2" oW="128" oH="128"/>
+    <sprite n="Player/PlayerBlue_Frame_02.png" x="819" y="552" w="113" h="121" pX="0.5" pY="0.5" oX="14" oY="1" oW="128" oH="128"/>
+    <sprite n="Player/PlayerBlue_Frame_03.png" x="600" y="552" w="102" h="120" pX="0.5" pY="0.5" oX="22" oY="1" oW="128" oH="128"/>
+    <sprite n="Player/PlayerRed_Frame_01.png" x="341" y="675" w="116" h="122" pX="0.5" pY="0.5" oX="6" oY="2" oW="128" oH="128"/>
+    <sprite n="Player/PlayerRed_Frame_02.png" x="704" y="552" w="113" h="121" pX="0.5" pY="0.5" oX="14" oY="1" oW="128" oH="128"/>
+    <sprite n="Player/PlayerRed_Frame_03.png" x="496" y="552" w="102" h="120" pX="0.5" pY="0.5" oX="22" oY="1" oW="128" oH="128"/>
+    <sprite n="Player/PlayerShadow_Frame_01.png" x="682" y="675" w="118" h="124" pX="0.5" pY="0.5" oX="5" oY="1" oW="128" oH="128"/>
+    <sprite n="Player/PlayerShadow_Frame_02.png" x="565" y="675" w="115" h="123" pX="0.5" pY="0.5" oX="13" oY="0" oW="128" oH="128"/>
+    <sprite n="Player/PlayerShadow_Frame_03.png" x="459" y="675" w="104" h="122" pX="0.5" pY="0.5" oX="21" oY="0" oW="128" oH="128"/>
+    <sprite n="Powerups/Powerup_Ammo.png" x="241" y="57" w="96" h="58" pX="0.5" pY="0.5"/>
+    <sprite n="Powerups/Powerup_Energy.png" x="535" y="57" w="96" h="59" pX="0.5" pY="0.5"/>
+    <sprite n="Powerups/Powerup_Health.png" x="633" y="57" w="96" h="59" pX="0.5" pY="0.5"/>
+    <sprite n="Powerups/Powerup_Rockets.png" x="437" y="57" w="96" h="58" pX="0.5" pY="0.5"/>
+    <sprite n="Powerups/Powerup_Shadow.png" x="800" y="57" w="97" h="62" pX="0.5" pY="0.5"/>
+    <sprite n="Powerups/Powerup_Shields.png" x="339" y="57" w="96" h="58" pX="0.5" pY="0.5"/>
+</TextureAtlas>
