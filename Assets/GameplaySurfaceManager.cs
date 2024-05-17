@@ -91,11 +91,11 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
             gameplaySubsurfacePrefab.layer = (int) RenderLayer.SUB_SURFACE;
             gameplaySubsurfacePrefab.name = "Gameplay Subsurface Layer";
 
-            var surfaceLayerManager = gameplaySubsurfacePrefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
-            surfaceLayerManager.Actuate(new SurfaceLayerManager.Configuration
-            {
-                ZDepth = 0.1f
-            });
+            //var surfaceLayerManager = gameplaySubsurfacePrefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
+            //surfaceLayerManager.Actuate(new SurfaceLayerManager.Configuration
+            //{
+            //    ZDepth = 0.1f
+            //});
 
             TrackingPointMapPack.Map subSurfaceTrackingPointMap = GetTrackingPointMap(subSurfaceTrackingPointMapPack, mainCanvasId);
 
@@ -112,8 +112,6 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
                         Vector3 position = dependencies.Main.transform.position;
                         subSurfaceMap = Instantiate(trackingPointMapPrefab, position, Quaternion.identity) as GameObject;
                         subSurfaceMap.transform.parent = dependencies.Main.transform;
-
-                        ScaleObjects(subSurfaceMap.transform);
                     }
                 }
             }
@@ -126,8 +124,8 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
             gameplaySurfacePrefab.layer = (int) RenderLayer.SURFACE;
             gameplaySurfacePrefab.name = "Gameplay Surface Layer";
 
-            var surfaceLayerManager = gameplaySubsurfacePrefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
-            surfaceLayerManager.Actuate();
+            //var surfaceLayerManager = gameplaySubsurfacePrefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
+            //surfaceLayerManager.Actuate();
 
             TrackingPointMapPack.Map surfaceTrackingPointMap = GetTrackingPointMap(surfaceTrackingPointMapPack, mainCanvasId);
 
@@ -144,8 +142,6 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
                         Vector3 position = dependencies.Main.transform.position;
                         surfaceMap = Instantiate(trackingPointMapPrefab, position, Quaternion.identity) as GameObject;
                         surfaceMap.transform.parent = dependencies.Main.transform;
-
-                        ScaleObjects(surfaceMap.transform);
                     }
                 }
             }
@@ -189,9 +185,6 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
                     subSurfaceMap = Instantiate(trackingPointMapPrefab, position, Quaternion.identity) as GameObject;
                     subSurfaceMap.transform.parent = dependencies.Buffer.transform;
 
-                    ScaleObjects(subSurfaceMap.transform);
-                    //AssignLayerToGroup(subSurfaceMap.transform, Layer.SUB_SURFACE);
-
                     subSurfaceActuators = CaptureActuators(subSurfaceMap);
                 }
             }
@@ -213,16 +206,13 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
                     surfaceMap = Instantiate(trackingPointMapPrefab, position, Quaternion.identity) as GameObject;
                     surfaceMap.transform.parent = dependencies.Buffer.transform;
 
-                    ScaleObjects(surfaceMap.transform);
-                    //AssignLayerToGroup(surfaceMap.transform, Layer.SURFACE);
-
                     surfaceActuators = CaptureActuators(surfaceMap);
                 }
             }
         }
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenHeightInUnits, transform.position.z);
-        float journeyLength = InGameManager.ScreenHeightInUnits;
+        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
+        float journeyLength = InGameManager.ScreenRatio.y;
         float accumulativeDeltaTime = 0.0f;
         bool complete = false;
 
@@ -234,7 +224,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
 
             StartCoroutine(ActionActuators());
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1.0f;
 
             if (complete)
             {
@@ -251,8 +241,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
     {
         foreach (Transform childTransform in transform)
         {
-            childTransform.gameObject.layer = (int)layer;
-
+            childTransform.gameObject.layer = (int) layer;
             AssignLayerToGroup(childTransform, layer);
         }
     }
@@ -272,14 +261,12 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
 
     private class DuplicateKeyComparer<T> : IComparer<T> where T : IComparable
     {
-        #region IComparer<T> Members
-
+#region IComparer<T> Members
         public int Compare(T keyA, T keyB)
         {
             return (keyA.CompareTo(keyB) == 0) ? 1 : keyA.CompareTo(keyB);
         }
-
-        #endregion
+#endregion
     }
 
     private SortedList<float, GameObject> CaptureActuators(GameObject map)
@@ -339,8 +326,8 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
                     continue;
                 }
 
-                float target = InGameManager.ScreenHeightInUnits - key;
-                float delta = ((InGameManager.ScreenHeightInUnits + this.gameObject.transform.position.y) - target);
+                float target = InGameManager.ScreenRatio.y - key;
+                float delta = InGameManager.ScreenRatio.y + this.gameObject.transform.position.y - target;
 
                 if (delta <= 0)
                 {
@@ -348,7 +335,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
 
                     var actuation = gameObject.GetComponent<IActuate>() as IActuate;
 
-                    if ((actuation != null) && (gameObject.activeSelf))
+                    if (actuation != null && gameObject.activeSelf)
                     {
                         actuation.Actuate(new GameplayConfiguration
                         {
@@ -390,66 +377,6 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         return multiplier;
     }
 
-    private void ScaleObject(GameObject gameObject, int activeLayer)
-    {
-        var iModify = gameObject.GetComponent<IModify>() as IModify;
-
-        if (iModify != null)
-        {
-            float multiplier = GetMultiplier(gameObject, activeLayer);
-
-            iModify.SetScale(multiplier);
-        }
-    }
-
-    private void ScaleObject(GameObject gameObject, int activeLayer, RenderLayer layer, float fractionComplete)
-    {
-        var iModify = gameObject.GetComponent<IModify>() as IModify;
-
-        if (iModify != null)
-        {
-            float originMultiplier = GetMultiplier(gameObject, activeLayer);
-            float targetMultiplier = GetMultiplier(gameObject, (int) layer);
-            float multiplier = Mathf.Lerp(originMultiplier, targetMultiplier, fractionComplete);
-
-            iModify.SetScale(multiplier);
-        }
-    }
-
-    private void ScaleObjects(Transform transform)
-    {
-        GameObject gameObject = transform.gameObject;
-
-        if (gameObject.GetComponentsInChildren<IModify>() is IModify[] iModifys)
-        {
-            foreach (IModify iModify in iModifys)
-            {
-                GameObject childGameObject = iModify.GetDefaults().Transform.gameObject;
-
-                if (childGameObject.activeSelf)
-                {
-                    //ScaleObject(childGameObject, activeLayer);
-                }
-            }
-        }
-    }
-
-    public void ScaleObjects(int activeLayer, RenderLayer targetLayer, float fractionComplete)
-    {
-        if (gameObject.GetComponentsInChildren<IModify>() is IModify[] iModifys)
-        {
-            foreach (IModify iModify in iModifys)
-            {
-                GameObject childGameObject = iModify.GetDefaults().Transform.gameObject;
-
-                if (childGameObject.activeSelf)
-                {
-                    ScaleObject(childGameObject, activeLayer, targetLayer, fractionComplete);
-                }
-            }
-        }
-    }
-
     private void OnComplete()
     {
         Dependencies dependencies;
@@ -485,7 +412,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         for (int itr = 0; itr < dependencies.Buffer.transform.childCount; ++itr)
         {
             Transform childTransform = dependencies.Buffer.transform.GetChild(0);
-            childTransform.position += new Vector3(0.0f, -InGameManager.ScreenHeightInUnits, 0.0f);
+            childTransform.position += new Vector3(0.0f, -InGameManager.ScreenRatio.y, 0.0f);
             childTransform.parent = dependencies.Main.transform;
         }
     }
@@ -493,7 +420,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
     void OnDrawGizmos()
     {
         Gizmos.color = idTagColor;
-        DrawPanelGuide(transform.position, 2.0f);
+        DrawPanelGuide(transform.position);
 
         if ((surfaceActuators != null) && (surfaceActuators.Count > 0))
         {
@@ -504,11 +431,11 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
 
                 if (gameObject != null)
                 {
-                    float target = InGameManager.ScreenHeightInUnits - key;
-                    float delta = ((InGameManager.ScreenHeightInUnits + this.gameObject.transform.position.y) - target);
+                    float target = InGameManager.ScreenRatio.y - key;
+                    float delta = InGameManager.ScreenRatio.y + this.gameObject.transform.position.y - target;
 
                     Gizmos.color = Color.white;
-                    Gizmos.DrawLine(new Vector3(gameObject.transform.position.x - 0.0625f, InGameManager.ScreenHeightInUnits + delta, gameObject.transform.position.z), new Vector3(gameObject.transform.position.x + 0.0625f, InGameManager.ScreenHeightInUnits + delta, gameObject.transform.position.z));
+                    Gizmos.DrawLine(new Vector3(gameObject.transform.position.x - 0.0625f, InGameManager.ScreenRatio.y + delta, gameObject.transform.position.z), new Vector3(gameObject.transform.position.x + 0.0625f, InGameManager.ScreenRatio.y + delta, gameObject.transform.position.z));
 
                     Gizmos.color = idTagColor;
                     Gizmos.DrawWireCube(gameObject.transform.position, new Vector2(0.125f, 0.125f));
@@ -525,11 +452,11 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
 
                 if (gameObject != null)
                 {
-                    float target = InGameManager.ScreenHeightInUnits - key;
-                    float delta = ((InGameManager.ScreenHeightInUnits + this.gameObject.transform.position.y) - target);
+                    float target = InGameManager.ScreenRatio.y - key;
+                    float delta = InGameManager.ScreenRatio.y + this.gameObject.transform.position.y - target;
 
                     Gizmos.color = Color.white;                    
-                    Gizmos.DrawLine(new Vector3(gameObject.transform.position.x - 0.0625f, InGameManager.ScreenHeightInUnits + delta, gameObject.transform.position.z), new Vector3(gameObject.transform.position.x + 0.0625f, InGameManager.ScreenHeightInUnits + delta, gameObject.transform.position.z));
+                    Gizmos.DrawLine(new Vector3(gameObject.transform.position.x - 0.0625f, InGameManager.ScreenRatio.y + delta, gameObject.transform.position.z), new Vector3(gameObject.transform.position.x + 0.0625f, InGameManager.ScreenRatio.y + delta, gameObject.transform.position.z));
 
                     Gizmos.color = idTagColor;
                     Gizmos.DrawWireCube(gameObject.transform.position, new Vector2(0.125f, 0.125f));

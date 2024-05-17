@@ -6,8 +6,5 @@ public class WaveConfigPack : ScriptableObject
     [Header("Configuration")]
     [SerializeField] WaveConfig[] pack;
 
-    public WaveConfig[] GetPack()
-    {
-        return pack;
-    }
+    public WaveConfig[] Pack { get => pack; }
 }

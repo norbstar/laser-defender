@@ -25,7 +25,7 @@ public class ProjectileController : MonoBehaviour, IActuate
     private IEnumerator LaunchProjectileCoroutine()
     {
         Vector3 originPosition = transform.position;
-        Vector3 targetPosition = new Vector3(transform.position.x, InGameManagerOld.ScreenHeightInUnits, transform.position.z);
+        Vector3 targetPosition = new Vector3(transform.position.x, InGameManagerOld.ScreenRatio.y, transform.position.z);
         float startTime = Time.time;
         bool complete = false;
 

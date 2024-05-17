@@ -26,7 +26,7 @@ public class LayerPack : ScriptableObject
     }
 
     [Serializable]
-    public class Pack
+    public class LayerAsset
     {
         [Header("Asteroid Layer")]
         public bool enableAsteroidLayer = false;
@@ -40,10 +40,7 @@ public class LayerPack : ScriptableObject
         public TrackingPointMapPack trackingPointMapPack;
     }
 
-    [SerializeField] Pack pack;
+    [SerializeField] LayerAsset pack;
 
-    public Pack GetPack()
-    {
-        return pack;
-    }
+    public LayerAsset Pack { get => pack; }
 }

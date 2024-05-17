@@ -55,7 +55,7 @@ public class EnemyWaveManager : GUIMonoBehaviour
 
     public void AssignWaveConfigPack(WaveConfigPack waveConfigPack)
     {
-        waveConfigs = waveConfigPack.GetPack();
+        waveConfigs = waveConfigPack.Pack;
     }
 
     //public void LaunchWaves()

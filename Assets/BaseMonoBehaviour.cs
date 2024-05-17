@@ -18,29 +18,25 @@ public abstract class BaseMonoBehaviour : MonoBehaviour
         {
             Transform = transform
         };
+
+        signature = Guid.NewGuid().ToString();
     }
 
     public string Signature
     {
         get
         {
-            guid = (guid == null) ? Guid.NewGuid().ToString() : guid;
+            //guid = (guid == null) ? Guid.NewGuid().ToString() : guid;
+            guid = (guid == null) ? signature : guid;
             return guid;
         }
     }
 
-    public Transform GetTransform()
-    {
-        return transform;
-    }
+    public Transform GetTransform() => transform;
 
-    public Defaults GetDefaults()
-    {
-        return defaults;
-    }
+    public Defaults GetDefaults() => defaults;
 
-    public void OverrideSignature(string guid)
-    {
-        this.guid = guid;
-    }
+    public void OverrideSignature(string guid) => this.guid = guid;
+
+    [SerializeField] string signature;
 }

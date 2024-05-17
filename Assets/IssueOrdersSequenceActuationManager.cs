@@ -35,7 +35,7 @@ public class IssueOrdersSequenceActuationManager : MonoBehaviour, IActuate
     {
         issueOrdersSequencePrefab = issueOrdersSequenceConfig.GetIssueOrdersSequencePrefab();
 
-        GameObject cockpitPanel = generalResources.GetCockpitPanel();
+        var cockpitPanel = generalResources.CockpitManager.gameObject;
         cockpitUIManager = cockpitPanel.GetComponent<CockpitUIManager>() as CockpitUIManager;
         cockpitViewUIManager = cockpitUIManager.GetCockpitViewUIManager();
     }
@@ -52,7 +52,7 @@ public class IssueOrdersSequenceActuationManager : MonoBehaviour, IActuate
         });
 
         GameObject prefab = Instantiate(issueOrdersSequencePrefab) as GameObject;
-        prefab.transform.parent = generalResources.GetActuatorFolder().transform;
+        prefab.transform.parent = generalResources.ActuatorFolder.transform;
 
         issueOrdersSequenceManager = prefab.GetComponent<IssueOrdersSequenceManager>() as IssueOrdersSequenceManager;
         issueOrdersSequenceManager.RegisterDelegates(new IssueOrdersSequenceManager.Delegates

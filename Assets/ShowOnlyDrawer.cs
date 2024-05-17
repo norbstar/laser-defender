@@ -1,32 +1,34 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ShowOnlyAttribute))]
-public class ShowOnlyDrawer : PropertyDrawer
+namespace UnityEditor
 {
-    public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
+    [CustomPropertyDrawer(typeof(ShowOnlyAttribute))]
+    public class ShowOnlyDrawer : PropertyDrawer
     {
-        string valueStr;
-
-        switch (prop.propertyType)
+        public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
         {
-            case SerializedPropertyType.Integer:
-                valueStr = prop.intValue.ToString();
-                break;
-            case SerializedPropertyType.Boolean:
-                valueStr = prop.boolValue.ToString();
-                break;
-            case SerializedPropertyType.Float:
-                valueStr = prop.floatValue.ToString("0.00");
-                break;
-            case SerializedPropertyType.String:
-                valueStr = prop.stringValue;
-                break;
-            default:
-                valueStr = "Unsupported Format!";
-                break;
-        }
+            string valueStr;
 
-        EditorGUI.LabelField(position, label.text, valueStr);
+            switch (prop.propertyType)
+            {
+                case SerializedPropertyType.Integer:
+                    valueStr = prop.intValue.ToString();
+                    break;
+                case SerializedPropertyType.Boolean:
+                    valueStr = prop.boolValue.ToString();
+                    break;
+                case SerializedPropertyType.Float:
+                    valueStr = prop.floatValue.ToString("0.00");
+                    break;
+                case SerializedPropertyType.String:
+                    valueStr = prop.stringValue;
+                    break;
+                default:
+                    valueStr = "Unsupported Format!";
+                    break;
+            }
+
+            EditorGUI.LabelField(position, label.text, valueStr);
+        }
     }
 }

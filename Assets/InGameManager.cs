@@ -1,52 +1,46 @@
 ﻿using System.Collections;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using static BaseMonoBehaviour;
 
+[RequireComponent(typeof(GeneralResources))]
 public class InGameManager : MonoBehaviour, ISetup
 {
-    public static float ScreenWidthInUnits = 9.0f;
-    public static float ScreenHeightInUnits = 16.0f;
-
-    //[Header("Surfaces")]
-    //[SerializeField] GameObject canvas;
-    //[SerializeField] GameObject background;
-    //[SerializeField] GameObject gameplay;
-    //[SerializeField] GameObject foreground;
+    public static Vector2 ScreenRatio = new Vector2(9f, 16f);
 
     [Header("Levels")]
     [SerializeField] LevelPack[] levelPacks;
-    [SerializeField] float endOfLevelDelay = 2.0f;
+    [SerializeField] float endOfLevelDelay = 2f;
 
     public class LevelConfig
     {
         public TextPack ExpositionPack { get; set; }
-        public SpriteAssetPack CanvasAssetPack { get; set; }
-        public SurfacePack BackgroundPack { get; set; }
-        public GameplaySurfacePack GameplayPack { get; set; }
-        public SurfacePack ForegroundPack { get; set; }
+        public SpriteAssetPack SpritePack { get; set; }
+        public SurfacePack BackgroundSurfacePack { get; set; }
+        public SurfacePack GameplaySurfacePack { get; set; }
+        public SurfacePack ForegroundSurfacePack { get; set; }
         public WaveConfigPack WaveConfigPack { get; set; }
         public AudioClip AudioClip { get; set; }
     }
 
     private GeneralResources generalResources;
+    private ScoreUIManager scoreUIManager;
+    private LivesUIManager livesUIManager;
+    private CountdownUIManager countdownUIManager;
+    private ExpositionUIManager expositionUIManager;
+    private LevelCompleteUIManager levelCompleteUIManager;
+    private CockpitUIManager cockpitManager;
+
     private DynamicPlayerController playerController;
     private AudioSource audioSource;
-    private CountdownUIManager countdownUIManager;
-    private LevelCompleteUIManager levelCompleteUIManager;
-    private LivesUIManager livesUIManager;
-    private ScoreUIManager scoreUIManager;
     private CanvasSurfaceManager canvasSurfaceManager;
-    private BackgroundSurfaceManager backgroundSurfaceManager;
-    private GameplaySurfaceManager gameplaySurfaceManager;
-    private ForegroundSurfaceManager foregroundSurfaceManager;
+    private TrackingSurfaceManager backgroundSurfaceManager;
+    private TrackingSurfaceManager gameplaySurfaceManager;
+    private TrackingSurfaceManager foregroundSurfaceManager;
     private EnemyWaveManager enemyWaveManager;
     private LevelPack levelPack;
     private LevelConfig levelConfig;
     private int levelIndex;
     private bool paused;
-    private RenderLayer activeLayer;
 
     void Awake()
     {
@@ -55,17 +49,52 @@ public class InGameManager : MonoBehaviour, ISetup
         Cursor.visible = false;
         levelIndex = 0;
         paused = false;
-        activeLayer = RenderLayer.SURFACE;
 
         SetupHelper.SetSetupManager(this);
+    }
+
+    private void ResolveComponents()
+    {
+        generalResources = GetComponent<GeneralResources>();
+        scoreUIManager = generalResources.ScoreManager;
+        livesUIManager = generalResources.LivesManager;
+        countdownUIManager = generalResources.CountdownManager;
+        expositionUIManager = generalResources.ExpositionManager;
+        levelCompleteUIManager = generalResources.LevelCompleteManager;
+        cockpitManager = generalResources.CockpitManager;
+
+        playerController = FindObjectOfType<DynamicPlayerController>();
+        audioSource = Camera.main.gameObject.GetComponent<AudioSource>();
+        canvasSurfaceManager = FindObjectOfType<CanvasSurfaceManager>();
+        backgroundSurfaceManager = FindObjectOfType<TrackingSurfaceManager>();
+        gameplaySurfaceManager = FindObjectOfType<TrackingSurfaceManager>();
+        foregroundSurfaceManager = FindObjectOfType<TrackingSurfaceManager>();
+        enemyWaveManager = FindObjectOfType<EnemyWaveManager>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        PrepareInitLevelPack();
+        RegisterDelegates();
+        ScheduleLevel();
+    }
+
+    private void PrepareInitLevelPack()
+    {
         levelPack = ResolveLevel(levelIndex);
         levelConfig = ResolveLevelConfiguration(levelPack);
-        ScheduleLevel();
+    }
+
+    private void RegisterDelegates()
+    {
+        playerController.RegisterDelegates(new DynamicPlayerController.Delegates
+        {
+            OnShipEngagedDelegate = OnShipEngaged,
+            OnShipDisengagedDelegate = OnShipDisengaged
+        });
+
+        enemyWaveManager?.RegisterDelegate(OnScoreAchieved);
     }
 
     // Update is called once per frame
@@ -73,7 +102,7 @@ public class InGameManager : MonoBehaviour, ISetup
     {
         if (Input.GetKeyDown(KeyCode.Pause))
         {
-            Time.timeScale = (paused) ? 1 : 0;
+            Time.timeScale = paused ? 1 : 0;
             paused = !paused;
         }
 
@@ -81,33 +110,6 @@ public class InGameManager : MonoBehaviour, ISetup
         {
             Application.Quit();
         }
-    }
-
-    private void ResolveComponents()
-    {
-        generalResources = FindObjectOfType<GeneralResources>();
-        playerController = FindObjectOfType<DynamicPlayerController>();
-        playerController.RegisterDelegates(new DynamicPlayerController.Delegates
-        {
-            OnShipEngagedDelegate = OnShipEngaged,
-            OnShipDisengagedDelegate = OnShipDisengaged,
-            //OnShipLayerChangedDelegate = OnShipLayerChanged
-            OnRequisitionLayerChangeDelegate = OnRequisitionLayerChange
-        });
-
-        audioSource = Camera.main.gameObject.GetComponent<AudioSource>() as AudioSource;
-        countdownUIManager = FindObjectOfType<CountdownUIManager>() as CountdownUIManager;
-        levelCompleteUIManager = FindObjectOfType<LevelCompleteUIManager>() as LevelCompleteUIManager;
-        livesUIManager = FindObjectOfType<LivesUIManager>() as LivesUIManager;
-        scoreUIManager = FindObjectOfType<ScoreUIManager>() as ScoreUIManager;
-
-        canvasSurfaceManager = FindObjectOfType<CanvasSurfaceManager>() as CanvasSurfaceManager;
-        backgroundSurfaceManager = FindObjectOfType<BackgroundSurfaceManager>() as BackgroundSurfaceManager;
-        gameplaySurfaceManager = FindObjectOfType<GameplaySurfaceManager>() as GameplaySurfaceManager;
-        foregroundSurfaceManager = FindObjectOfType<ForegroundSurfaceManager>() as ForegroundSurfaceManager;
-
-        enemyWaveManager = FindObjectOfType<EnemyWaveManager>();
-        enemyWaveManager?.RegisterDelegate(OnScoreAchieved);
     }
 
     private LevelPack ResolveLevel(int levelIndex)
@@ -122,46 +124,27 @@ public class InGameManager : MonoBehaviour, ISetup
         return levelPack;
     }
 
-    private bool HasNextLevel()
-    {
-        return (levelIndex + 1 < levelPacks.Length);
-    }
-
-    private LevelPack ResolveNextLevel()
-    {
-        if (HasNextLevel())
-        {
-            ++levelIndex;
-        }
-        else
-        {
-            levelIndex = 0;
-        }
-
-        return ResolveLevel(levelIndex);
-    }
-
     private LevelConfig ResolveLevelConfiguration(LevelPack levelPack)
     {
         return new LevelConfig
         {
-            CanvasAssetPack = levelPack.GetCanvasAssetPack(),
-            BackgroundPack = levelPack.GetBackgroundPack(),
-            GameplayPack = levelPack.GetGameplayPack(),
-            ForegroundPack = levelPack.GetForegroundPack(),
-            WaveConfigPack = levelPack.GetWaveConfigPack(),
-            AudioClip = levelPack.GetAudioClip(),
-            ExpositionPack = levelPack.GetExpositionPack()
+            SpritePack = levelPack.SpritePack,
+            BackgroundSurfacePack = levelPack.BackgroundPack,
+            GameplaySurfacePack = levelPack.GameplayPack,
+            ForegroundSurfacePack = levelPack.ForegroundPack,
+            WaveConfigPack = levelPack.WaveConfigPack,
+            AudioClip = levelPack.AudioClip,
+            ExpositionPack = levelPack.ExpositionPack
         };
     }
 
     private void ScheduleLevel()
     {
         ResetScore();
-        AssignCanvas(levelConfig.CanvasAssetPack);
-        AssignBackground(levelConfig.BackgroundPack);
-        AssignGameplay(levelConfig.GameplayPack);
-        AssignForeground(levelConfig.ForegroundPack);
+        AssignCanvas(levelConfig.SpritePack);
+        AssignBackground(levelConfig.BackgroundSurfacePack);
+        AssignGameplay(levelConfig.GameplaySurfacePack);
+        AssignForeground(levelConfig.ForegroundSurfacePack);
         AssignAudioSource(levelConfig.AudioClip);
         EngageShip();
     }
@@ -181,18 +164,18 @@ public class InGameManager : MonoBehaviour, ISetup
     {
         if (surfacePack != null)
         {
-            backgroundSurfaceManager.Actuate(new BackgroundSurfaceManager.Configuration
+            backgroundSurfaceManager.Actuate(new TrackingSurfaceManager.Configuration
             {
                 SurfacePack = surfacePack
             });
         }
     }
 
-    private void AssignGameplay(GameplaySurfacePack surfacePack)
+    private void AssignGameplay(SurfacePack surfacePack)
     {
         if (surfacePack != null)
         {
-            gameplaySurfaceManager.Actuate(new GameplaySurfaceManager.Configuration
+            gameplaySurfaceManager.Actuate(new TrackingSurfaceManager.Configuration
             {
                 SurfacePack = surfacePack
             });
@@ -203,7 +186,7 @@ public class InGameManager : MonoBehaviour, ISetup
     {
         if (surfacePack != null)
         {
-            foregroundSurfaceManager.Actuate(new ForegroundSurfaceManager.Configuration
+            foregroundSurfaceManager.Actuate(new TrackingSurfaceManager.Configuration
             {
                 SurfacePack = surfacePack
             });
@@ -218,10 +201,7 @@ public class InGameManager : MonoBehaviour, ISetup
         PlayAudio();
     }
 
-    public void OnShipEngaged()
-    {
-        StartCountdown();
-    }
+    public void OnShipEngaged() => StartCountdown();
 
     private void EngageShip() => playerController.EngageShip();
 
@@ -234,9 +214,12 @@ public class InGameManager : MonoBehaviour, ISetup
     public void OnCountdownComplete()
     {
         EnablePlayerControls();
-        ApplyWaveConfiguration(levelConfig.WaveConfigPack);
 
-        var expositionUIManager = generalResources.GetExpositionPanel().GetComponent<ExpositionUIManager>() as ExpositionUIManager;
+        if (levelConfig.WaveConfigPack != null)
+        {
+            ApplyWaveConfiguration(levelConfig.WaveConfigPack);
+        }
+
         expositionUIManager.RegisterDelegate(OnExpositionComplete);
         expositionUIManager.Actuate(new ExpositionUIManager.Configuration
         {
@@ -248,15 +231,15 @@ public class InGameManager : MonoBehaviour, ISetup
 
     private void ApplyWaveConfiguration(WaveConfigPack waveConfigPack)
     {
-        enemyWaveManager?.AssignWaveConfigPack(waveConfigPack);
-        enemyWaveManager?.SpawnAllWaves();
+        enemyWaveManager.AssignWaveConfigPack(waveConfigPack);
+        enemyWaveManager.SpawnAllWaves();
     }
 
     private void PlayAudio() => audioSource.Play();
 
     private void PauseAudio() => audioSource.Pause();
 
-    private void UnpauseAudio() => audioSource.UnPause();
+    private void ResumeAudio() => audioSource.UnPause();
 
     private void SupplementScoreScore(int score) => scoreUIManager.SupplementScore(score);
 
@@ -264,10 +247,7 @@ public class InGameManager : MonoBehaviour, ISetup
 
     private void RevokeLife() => livesUIManager.RemoveLife();
 
-    private bool HasLives()
-    {
-        return livesUIManager.HasLives();
-    }
+    private bool HasLives() => livesUIManager.HasLives();
 
     private void ResetLives() => livesUIManager.ResetLives();
 
@@ -283,70 +263,20 @@ public class InGameManager : MonoBehaviour, ISetup
         StartCoroutine(PrepareNextLevel());
     }
 
-    public RenderLayer GetActiveLayer()
+    private bool HasNextLevel() => levelIndex + 1 < levelPacks.Length;
+
+    private LevelPack ResolveNextLevel()
     {
-        return activeLayer;
-    }
-
-    public void OnRequisitionLayerChange(RenderLayer layer)
-    {
-        StartCoroutine(TransitionGameplayObjectsCoroutine(layer));
-    }
-
-    private IEnumerator TransitionGameplayObjectsCoroutine(RenderLayer layer)
-    {
-        GameObject player = playerController.gameObject;
-        int activeLayer = player.layer;
-
-        float duration = 0.25f;
-        float startTime = Time.time;
-
-        bool complete = false;
-
-        while (!complete)
+        if (HasNextLevel())
         {
-            float fractionComplete = (Time.time - startTime) / duration;
-
-            if (fractionComplete >= 0.0f)
-            {
-                gameplaySurfaceManager.ScaleObjects(activeLayer, layer, fractionComplete);
-                complete = (fractionComplete >= 1.0f);
-            }
-
-            if (complete)
-            {
-                OnTransitionGameplayLayerComplete(layer);
-            }
-
-            yield return null;
+            ++levelIndex;
         }
-    }
-    public void OnTransitionGameplayLayerComplete(RenderLayer layer)
-    {
-        activeLayer = layer;
-        NotifyOnLayerChange(layer);
-    }
-
-    //public void OnShipLayerChanged(RenderLayer layer)
-    //{
-    //    activeLayer = layer;
-    //    NotifyOnLayerChange(layer);
-    //}
-
-    private void NotifyOnLayerChange(RenderLayer layer)
-    {
-        GameObject[] rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
-
-        foreach (GameObject gameObject in rootObjects)
+        else
         {
-            if (gameObject.GetComponentsInChildren<INotify>() is INotify[] iNotifys)
-            {
-                foreach (INotify iNotify in iNotifys)
-                {
-                    iNotify.OnLayerChange((int) layer);
-                }
-            }
+            levelIndex = 0;
         }
+
+        return ResolveLevel(levelIndex);
     }
 
     private IEnumerator PrepareNextLevel()

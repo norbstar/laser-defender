@@ -39,7 +39,7 @@ public class CanvasSurfaceManager : SurfaceManager, IActuate
             spriteAssetPack = ((Configuration) configuration).SpriteAssetPack;
         }
 
-        spritePack = spriteAssetPack.GetPack();
+        spritePack = spriteAssetPack.Pack;
 
         index = 0;
         nextIndex = GetNextIndex();
@@ -95,15 +95,15 @@ public class CanvasSurfaceManager : SurfaceManager, IActuate
         prefab.layer = (int) RenderLayer.CANVAS;
         prefab.name = "Canvas Surface Layer";
 
-        var surfaceLayerManager = prefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
-        surfaceLayerManager.Actuate();
+        //var surfaceLayerManager = prefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
+        //surfaceLayerManager.Actuate();
 
         ResolveDependencies(prefab);
         AssignCanvasSprites();
         SetTrackingIdentifiers();
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenHeightInUnits, transform.position.z);
-        float distance = InGameManager.ScreenHeightInUnits;
+        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
+        float distance = InGameManager.ScreenRatio.y;
         float accumulativeDeltaTime = 0.0f;
         bool complete = false;
 
@@ -142,6 +142,6 @@ public class CanvasSurfaceManager : SurfaceManager, IActuate
     void OnDrawGizmos()
     {
         Gizmos.color = idTagColor;
-        DrawPanelGuide(transform.position, 0.5f);
+        DrawPanelGuide(transform.position);
     }
 }

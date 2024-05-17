@@ -124,8 +124,8 @@ public class SurfaceLayerManagerOld : SurfaceManager, IActuate
     {
         SetTrackingIdentifiers();
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenHeightInUnits, transform.position.z);
-        float journeyLength = InGameManager.ScreenHeightInUnits;
+        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
+        float journeyLength = InGameManager.ScreenRatio.y;
         float accumulativeDeltaTime = 0.0f;
         bool complete = false;
 
@@ -242,8 +242,8 @@ public class SurfaceLayerManagerOld : SurfaceManager, IActuate
             float key = actuators.Keys[0];
             GameObject gameObject = actuators.Values[0];
 
-            float target = InGameManager.ScreenHeightInUnits - key;
-            float delta = ((InGameManager.ScreenHeightInUnits + this.gameObject.transform.position.y) - target);
+            float target = InGameManager.ScreenRatio.y - key;
+            float delta = InGameManager.ScreenRatio.y + this.gameObject.transform.position.y - target;
 
             if (delta <= 0)
             {
@@ -275,7 +275,7 @@ public class SurfaceLayerManagerOld : SurfaceManager, IActuate
         for (int itr = 0; itr < buffer.transform.childCount; ++itr)
         {
             Transform childTransform = buffer.transform.GetChild(0);
-            childTransform.position += new Vector3(0.0f, -InGameManager.ScreenHeightInUnits, 0.0f);
+            childTransform.position += new Vector3(0.0f, -InGameManager.ScreenRatio.y, 0.0f);
             childTransform.parent = main.transform;
         }
 
@@ -289,7 +289,7 @@ public class SurfaceLayerManagerOld : SurfaceManager, IActuate
     void OnDrawGizmos()
     {
         Gizmos.color = idTagColor;
-        DrawPanelGuide(transform.position, 2.0f);
+        DrawPanelGuide(transform.position);
 
         foreach (KeyValuePair<long, SortedList<float, GameObject>> keyValuePair in actuators)
         {
@@ -303,11 +303,11 @@ public class SurfaceLayerManagerOld : SurfaceManager, IActuate
                     float key = actuator.Key;
                     GameObject gameObject = actuator.Value;
 
-                    float target = InGameManager.ScreenHeightInUnits - key;
-                    float delta = ((InGameManager.ScreenHeightInUnits + this.gameObject.transform.position.y) - target);
+                    float target = InGameManager.ScreenRatio.y - key;
+                    float delta = InGameManager.ScreenRatio.y + this.gameObject.transform.position.y - target;
 
                     Gizmos.color = Color.red;
-                    Gizmos.DrawLine(new Vector3(gameObject.transform.position.x - 0.5f, InGameManager.ScreenHeightInUnits + delta, gameObject.transform.position.z), new Vector3(gameObject.transform.position.x + 0.5f, InGameManager.ScreenHeightInUnits + delta, gameObject.transform.position.z));
+                    Gizmos.DrawLine(new Vector3(gameObject.transform.position.x - 0.5f, InGameManager.ScreenRatio.y + delta, gameObject.transform.position.z), new Vector3(gameObject.transform.position.x + 0.5f, InGameManager.ScreenRatio.y + delta, gameObject.transform.position.z));
                 }
             }
         }

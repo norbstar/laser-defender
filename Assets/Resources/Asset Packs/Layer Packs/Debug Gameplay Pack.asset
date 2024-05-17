@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Debug Gameplay Pack
   m_EditorClassIdentifier: 
   pack:
-    enableAsteroidLayer: 1
+    enableAsteroidLayer: 0
     overrides:
       enableOverrides: 0
     enableDebrisLayer: 0

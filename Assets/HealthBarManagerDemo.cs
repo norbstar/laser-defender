@@ -8,14 +8,11 @@ public class HealthBarManagerDemo : MonoBehaviour
 
     private float minHealth, maxHealth;
 
-    void Awake()
+    IEnumerator Start()
     {
         maxHealth = healthBarSliderUIManager.GetMaxHealth();
         minHealth = healthBarSliderUIManager.GetMinHealth();
-    }
 
-    IEnumerator Start()
-    {
         while (true)
         {
             float health = healthBarSliderUIManager.GetHealth();

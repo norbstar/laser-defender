@@ -5,7 +5,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(HealthAttributes))]
 [RequireComponent(typeof(DamageAttributes))]
-public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IState, INotify
+public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, INotify
 {
     public delegate void OnTurretDamaged(GameObject gameObject, HealthAttributes healthAttributes);
     public delegate void OnTurretDestroyed(GameObject gameObject);
@@ -31,7 +31,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IState, INo
     [SerializeField] GameObject mount;
     [SerializeField] GameObject gun;
     [SerializeField] Type type;
-    [SerializeField] Mode mode = Mode.ACTIVE;
+    //[SerializeField] Mode mode;
     [SerializeField] GameObject target;
     
     [Range(0.0f, 50.0f)]
@@ -53,7 +53,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IState, INo
     private float localAngle, relativeAngle, differentialAngle;
     private long targetTicks;
     private RenderLayer layer;
-    private Mode activeMode;
+    //private Mode activeMode;
 
     public override void Awake()
     {
@@ -61,33 +61,21 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IState, INo
 
         ResolveComponents();
 
-        mode = activeMode = Mode.INACTIVE;
-    }
-
-    public void SetActive(bool active)
-    {
-        activeMode = (active) ? Mode.ACTIVE : Mode.INACTIVE;
-
-        var healthBarCanvas = gameObject.transform.Find("Health Bar Canvas");
-
-        if (healthBarCanvas != null)
-        {
-            healthBarCanvas.gameObject.SetActive(active);
-        }
-    }
-
-    public bool IsActive()
-    {
-        return (activeMode == Mode.ACTIVE);
+        //mode = activeMode = Mode.INACTIVE;
+        //mode = Mode.INACTIVE;
     }
 
     public void Actuate(IConfiguration configuration)
     {
         if (configuration != null)
         {
+            if (typeof(GameplayConfiguration).IsInstanceOfType(configuration))
+            {
+                layer = ((GameplayConfiguration) configuration).Layer;
+            }
+
             if (typeof(Configuration).IsInstanceOfType(configuration))
             {
-                layer = ((Configuration) configuration).Layer;
                 target = ((Configuration) configuration).Target;
             }
         }
@@ -101,9 +89,6 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IState, INo
 
         int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
-
-        RenderLayer activeLayer = SetupHelper.SetupManager.GetActiveLayer();
-        SetActive((mode == Mode.ACTIVE) && (gameObject.layer == (int) activeLayer));
 
         while (healthAttributes.GetHealthMetric() > 0.0f)
         {
@@ -240,60 +225,57 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IState, INo
             return;
         }
 
-        if (IsActive())
+        if (collider != null)
         {
-            if (collider != null)
+            GameObject trigger = collider.gameObject;
+
+            if (trigger.tag.Equals("Projectile"))
             {
-                GameObject trigger = collider.gameObject;
-
-                if (trigger.tag.Equals("Projectile"))
+                if (trigger.name.Contains(Signature))
                 {
-                    if (trigger.name.Contains(Signature))
-                    {
-                        // Ignore as it's signature matches that of the game object instance
-                        return;
-                    }
-
-                    Destroy(trigger);
+                    // Ignore as it's signature matches that of the game object instance
+                    return;
                 }
 
-                var damageAttributes = trigger.GetComponent<DamageAttributes>() as DamageAttributes;
+                Destroy(trigger);
+            }
 
-                if (damageAttributes != null)
+            var damageAttributes = trigger.GetComponent<DamageAttributes>() as DamageAttributes;
+
+            if (damageAttributes != null)
+            {
+                float damageMetric = damageAttributes.GetDamageMetric();
+                healthAttributes.SubstractHealth(damageMetric);
+                healthBarSliderUIManager.SetHealth(healthAttributes.GetHealthMetric());
+
+                if (healthAttributes.GetHealthMetric() > 0.0f)
                 {
-                    float damageMetric = damageAttributes.GetDamageMetric();
-                    healthAttributes.SubstractHealth(damageMetric);
-                    healthBarSliderUIManager.SetHealth(healthAttributes.GetHealthMetric());
+                    StartCoroutine(ManifestDamage());
+                    delegates?.OnTurretDamagedDelegate?.Invoke(gameObject, healthAttributes);
+                }
+                else
+                {
+                    var explosion = Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+                    explosion.transform.localScale = transform.localScale;
 
-                    if (healthAttributes.GetHealthMetric() > 0.0f)
+                    var explosionController = explosion.GetComponent<ExplosionController>() as ExplosionController;
+                    var mineDamageAttributes = GetComponent<DamageAttributes>() as DamageAttributes;
+
+                    explosionController.Actuate(new ExplosionController.Configuration
                     {
-                        StartCoroutine(ManifestDamage());
-                        delegates?.OnTurretDamagedDelegate?.Invoke(gameObject, healthAttributes);
-                    }
-                    else
-                    {
-                        var explosion = Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-                        explosion.transform.localScale = transform.localScale;
+                        Layer = layer,
+                        Range = 2.5f,
+                        Speed = 0.5f,
+                        DamageMetric = mineDamageAttributes.GetDamageMetric()
+                    });
 
-                        var explosionController = explosion.GetComponent<ExplosionController>() as ExplosionController;
-                        var mineDamageAttributes = GetComponent<DamageAttributes>() as DamageAttributes;
+                    Destroy(explosion, 0.15f);
 
-                        explosionController.Actuate(new ExplosionController.Configuration
-                        {
-                            Layer = layer,
-                            Range = 2.5f,
-                            Speed = 0.5f,
-                            DamageMetric = mineDamageAttributes.GetDamageMetric()
-                        });
+                    AudioSource.PlayClipAtPoint(explosiveAudio, Camera.main.transform.position, 2.0f);
 
-                        Destroy(explosion, 0.15f);
+                    Destroy(gameObject);
 
-                        AudioSource.PlayClipAtPoint(explosiveAudio, Camera.main.transform.position, 2.0f);
-
-                        Destroy(gameObject);
-
-                        delegates?.OnTurretDestroyedDelegate?.Invoke(gameObject);
-                    }
+                    delegates?.OnTurretDestroyedDelegate?.Invoke(gameObject);
                 }
             }
         }
@@ -315,15 +297,17 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IState, INo
 
     private bool InBoundsOfCamera(Vector3 position)
     {
-        return (position.x >= 0.0f) && (position.x <= InGameManager.ScreenWidthInUnits - 1.0f) &&
-            (position.y >= 0.0f) && (position.y <= InGameManager.ScreenHeightInUnits - 1.0f);
+        return (position.x >= 0.0f) && (position.x <= InGameManager.ScreenRatio.x - 1.0f) &&
+            (position.y >= 0.0f) && (position.y <= InGameManager.ScreenRatio.y - 1.0f);
     }
 
-    public void OnLayerChange(int layer)
+    //public new Defaults GetDefaults()
+    //{
+    //    return base.GetDefaults();
+    //}
+
+    public RenderLayer GetLayer()
     {
-        if ((gameObject.activeSelf) && (mode == Mode.ACTIVE))
-        {
-            SetActive((mode == Mode.ACTIVE) && (gameObject.layer == layer));
-        }
+        return layer;
     }
 }

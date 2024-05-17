@@ -1,24 +1,26 @@
 ﻿using UnityEngine;
-using UnityEditor;
 
-public class ExampleWindow : EditorWindow
+namespace UnityEditor
 {
-    private string myString = "Hello World";
-
-    [MenuItem("Window/Example")]
-    public static void ShowWindow()
+    public class ExampleWindow : EditorWindow
     {
-        GetWindow<ExampleWindow>("Example");
-    }
+        private string myString = "Hello World";
 
-    void OnGUI()
-    {
-        GUILayout.Label("Label", EditorStyles.boldLabel);
-        myString = EditorGUILayout.TextField("Name", myString, EditorStyles.label);
-
-        if (GUILayout.Button("Click Me"))
+        [MenuItem("Window/Example")]
+        public static void ShowWindow()
         {
-            Debug.Log($"You clicked me!");
+            GetWindow<ExampleWindow>("Example");
+        }
+
+        void OnGUI()
+        {
+            GUILayout.Label("Label", EditorStyles.boldLabel);
+            myString = EditorGUILayout.TextField("Name", myString, EditorStyles.label);
+
+            if (GUILayout.Button("Click Me"))
+            {
+                Debug.Log($"You clicked me!");
+            }
         }
     }
 }

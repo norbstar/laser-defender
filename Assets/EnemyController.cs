@@ -185,21 +185,21 @@ public class EnemyController : MonoBehaviour, IActuate
 
         if (invertX)
         {
-            position = new Vector2(InGameManager.ScreenWidthInUnits - position.x, position.y);
+            position = new Vector2(InGameManager.ScreenRatio.x - position.x, position.y);
 
             if (projectedPosition != null)
             {
-                projectedPosition = new Vector2(InGameManager.ScreenWidthInUnits - ((Vector2)projectedPosition).x, ((Vector2)projectedPosition).y);
+                projectedPosition = new Vector2(InGameManager.ScreenRatio.x - ((Vector2) projectedPosition).x, ((Vector2) projectedPosition).y);
             }
         }
 
         if (invertY)
         {
-            position = new Vector2(position.x, InGameManager.ScreenHeightInUnits - position.y);
+            position = new Vector2(position.x, InGameManager.ScreenRatio.y - position.y);
 
             if (projectedPosition != null)
             {
-                projectedPosition = new Vector2(((Vector2)projectedPosition).x, InGameManager.ScreenHeightInUnits - ((Vector2)projectedPosition).y);
+                projectedPosition = new Vector2(((Vector2) projectedPosition).x, InGameManager.ScreenRatio.y - ((Vector2) projectedPosition).y);
             }
         }
 
@@ -351,8 +351,8 @@ public class EnemyController : MonoBehaviour, IActuate
 
     private bool InBoundsOfCamera(Vector3 position)
     {
-        return (position.x >= 0.0f) && (position.x <= InGameManager.ScreenWidthInUnits - 1.0f) &&
-            (position.y >= 0.0f) && (position.y <= InGameManager.ScreenHeightInUnits - 1.0f);
+        return (position.x >= 0.0f) && (position.x <= InGameManager.ScreenRatio.x - 1.0f) &&
+            (position.y >= 0.0f) && (position.y <= InGameManager.ScreenRatio.y - 1.0f);
     }
 
     private void OnJourneyComplete(int waveSequence)

@@ -42,7 +42,7 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
             surfacePack = ((Configuration) configuration).SurfacePack;
         }
 
-        SurfacePack.Pack pack = surfacePack.GetPack();
+        SurfacePack.SurfaceAsset pack = surfacePack.Pack;
 
         if (pack.enableTracking)
         {
@@ -73,8 +73,8 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
         prefab.layer = (int) RenderLayer.BACKGROUND;
         prefab.name = "Background Surface Layer";
 
-        var surfaceLayerManager = prefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
-        surfaceLayerManager.Actuate();
+        //var surfaceLayerManager = prefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
+        //surfaceLayerManager.Actuate();
 
         ResolveDependencies(prefab);
 
@@ -118,8 +118,8 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
     {
         SetTrackingIdentifiers();
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenHeightInUnits, transform.position.z);
-        float journeyLength = InGameManager.ScreenHeightInUnits;
+        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
+        float journeyLength = InGameManager.ScreenRatio.y;
         float accumulativeDeltaTime = 0.0f;
         bool complete = false;
 
@@ -260,8 +260,8 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
                 continue;
             }
 
-            float target = InGameManager.ScreenHeightInUnits - key;
-            float delta = ((InGameManager.ScreenHeightInUnits + this.gameObject.transform.position.y) - target);
+            float target = InGameManager.ScreenRatio.y - key;
+            float delta = InGameManager.ScreenRatio.y + this.gameObject.transform.position.y - target;
 
             if (delta <= 0)
             {
@@ -296,7 +296,7 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
         for (int itr = 0; itr < buffer.transform.childCount; ++itr)
         {
             Transform childTransform = buffer.transform.GetChild(0);
-            childTransform.position += new Vector3(0.0f, -InGameManager.ScreenHeightInUnits, 0.0f);
+            childTransform.position += new Vector3(0.0f, -InGameManager.ScreenRatio.y, 0.0f);
             childTransform.parent = main.transform;
         }
 
@@ -310,7 +310,7 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
     void OnDrawGizmos()
     {
         Gizmos.color = idTagColor;
-        DrawPanelGuide(transform.position, 1.25f);
+        DrawPanelGuide(transform.position);
 
         if ((actuators != null) && (actuators.Count > 0))
         {
@@ -321,11 +321,11 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
 
                 if (gameObject != null)
                 {
-                    float target = InGameManager.ScreenHeightInUnits - key;
-                    float delta = ((InGameManager.ScreenHeightInUnits + this.gameObject.transform.position.y) - target);
+                    float target = InGameManager.ScreenRatio.y - key;
+                    float delta = InGameManager.ScreenRatio.y + this.gameObject.transform.position.y - target;
 
                     Gizmos.color = Color.white;
-                    Gizmos.DrawLine(new Vector3(gameObject.transform.position.x - 0.0625f, InGameManager.ScreenHeightInUnits + delta, gameObject.transform.position.z), new Vector3(gameObject.transform.position.x + 0.0625f, InGameManager.ScreenHeightInUnits + delta, gameObject.transform.position.z));
+                    Gizmos.DrawLine(new Vector3(gameObject.transform.position.x - 0.0625f, InGameManager.ScreenRatio.y + delta, gameObject.transform.position.z), new Vector3(gameObject.transform.position.x + 0.0625f, InGameManager.ScreenRatio.y + delta, gameObject.transform.position.z));
 
                     Gizmos.color = idTagColor;
                     Gizmos.DrawWireCube(gameObject.transform.position, new Vector2(0.125f, 0.125f));

@@ -10,30 +10,17 @@ public class AbstractSceneryManager : MonoBehaviour
     private float? referenceScrollSpeed;
     private OnScrollSpeedUpdate onScrollSpeedUpdateDelegate;
 
-    public virtual void Awake()
-    {
-        referenceScrollSpeed = scrollSpeed;
-    }
+    public virtual void Awake() => referenceScrollSpeed = scrollSpeed;
 
-    public void RegisterDelegate(OnScrollSpeedUpdate onScrollSpeedUpdateDelegate)
-    {
-        this.onScrollSpeedUpdateDelegate = onScrollSpeedUpdateDelegate;
-    }
+    public void RegisterDelegate(OnScrollSpeedUpdate onScrollSpeedUpdateDelegate) => this.onScrollSpeedUpdateDelegate = onScrollSpeedUpdateDelegate;
 
-    public float GetReferenceScrollSpeed()
-    {
-        return referenceScrollSpeed.Value;
-    }
+    public float GetReferenceScrollSpeed() => referenceScrollSpeed.Value;
 
-    public float GetScrollSpeed()
-    {
-        return scrollSpeed;
-    }
+    public float GetScrollSpeed() => scrollSpeed;
 
     public void SetScrollSpeed(float scrollSpeed)
     {
         this.scrollSpeed = scrollSpeed;
-
         onScrollSpeedUpdateDelegate?.Invoke(scrollSpeed);
     }
 }

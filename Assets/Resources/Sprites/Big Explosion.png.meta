@@ -225,7 +225,7 @@ TextureImporter:
       213: -903260933747683796
     second: Big Explosion_73
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -245,6 +245,8 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -253,9 +255,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -100
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -276,9 +278,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -318,6 +325,18 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1895,6 +1914,81 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      Big Explosion_19: 4678431439790914148
+      Big Explosion_62: 7814691963979317950
+      Big Explosion_9: -931157102456885312
+      Big Explosion_54: 555863629078128111
+      Big Explosion_63: 8172076612022121355
+      Big Explosion_47: -7494499427809306263
+      Big Explosion_30: 361965661858787306
+      Big Explosion_32: 2763811340132918278
+      Big Explosion_68: 2672636623126586559
+      Big Explosion_59: -1832340720977382399
+      Big Explosion_60: -9117457800620174519
+      Big Explosion_71: 7451236822555809579
+      Big Explosion_20: -4453362420504368743
+      Big Explosion_52: 6831589279050426874
+      Big Explosion_39: 8273792985125486706
+      Big Explosion_58: 3292203157522245068
+      Big Explosion_43: -6266974503887528643
+      Big Explosion_2: 7600906666665548920
+      Big Explosion_6: 39373629259732148
+      Big Explosion_35: -4301675028953285908
+      Big Explosion_61: -1889076668665854291
+      Big Explosion_67: 7323384563524363134
+      Big Explosion_69: 4873834495518488855
+      Big Explosion_17: -7820189731991121077
+      Big Explosion_1: -7041137183313045292
+      Big Explosion_3: -939324568046929296
+      Big Explosion_40: 3796307324108537064
+      Big Explosion_37: -7058955722181444300
+      Big Explosion_7: -6542021164666533198
+      Big Explosion_42: 4193161561282420047
+      Big Explosion_57: -5727559358870210633
+      Big Explosion_66: -3743980700006984053
+      Big Explosion_41: 5388461702211099550
+      Big Explosion_27: 5853784632530824076
+      Big Explosion_28: -5891332941379545579
+      Big Explosion_45: 5504841901217980152
+      Big Explosion_33: 1402297895232275612
+      Big Explosion_36: -8980616366749284826
+      Big Explosion_53: -4021197490722485277
+      Big Explosion_12: 737546135473631681
+      Big Explosion_0: -426795651818846405
+      Big Explosion_72: 1186674803747656772
+      Big Explosion_29: 831431779470580619
+      Big Explosion_56: -2040464818695579872
+      Big Explosion_25: 3422286166989367199
+      Big Explosion_8: 4500490472615956014
+      Big Explosion_5: -6936217642108510413
+      Big Explosion_46: 5960584837374771150
+      Big Explosion_21: 615250108871552593
+      Big Explosion_70: 7919719695512464572
+      Big Explosion_31: -1414046554254510898
+      Big Explosion_26: -4672853431047484104
+      Big Explosion_51: 6028232334918541977
+      Big Explosion_44: 3083224346455042845
+      Big Explosion_48: -39535705817177118
+      Big Explosion_50: 3507242821375284787
+      Big Explosion_55: -2976544954055608338
+      Big Explosion_16: 2489609193803486201
+      Big Explosion_38: -5886212351506643665
+      Big Explosion_65: 8560381993901170690
+      Big Explosion_4: -4312304961293776624
+      Big Explosion_18: -7485189623256518950
+      Big Explosion_64: -3098784683373400523
+      Big Explosion_11: -3475408455981886748
+      Big Explosion_14: -3490550150989689422
+      Big Explosion_23: -2476778693650081625
+      Big Explosion_13: 5729952736327399732
+      Big Explosion_24: 6121919628212097513
+      Big Explosion_15: -7034715239187075122
+      Big Explosion_10: -8380734862678587477
+      Big Explosion_73: -903260933747683796
+      Big Explosion_22: 2206139425483364815
+      Big Explosion_49: -8645305282236760181
+      Big Explosion_34: -2187306732941265596
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

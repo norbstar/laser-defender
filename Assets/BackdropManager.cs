@@ -41,15 +41,9 @@ public class BackdropManager : AbstractSceneryManager
         isActive = shouldDeactivate = false;
     }
 
-    public void RegisterDelegate(OnDeactivated onDeactivatedDelegate)
-    {
-        this.onDeactivatedDelegate = onDeactivatedDelegate;
-    }
+    public void RegisterDelegate(OnDeactivated onDeactivatedDelegate) => this.onDeactivatedDelegate = onDeactivatedDelegate;
 
-    public bool IsActive()
-    {
-        return isActive;
-    }
+    public bool IsActive() => isActive;
 
     public void Activate(SpriteAssetPack spriteAssetPack)
     {
@@ -58,7 +52,7 @@ public class BackdropManager : AbstractSceneryManager
             throw new AlreadyActiveException();
         }
 
-        spritePack = spriteAssetPack.GetPack();
+        spritePack = spriteAssetPack.Pack;
 
         index = 0;
         nextIndex = GetNextIndex();
@@ -68,15 +62,9 @@ public class BackdropManager : AbstractSceneryManager
         StartCoroutine(ScrollBackgroundCoroutine());
     }
 
-    public void Deactivate()
-    {
-        shouldDeactivate = true;
-    }
+    public void Deactivate() => shouldDeactivate = true;
 
-    public Vector2 GetLastPosition()
-    {
-        return lastPosition;
-    }
+    public Vector2 GetLastPosition() => lastPosition;
 
     private void ResolveComponents()
     {
@@ -86,9 +74,7 @@ public class BackdropManager : AbstractSceneryManager
 
     private void SetTrackingIdentifiers()
     {
-        TextMesh textMesh;
-
-        textMesh = mainIdentifier.GetComponent<TextMesh>() as TextMesh;
+        var textMesh = mainIdentifier.GetComponent<TextMesh>() as TextMesh;
         textMesh.text = primaryCanvasId.ToString();
 
         textMesh = bufferIdentifier.GetComponent<TextMesh>() as TextMesh;
@@ -99,10 +85,10 @@ public class BackdropManager : AbstractSceneryManager
     {
         SetTrackingIdentifiers();
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManagerOld.ScreenHeightInUnits, transform.position.z);
+        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManagerOld.ScreenRatio.y, transform.position.z);
         //float magnitude = (targetPosition - originPosition).magnitude * 0.01f;
         //float startTransformTime = Time.time;
-        float journeyLength = InGameManagerOld.ScreenHeightInUnits;
+        float journeyLength = InGameManagerOld.ScreenRatio.y;
         float accumulativeDeltaTime = 0.0f;
         bool complete = false;
         isActive = true;
@@ -141,10 +127,7 @@ public class BackdropManager : AbstractSceneryManager
         nextCanvasRenderer.sprite = spritePack[nextIndex];
     }
 
-    private int GetNextIndex()
-    {
-        return (index + 1 <= spritePack.Length - 1) ? index + 1 : 0;
-    }
+    private int GetNextIndex() => (index + 1 <= spritePack.Length - 1) ? index + 1 : 0;
 
     private void OnComplete()
     {

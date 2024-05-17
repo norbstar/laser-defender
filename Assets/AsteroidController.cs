@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(HealthAttributes))]
 [RequireComponent(typeof(DamageAttributes))]
-public class AsteroidController : MonoBehaviour, IActuate, IState, INotify
+public class AsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
 {
     public delegate void OnAsteroidDamaged(GameObject gameObject, GameObject trigger, HealthAttributes healthAttributes);
     public delegate void OnAsteroidDestroyed(GameObject gameObject, GameObject trigger);
@@ -50,26 +50,15 @@ public class AsteroidController : MonoBehaviour, IActuate, IState, INotify
     private float speed;
     private float rotation;
     private RenderLayer layer;
-    private Mode activeMode;
 
-    void Awake()
+    public override void Awake()
     {
+        base.Awake();
+
         ResolveComponents();
 
         //range = transform.localScale.x * 2.5f;
         healthBarSliderUIManager?.SetMaxHealth(healthAttributes.GetHealthMetric());
-        activeMode = Mode.INACTIVE;
-    }
-
-    public void SetActive(bool active)
-    {
-        activeMode = (active) ? Mode.ACTIVE : Mode.INACTIVE;
-        healthBarCanvas.GetComponent<Canvas>().enabled = active;
-    }
-
-    public bool IsActive()
-    {
-        return (activeMode == Mode.ACTIVE);
     }
 
     public void Actuate(IConfiguration configuration)
@@ -99,9 +88,6 @@ public class AsteroidController : MonoBehaviour, IActuate, IState, INotify
 
         int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
-
-        RenderLayer activeLayer = SetupHelper.SetupManager.GetActiveLayer();
-        SetActive((mode == Mode.ACTIVE) && (gameObject.layer == (int)activeLayer));
 
         Vector2 originPosition = VectorFunctions.ToVector2(transform.position);
         float magnitude = (targetPosition - originPosition).magnitude * 0.01f;
@@ -154,67 +140,66 @@ public class AsteroidController : MonoBehaviour, IActuate, IState, INotify
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (IsActive())
+        GameObject trigger = collider.gameObject;
+
+        //Debug.Log($"Signature: {Signature} Trigger Name: {trigger.name} Tag: {trigger.tag}");
+
+        if (!trigger.tag.Equals("Asteroid"))
         {
-            GameObject trigger = collider.gameObject;
+            var damageAttributes = trigger.GetComponent<DamageAttributes>() as DamageAttributes;
 
-            if (!trigger.tag.Equals("Asteroid"))
+            if (damageAttributes != null)
             {
-                var damageAttributes = trigger.GetComponent<DamageAttributes>() as DamageAttributes;
+                float damageMetric = damageAttributes.GetDamageMetric();
+                healthAttributes.SubstractHealth(damageMetric);
+                healthBarSliderUIManager?.SetHealth(healthAttributes.GetHealthMetric());
 
-                if (damageAttributes != null)
+                if (healthAttributes.GetHealthMetric() > 0.0f)
                 {
-                    float damageMetric = damageAttributes.GetDamageMetric();
-                    healthAttributes.SubstractHealth(damageMetric);
-                    healthBarSliderUIManager?.SetHealth(healthAttributes.GetHealthMetric());
+                    StartCoroutine(ManifestDamage());
+                    delegates?.OnAsteroidDamagedDelegate?.Invoke(gameObject, trigger, healthAttributes);
+                }
+                else
+                {
+                    //var explosion = Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+                    //explosion.transform.localScale = transform.localScale;
 
-                    if (healthAttributes.GetHealthMetric() > 0.0f)
-                    {
-                        StartCoroutine(ManifestDamage());
-                        delegates?.OnAsteroidDamagedDelegate?.Invoke(gameObject, trigger, healthAttributes);
-                    }
-                    else
-                    {
-                        //var explosion = Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-                        //explosion.transform.localScale = transform.localScale;
+                    //var explosionController = explosion.GetComponent<ExplosionController>() as ExplosionController;
+                    var localDamageAttributes = GetComponent<DamageAttributes>() as DamageAttributes;
 
-                        //var explosionController = explosion.GetComponent<ExplosionController>() as ExplosionController;
-                        var localDamageAttributes = GetComponent<DamageAttributes>() as DamageAttributes;
+                    //explosionController.Actuate(new ExplosionController.Configuration
+                    //{
+                    //    Range = range,
+                    //    Speed = propagationWaveSpeed,
+                    //    DamageMetric = localDamageAttributes.GetDamageMetric()
+                    //});
 
-                        //explosionController.Actuate(new ExplosionController.Configuration
-                        //{
-                        //    Range = range,
-                        //    Speed = propagationWaveSpeed,
-                        //    DamageMetric = localDamageAttributes.GetDamageMetric()
-                        //});
+                    //Destroy(explosion, 0.15f);
 
-                        //Destroy(explosion, 0.15f);
+                    //AudioSource.PlayClipAtPoint(explosiveAudio, Camera.main.transform.position, 2.0f);
 
-                        //AudioSource.PlayClipAtPoint(explosiveAudio, Camera.main.transform.position, 2.0f);
+                    var fragmentation = Instantiate(fragmentationPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+                    fragmentation.transform.localScale = transform.localScale;
 
-                        var fragmentation = Instantiate(fragmentationPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-                        fragmentation.transform.localScale = transform.localScale;
-
-                        var fragmentationController = fragmentation.GetComponent<FragmentationController>() as FragmentationController;
+                    var fragmentationController = fragmentation.GetComponent<FragmentationController>() as FragmentationController;
                             
-                        float intersectionAngle = MathFunctions.GetForwardIntersectionAngle(trigger.transform, transform);
-                        Debug.Log($"Angle: {intersectionAngle}");
+                    float intersectionAngle = MathFunctions.GetForwardIntersectionAngle(trigger.transform, transform);
+                    Debug.Log($"Angle: {intersectionAngle}");
 
-                        fragmentationController.Actuate(new FragmentationController.Configuration
-                        {
-                            Layer = layer,
-                            IntersectionAngle = intersectionAngle,
-                            Prefab = fragmentationPrefab
-                        });
+                    fragmentationController.Actuate(new FragmentationController.Configuration
+                    {
+                        Layer = layer,
+                        IntersectionAngle = intersectionAngle,
+                        Prefab = fragmentationPrefab
+                    });
 
-                        Destroy(fragmentation, 0.15f);
+                    Destroy(fragmentation, 0.15f);
 
-                        AudioSource.PlayClipAtPoint(fragmentationAudio, Camera.main.transform.position, 2.0f);
+                    AudioSource.PlayClipAtPoint(fragmentationAudio, Camera.main.transform.position, 2.0f);
 
-                        Destroy(gameObject);
+                    Destroy(gameObject);
 
-                        delegates?.OnAsteroidDestroyedDelegate?.Invoke(gameObject, trigger);
-                    }
+                    delegates?.OnAsteroidDestroyedDelegate?.Invoke(gameObject, trigger);
                 }
             }
         }
@@ -232,17 +217,19 @@ public class AsteroidController : MonoBehaviour, IActuate, IState, INotify
         }
     }
 
+    //public new Defaults GetDefaults()
+    //{
+    //    return base.GetDefaults();
+    //}
+
+    public RenderLayer GetLayer()
+    {
+        return layer;
+    }
+
     private void OnJourneyComplete()
     {
         Destroy(gameObject);
         delegates?.OnAsteroidJourneyCompleteDelegate?.Invoke(gameObject);
-    }
-
-    public void OnLayerChange(int layer)
-    {
-        if ((gameObject.activeSelf) && (mode == Mode.ACTIVE))
-        {
-            SetActive((mode == Mode.ACTIVE) && (gameObject.layer == layer));
-        }
     }
 }

@@ -290,12 +290,12 @@ public class PlayerController : /*GUI*/MonoBehaviour
         float relativePositionX = mousePosition.x / Screen.width;
         //float unitPositionX = relativePositionX * InGameManager.ScreenWidthInUnits;
         float unitPositionX = Mathf.Clamp(relativePositionX, boundary.XMin + 1.0f, boundary.XMax - 1.0f);
-        unitPositionX = Mathf.Clamp(unitPositionX, 1.0f, InGameManagerOld.ScreenWidthInUnits - 1.0f);
+        unitPositionX = Mathf.Clamp(unitPositionX, 1.0f, InGameManagerOld.ScreenRatio.x - 1.0f);
 
         float relativePositionY = mousePosition.y / Screen.height;
         //float unitPositionY = relativePositionY * InGameManager.ScreenHeightInUnits;
         float unitPositionY = Mathf.Clamp(relativePositionY, boundary.YMin + 1.25f, boundary.YMax - 1.0f);
-        unitPositionY = Mathf.Clamp(unitPositionY, 1.25f, InGameManagerOld.ScreenHeightInUnits - 1.0f);
+        unitPositionY = Mathf.Clamp(unitPositionY, 1.25f, InGameManagerOld.ScreenRatio.y - 1.0f);
 
         return new Vector3(unitPositionX, unitPositionY, transform.position.z);
     }

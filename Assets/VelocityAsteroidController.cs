@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-public class VelocityAsteroidController : MonoBehaviour, IActuate, IState, INotify
+public class VelocityAsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
 {
     public delegate void OnAsteroidDamaged(GameObject gameObject, GameObject trigger, HealthAttributes healthAttributes);
     public delegate void OnAsteroidDestroyed(GameObject gameObject, GameObject trigger);
@@ -19,6 +19,7 @@ public class VelocityAsteroidController : MonoBehaviour, IActuate, IState, INoti
     {
         public float StartTransformTime { get; set; }
         public Vector2 Vector { get; set; }
+        public string Zone { get; set; }
         public float Speed { get; set; }
         public float Rotation { get; set; }
     }
@@ -43,28 +44,18 @@ public class VelocityAsteroidController : MonoBehaviour, IActuate, IState, INoti
     private HealthAttributes healthAttributes;
     private float startTime;
     private Vector2 vector;
+    private string zone;
     private float speed;
     private float rotation;
     private RenderLayer layer;
-    private Mode activeMode;
 
-    void Awake()
+    public override void Awake()
     {
+        base.Awake();
+
         ResolveComponents();
 
         healthBarSliderUIManager?.SetMaxHealth(healthAttributes.GetHealthMetric());
-        activeMode = Mode.INACTIVE;
-    }
-
-    public void SetActive(bool active)
-    {
-        activeMode = (active) ? Mode.ACTIVE : Mode.INACTIVE;
-        healthBarCanvas.GetComponent<Canvas>().enabled = active;
-    }
-
-    public bool IsActive()
-    {
-        return (activeMode == Mode.ACTIVE);
     }
 
     public void Actuate(IConfiguration configuration)
@@ -80,6 +71,7 @@ public class VelocityAsteroidController : MonoBehaviour, IActuate, IState, INoti
             {
                 startTime = ((Configuration) configuration).StartTransformTime;
                 vector = ((Configuration) configuration).Vector;
+                zone = ((Configuration) configuration).Zone;
                 speed = ((Configuration) configuration).Speed;
                 rotation = ((Configuration) configuration).Rotation;
             }
@@ -94,9 +86,6 @@ public class VelocityAsteroidController : MonoBehaviour, IActuate, IState, INoti
 
         int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
-
-        RenderLayer activeLayer = SetupHelper.SetupManager.GetActiveLayer();
-        SetActive((mode == Mode.ACTIVE) && (gameObject.layer == (int) activeLayer));
 
         rigidBody.velocity = vector * speed;
         rigidBody.angularVelocity = rotation * speed;
@@ -130,85 +119,84 @@ public class VelocityAsteroidController : MonoBehaviour, IActuate, IState, INoti
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (IsActive())
+        GameObject trigger = collider.gameObject;
+
+        //Debug.Log($"Signature: {Signature} Trigger Name: {trigger.name} Tag: {trigger.tag}");
+
+        if (trigger.tag.Equals("Asteroid Layer Boundary") && trigger.name.Equals(zone))
         {
-            GameObject trigger = collider.gameObject;
+            OnJourneyComplete();
+        }
+        else if (!trigger.tag.Equals("Asteroid"))
+        {
+            var damageAttributes = trigger.GetComponent<DamageAttributes>() as DamageAttributes;
 
-            if (trigger.tag.Equals("Asteroid Layer Boundary"))
+            if (damageAttributes != null)
             {
-                OnJourneyComplete();
-            }
-            else if (!trigger.tag.Equals("Asteroid"))
-            {
-                var damageAttributes = trigger.GetComponent<DamageAttributes>() as DamageAttributes;
+                float damageMetric = damageAttributes.GetDamageMetric();
+                healthAttributes.SubstractHealth(damageMetric);
+                healthBarSliderUIManager?.SetHealth(healthAttributes.GetHealthMetric());
 
-                if (damageAttributes != null)
+                if (healthAttributes.GetHealthMetric() > 0.0f)
                 {
-                    float damageMetric = damageAttributes.GetDamageMetric();
-                    healthAttributes.SubstractHealth(damageMetric);
-                    healthBarSliderUIManager?.SetHealth(healthAttributes.GetHealthMetric());
-
-                    if (healthAttributes.GetHealthMetric() > 0.0f)
-                    {
-                        StartCoroutine(ManifestDamage());
-                        delegates?.OnAsteroidDamagedDelegate?.Invoke(gameObject, trigger, healthAttributes);
-                    }
-                    else
-                    {
-                        var localDamageAttributes = GetComponent<DamageAttributes>() as DamageAttributes;
+                    StartCoroutine(ManifestDamage());
+                    delegates?.OnAsteroidDamagedDelegate?.Invoke(gameObject, trigger, healthAttributes);
+                }
+                else
+                {
+                    var localDamageAttributes = GetComponent<DamageAttributes>() as DamageAttributes;
 
 # if (false)
-                        var fragmentation = Instantiate(fragmentationPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-                        fragmentation.transform.localScale = transform.localScale;
+                    var fragmentation = Instantiate(fragmentationPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+                    fragmentation.transform.localScale = transform.localScale;
 
-                        var fragmentationController = fragmentation.GetComponent<FragmentationController>() as FragmentationController;
+                    var fragmentationController = fragmentation.GetComponent<FragmentationController>() as FragmentationController;
 
-                        //float intersectionAngle = MathFunctions.GetForwardIntersectionAngle(trigger.transform, transform);
-                        float angle = MathFunctions.GetIntersectionAngle(trigger.transform);
-                        angle = MathFunctions.ModifyTrueAngle(angle, 90.0f);
+                    //float intersectionAngle = MathFunctions.GetForwardIntersectionAngle(trigger.transform, transform);
+                    float angle = MathFunctions.GetIntersectionAngle(trigger.transform);
+                    angle = MathFunctions.ModifyTrueAngle(angle, 90.0f);
 
-                        //float leftOffset = MathFunctions.ModifyTrueAngle(angle, -90.0f);
-                        //float rightOffset = MathFunctions.ModifyTrueAngle(angle, +90.0f);
-                        //Debug.Log($"Angle: {intersectionAngle} Left Offset: {leftOffset} Right Offset: {rightOffset}");
+                    //float leftOffset = MathFunctions.ModifyTrueAngle(angle, -90.0f);
+                    //float rightOffset = MathFunctions.ModifyTrueAngle(angle, +90.0f);
+                    //Debug.Log($"Angle: {intersectionAngle} Left Offset: {leftOffset} Right Offset: {rightOffset}");
 
-                        //var vector = (Vector2.right - VectorFunctions.ToVector2(transform.right)).normalized;
-                        //var vector = (VectorFunctions.ToVector2(transform.position) - VectorFunctions.ToVector2(trigger.transform.position)).normalized;
-                        //Debug.Log($"Vector: {vector}");
+                    //var vector = (Vector2.right - VectorFunctions.ToVector2(transform.right)).normalized;
+                    //var vector = (VectorFunctions.ToVector2(transform.position) - VectorFunctions.ToVector2(trigger.transform.position)).normalized;
+                    //Debug.Log($"Vector: {vector}");
 
-                        //trigger.transform.right = new Vector3(0, 1, 0);
-                        //Debug.Log($"Trigger Vector: {trigger.transform.right}");
+                    //trigger.transform.right = new Vector3(0, 1, 0);
+                    //Debug.Log($"Trigger Vector: {trigger.transform.right}");
 
-                        //Vector2 vector = (Vector2) (Quaternion.Euler(0.0f, 0.0f, angle) * Vector2.right);
-                        //Debug.Log($"Trigger Vector: {vector}");
+                    //Vector2 vector = (Vector2) (Quaternion.Euler(0.0f, 0.0f, angle) * Vector2.right);
+                    //Debug.Log($"Trigger Vector: {vector}");
 
 
-                        fragmentationController.Actuate(new FragmentationController.Configuration
-                        {
-                            RefTransform = transform,
-                            IntersectionAngle = angle,
-                            Prefab = fragmentationPrefab
-                        });
+                    fragmentationController.Actuate(new FragmentationController.Configuration
+                    {
+                        RefTransform = transform,
+                        IntersectionAngle = angle,
+                        Prefab = fragmentationPrefab
+                    });
 
-                        Destroy(fragmentation, 0.15f);
+                    Destroy(fragmentation, 0.15f);
 
-                        AudioSource.PlayClipAtPoint(fragmentationAudio, Camera.main.transform.position, 2.0f);
+                    AudioSource.PlayClipAtPoint(fragmentationAudio, Camera.main.transform.position, 2.0f);
 #endif 
 
-                        var particalEffect = Instantiate(particalEffectPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
-                        particalEffect.transform.localScale = transform.localScale;
+                    var particalEffect = Instantiate(particalEffectPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
+                    particalEffect.transform.localScale = transform.localScale;
 
-                        var particalEffectController = particalEffect.GetComponent<ParticalEffectController>() as ParticalEffectController;
+                    var particalEffectController = particalEffect.GetComponent<ParticalEffectController>() as ParticalEffectController;
 
-                        particalEffectController.Actuate();
+                    particalEffectController.Actuate();
 
-                        Destroy(particalEffect, 0.15f);
+                    Destroy(particalEffect, 0.15f);
 
-                        AudioSource.PlayClipAtPoint(particalEffectAudio, Camera.main.transform.position, 2.0f);
+                    AudioSource.PlayClipAtPoint(particalEffectAudio, Camera.main.transform.position, 2.0f);
 
-                        Destroy(gameObject);
+                    Destroy(gameObject);
 
-                        delegates?.OnAsteroidDestroyedDelegate?.Invoke(gameObject, trigger);
-                    }
+                    delegates?.OnAsteroidDestroyedDelegate?.Invoke(gameObject, trigger);
                 }
             }
         }
@@ -239,17 +227,19 @@ public class VelocityAsteroidController : MonoBehaviour, IActuate, IState, INoti
         }
     }
 
+    //public new Defaults GetDefaults()
+    //{
+    //    return base.GetDefaults();
+    //}
+
+    public RenderLayer GetLayer()
+    {
+        return layer;
+    }
+
     private void OnJourneyComplete()
     {
         Destroy(gameObject);
         delegates?.OnAsteroidJourneyCompleteDelegate?.Invoke(gameObject);
-    }
-
-    public void OnLayerChange(int layer)
-    {
-        if ((gameObject.activeSelf) && (mode == Mode.ACTIVE))
-        {
-            SetActive((mode == Mode.ACTIVE) && (gameObject.layer == layer));
-        }
     }
 }

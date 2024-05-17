@@ -29,7 +29,7 @@ public class OnTriggerHandler : MonoBehaviour
 
     private bool InBoundsOfCamera(Vector3 position)
     {
-        return (position.x >= 0.0f) && (position.x <= InGameManager.ScreenWidthInUnits - 1.0f) &&
-            (position.y >= 0.0f) && (position.y <= InGameManager.ScreenHeightInUnits - 1.0f);
+        return (position.x >= 0.0f) && (position.x <= InGameManager.ScreenRatio.x - 1.0f) &&
+            (position.y >= 0.0f) && (position.y <= InGameManager.ScreenRatio.y - 1.0f);
     }
 }

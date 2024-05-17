@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class TrackingLayerManager : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] GameObject main, mainIdentifier;
     [SerializeField] GameObject buffer, bufferIdentifier;
 
@@ -19,8 +20,6 @@ public class TrackingLayerManager : MonoBehaviour
 
     void Awake()
     {
-        ResolveComponents();
-
         primaryCanvasId = 0;
         bufferCanvasId = primaryCanvasId + 1;
         originPosition = transform.position;
@@ -43,7 +42,7 @@ public class TrackingLayerManager : MonoBehaviour
                 if (prefab != null)
                 {
                     Vector3 position = main.transform.position;
-                    map = Instantiate(prefab, position, Quaternion.identity) as GameObject;
+                    map = Instantiate(prefab, position, Quaternion.identity);
                     map.transform.parent = main.transform;
                 }
             }
@@ -56,36 +55,25 @@ public class TrackingLayerManager : MonoBehaviour
     {
         TextMesh textMesh;
 
-        textMesh = mainIdentifier.GetComponent<TextMesh>() as TextMesh;
+        textMesh = mainIdentifier.GetComponent<TextMesh>();
         textMesh.color = indicatorColor;
         textMesh.text = primaryCanvasId.ToString();
 
-        textMesh = bufferIdentifier.GetComponent<TextMesh>() as TextMesh;
+        textMesh = bufferIdentifier.GetComponent<TextMesh>();
         textMesh.color = indicatorColor;
         textMesh.text = bufferCanvasId.ToString();
     }
 
-    public void SetScrollSpeed(float scrollSpeed)
-    {
-        this.scrollSpeed = scrollSpeed;
-    }
+    public void SetScrollSpeed(float scrollSpeed) => this.scrollSpeed = scrollSpeed;
 
-    public Vector3 GetLastPosition()
-    {
-        return lastPosition;
-    }
-
-    private void ResolveComponents() { }
+    public Vector3 GetLastPosition() => lastPosition;
 
     private IEnumerator ScrollBackgroundCoroutine()
     {
         SetTrackingIdentifiers();
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManagerOld.ScreenHeightInUnits, transform.position.z);
-        //float magnitude = (targetPosition - originPosition).magnitude * 0.01f;
-        //float startTransformTime = Time.time;
-        float journeyLength = InGameManagerOld.ScreenHeightInUnits;
-        //float lastJourneyLengthCovered = 0.0f;
+        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManagerOld.ScreenRatio.y, transform.position.z);
+        float journeyLength = InGameManagerOld.ScreenRatio.y;
         float accumulativeDeltaTime = 0.0f;
         bool complete = false;
 
@@ -100,7 +88,7 @@ public class TrackingLayerManager : MonoBehaviour
                 if (prefab != null)
                 {
                     Vector3 position = buffer.transform.position;
-                    map = Instantiate(prefab, position, Quaternion.identity) as GameObject;
+                    map = Instantiate(prefab, position, Quaternion.identity);
                     map.transform.parent = buffer.transform;
 
                     actuators = CaptureActuators();
@@ -108,22 +96,16 @@ public class TrackingLayerManager : MonoBehaviour
             }
         }
 
-        //float startTransformTime = Time.time;
-        //float lastAccumulativeDeltaTime = 0.0f;
-        //float lastJourneyLengthRemaining = journeyLength;
-
         while (!complete)
         {
-            //float fractionComplete = (Time.time - startTransformTime) * speed; /*(speed * magnitude);*/
-            //float fractionComplete = (Time.time - startTransformTime) / journeyLength;
-            float fractionComplete = accumulativeDeltaTime / journeyLength;
+            var fractionComplete = accumulativeDeltaTime / journeyLength;
 
             lastPosition = transform.position;
             transform.position = Vector3.Lerp(originPosition, targetPosition, (float) fractionComplete);
 
             StartCoroutine(ActionActuators());
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1.0f;
 
             if (complete)
             {
@@ -131,35 +113,6 @@ public class TrackingLayerManager : MonoBehaviour
             }
 
             accumulativeDeltaTime += Time.deltaTime * scrollSpeed;
-            //Debug.Log($"Tracking Layer Manager -> Scroll Speed: {scrollSpeed} Accumulative Delta Time: {accumulativeDeltaTime}");
-
-            //float journeyLengthRemaining = journeyLength - (fractionComplete * journeyLength);
-            //float sampleTime = lastAccumulativeDeltaTime - accumulativeDeltaTime;
-            //Debug.Log($"Est Speed: {journeyLengthRemaining / sampleTime}");
-
-            //float relativeTimeElapsed = accumulativeDeltaTime - Time.deltaTime;
-            //Debug.Log($"Relative Time Elapsed: {relativeTimeElapsed}");
-
-            //float relativeJourneyCovered = fractionComplete * journeyLength;
-            //Debug.Log($"Relative Journey Covered: {relativeJourneyCovered}");
-
-            //Debug.Log($"Est Speed: {(fractionComplete * journeyLength) / accumulativeDeltaTime}");
-
-            //float journeyRemaining = journeyLength - (fractionComplete * journeyLength);
-            //Debug.Log($"Time Elapsed: {accumulativeDeltaTime} Journey Remaining: {journeyRemaining}");
-            //Debug.Log($"Speed: {journeyRemaining / accumulativeDeltaTime}");
-
-            //lastJourneyLengthRemaining = journeyLengthRemaining;
-            //lastAccumulativeDeltaTime += accumulativeDeltaTime;
-
-            //float journeyLengthCovered = fractionComplete * journeyLength;
-            //float journeyDelta = journeyLengthCovered - lastJourneyLengthCovered;
-            //float speed = journeyDelta / Time.deltaTime;
-            //Debug.Log($"Journey Length Covered: {journeyLengthCovered} Journey Delta: {journeyDelta} Delta Time: {Time.deltaTime} Speed: {speed}");
-            //Debug.Log($"Delta Time: {Time.deltaTime} Journey Delta: {journeyDelta} Speed: {speed}");
-
-            //lastJourneyLengthCovered = fractionComplete * journeyLength;
-
             yield return null;
         }
     }
@@ -181,14 +134,12 @@ public class TrackingLayerManager : MonoBehaviour
 
     private class DuplicateKeyComparer<T> : IComparer<T> where T : IComparable
     {
-        #region IComparer<T> Members
-
+#region IComparer<T> Members
         public int Compare(T keyA, T keyB)
         {
             return (keyA.CompareTo(keyB) == 0) ? 1 : keyA.CompareTo(keyB);
         }
-
-        #endregion
+#endregion
     }
 
     private SortedList<float, GameObject> CaptureActuators()
@@ -199,9 +150,9 @@ public class TrackingLayerManager : MonoBehaviour
         {
             GameObject gameObject = childTransform.gameObject;
 
-            var actuation = childTransform.gameObject.GetComponent<IActuate>() as IActuate;
+            var actuation = childTransform.gameObject.GetComponent<IActuate>();
 
-            if ((actuation != null) && (childTransform.gameObject.activeSelf))
+            if (actuation != null && childTransform.gameObject.activeSelf)
             {
                 GeometryFunctions.Bounds bounds = GeometryFunctions.GetAggregateBounds(gameObject);
 
@@ -223,21 +174,25 @@ public class TrackingLayerManager : MonoBehaviour
 
     private IEnumerator ActionActuators()
     {
+        if (actuators.Count > 0)
+        {
+            Debug.Log($"{name} ActionActuators Count: {actuators.Count}");
+        }
+
         while (actuators.Count > 0)
         {
-            float key = actuators.Keys[0];
-            GameObject gameObject = actuators.Values[0];
-
-            float target = 16.0f - key;
-            float delta = ((8.0f + this.gameObject.transform.position.y) - target);
+            var key = actuators.Keys[0];
+            var gameObject = actuators.Values[0];
+            var target = InGameManagerOld.ScreenRatio.y - key;
+            var delta = InGameManagerOld.ScreenRatio.x + this.gameObject.transform.position.y - target;
 
             if (delta <= 0)
             {
                 actuators.RemoveAt(0);
 
-                var actuation = gameObject.GetComponent<IActuate>() as IActuate;
+                var actuation = gameObject.GetComponent<IActuate>();
 
-                if ((actuation != null) && (gameObject.activeSelf))
+                if (actuation != null && gameObject.activeSelf)
                 {
                     actuation.Actuate();
                 }
@@ -261,7 +216,7 @@ public class TrackingLayerManager : MonoBehaviour
         for (int itr = 0; itr < buffer.transform.childCount; ++itr)
         {
             Transform childTransform = buffer.transform.GetChild(0);
-            childTransform.position += new Vector3(0.0f, -InGameManagerOld.ScreenHeightInUnits, 0.0f);
+            childTransform.position += new Vector3(0.0f, -InGameManagerOld.ScreenRatio.y, 0.0f);
             childTransform.parent = main.transform;
         }
 
@@ -272,12 +227,12 @@ public class TrackingLayerManager : MonoBehaviour
         StartCoroutine(ScrollBackgroundCoroutine());
     }
 
-#if (false)
+#if false
     void OnDrawGizmos()
     {
         Gizmos.color = indicatorColor;
         Gizmos.DrawLine(transform.position, transform.position + new Vector3(9.0f, 0.0f, 0.0f));
-        Gizmos.DrawLine(new Vector3(0.0f, InGameManager.ScreenHeightInUnits - transform.position.y, gameObject.transform.position.z), new Vector3(1.0f, InGameManager.ScreenHeightInUnits - transform.position.y, gameObject.transform.position.z));
+        Gizmos.DrawLine(new Vector3(0.0f, InGameManager.ScreenRatio.y - transform.position.y, gameObject.transform.position.z), new Vector3(1.0f, InGameManager.ScreenRatio.y - transform.position.y, gameObject.transform.position.z));
 
         if (actuators != null)
         {
@@ -286,8 +241,8 @@ public class TrackingLayerManager : MonoBehaviour
                 float key = actuator.Key;
                 GameObject gameObject = actuator.Value;
 
-                float target = 16.0f - key;
-                float delta = ((8.0f + this.gameObject.transform.position.y) - target);
+                float target = 16f - key;
+                float delta = 8.0f + this.gameObject.transform.position.y - target;
 
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(new Vector3(0.0f, 16.0f + delta, gameObject.transform.position.z), new Vector3(1.0f, 16.0f + delta, gameObject.transform.position.z));

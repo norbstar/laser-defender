@@ -15,8 +15,5 @@ public class TextPack : ScriptableObject
 
     [SerializeField] TextAsset[] pack;
 
-    public TextAsset[] GetPack()
-    {
-        return pack;
-    }
+    public TextAsset[] Pack { get => pack; }
 }

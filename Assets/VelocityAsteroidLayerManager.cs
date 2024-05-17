@@ -52,6 +52,7 @@ public class VelocityAsteroidLayerManager : MonoBehaviour
     [Serializable]
     public class Settings
     {
+        public int sortingOrder = 0;
         public InterSpawnDelaySettings interSpawnDelay;
         public SpeedSettings speed;
         public RotationSettings rotation;
@@ -68,6 +69,7 @@ public class VelocityAsteroidLayerManager : MonoBehaviour
     {
         public Vector2 Origin { get; set; }
         public Vector2 Vector { get; set; }
+        public string Zone { get; set; }
     }
 
     private int spawnCount, activeSpawnCount;
@@ -141,11 +143,15 @@ public class VelocityAsteroidLayerManager : MonoBehaviour
         Journey journey = CreateJourney();
         Vector2 origin = journey.Origin;
         Vector2 vector = journey.Vector;
+        string zone = journey.Zone;
 
         var asteroid = Instantiate(asteroidPrefab, origin, Quaternion.identity) as GameObject;
         asteroid.transform.parent = transform;
         asteroid.transform.localScale = new Vector3(scale, scale, 1.0f);
-        
+
+        var renderer = asteroid.GetComponent<SpriteRenderer>() as SpriteRenderer;
+        renderer.sortingOrder = settings.sortingOrder;
+
         var asteroidController = asteroid.GetComponent<VelocityAsteroidController>() as VelocityAsteroidController;
 
         if (asteroidController != null)
@@ -159,12 +165,15 @@ public class VelocityAsteroidLayerManager : MonoBehaviour
 
             asteroidController.Actuate(new VelocityAsteroidController.Configuration
             {
-                Layer = RenderLayer.SUB_SURFACE,
+                //Layer = RenderLayer.SUB_SURFACE,
                 StartTransformTime = Time.time,
                 Vector = vector,
+                Zone = zone,
                 Speed = speed,
                 Rotation = rotation
             });
+
+            //Debug.Log($"Signature: {asteroidController.Signature} Vector: {vector} Zone: {zone} Speed: {speed} Rotation: {rotation}");
         }
 
         yield return null;
@@ -177,10 +186,11 @@ public class VelocityAsteroidLayerManager : MonoBehaviour
         IList<GameObject> availableZones = zones.ToList();
 
         int originIndex = PickAvailableZone(availableZones);
-
         collider = availableZones[originIndex].GetComponent<BoxCollider2D>() as BoxCollider2D;
         Vector2 originZoneSize = collider.size;
         Vector2 origin = PickPositionInScope(availableZones[originIndex].transform.position, originZoneSize);
+
+        //Debug.Log($"Origin Index: {originIndex} Zone: {availableZones[originIndex].name}");
 
         availableZones.RemoveAt(originIndex);
 
@@ -190,9 +200,12 @@ public class VelocityAsteroidLayerManager : MonoBehaviour
         Vector2 target = PickPositionInScope(availableZones[targetIndex].transform.position, targetZoneSize);
         Vector2 vector = (target - origin).normalized;
 
+        //Debug.Log($"Target Index: {targetIndex} Zone: {availableZones[targetIndex].name}");
+
         return new Journey
         {
             Origin = origin,
+            Zone = availableZones[targetIndex].name,
             Vector = vector
         };
     }

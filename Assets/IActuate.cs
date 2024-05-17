@@ -1,6 +1,4 @@
-﻿using System;
-
-public interface IActuate
+﻿public interface IActuate
 {
     void Actuate(IConfiguration config = null);
 }

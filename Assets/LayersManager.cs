@@ -9,17 +9,8 @@ public class LayersManager : AbstractSceneryManager
     [SerializeField] GameObject trackingLayerPrefab;
     [SerializeField] Color indicatorColor;
 
-    private LayerPack.Pack pack;
+    private LayerPack.LayerAsset pack;
     private TrackingLayerManager trackingLayerManager;
-
-    public override void Awake()
-    {
-        base.Awake();
-
-        ResolveComponents();
-    }
-
-    private void ResolveComponents() { }
 
     public void Initiate(LayerPack layerPack)
     {
@@ -27,7 +18,7 @@ public class LayersManager : AbstractSceneryManager
 
         if (layerPack != null)
         {
-            pack = layerPack.GetPack();
+            pack = layerPack.Pack;
 
             if (pack.enableAsteroidLayer)
             {
@@ -66,8 +57,5 @@ public class LayersManager : AbstractSceneryManager
         trackingLayerManager.Initiate(trackingPointMapPack, GetScrollSpeed(), indicatorColor);
     }
 
-    private void OnUpdateScrollSpeed(float scrollSpeed)
-    {
-        trackingLayerManager?.SetScrollSpeed(scrollSpeed);
-    }
+    private void OnUpdateScrollSpeed(float scrollSpeed) => trackingLayerManager?.SetScrollSpeed(scrollSpeed);
 }

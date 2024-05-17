@@ -2,57 +2,44 @@
 
 public class GeneralResources : MonoBehaviour
 {
+    [Header("Canvas")]
+    [SerializeField] ScoreUIManager scoreManager;
+    [SerializeField] LivesUIManager livesManager;
+    [SerializeField] CountdownUIManager countdownManager;
+    [SerializeField] ExpositionUIManager expositionManager;
+    [SerializeField] LevelCompleteUIManager levelCompleteManager;
+    [SerializeField] CockpitUIManager cockpitManager;
+
+    [Header("Layers")]
+    [SerializeField] LayersManager backgroundLayers;
+    [SerializeField] LayersManager gameplayLayers;
+    [SerializeField] LayersManager foregroundLayers;
+
     [Header("Prefabs")]
     [SerializeField] GameObject explosionPrefab;
 
     [Header("Folders")]
     [SerializeField] GameObject actuatorFolder;
 
-    [Header("Canvas")]
-    [SerializeField] GameObject scorePanel;
-    [SerializeField] GameObject livesPanel;
-    [SerializeField] GameObject countdownPanel;
-    [SerializeField] GameObject expositionPanel;
-    [SerializeField] GameObject levelCompletePanel;
-    [SerializeField] GameObject cockpitPanel;
+    public ScoreUIManager ScoreManager { get => scoreManager; }
 
-    public GameObject GetExplosionPrefab()
-    {
-        return explosionPrefab;
-    }
+    public LivesUIManager LivesManager { get => livesManager; }
 
-    public GameObject GetActuatorFolder()
-    {
-        return actuatorFolder;
-    }
+    public CountdownUIManager CountdownManager { get => countdownManager; }
 
-    public GameObject GetScorePanel()
-    {
-        return scorePanel;
-    }
+    public ExpositionUIManager ExpositionManager { get => expositionManager; }
 
-    public GameObject GetLivesPanel()
-    {
-        return livesPanel;
-    }
+    public LevelCompleteUIManager LevelCompleteManager { get => levelCompleteManager; }
 
-    public GameObject GetCountdownPanel()
-    {
-        return countdownPanel;
-    }
+    public CockpitUIManager CockpitManager { get => cockpitManager; }
 
-    public GameObject GetExpositionPanel()
-    {
-        return expositionPanel;
-    }
+    public LayersManager BackgroundLayers { get => backgroundLayers; }
 
-    public GameObject GetLevelCompletePanel()
-    {
-        return levelCompletePanel;
-    }
+    public LayersManager GameplayLayers { get => gameplayLayers; }
 
-    public GameObject GetCockpitPanel()
-    {
-        return cockpitPanel;
-    }
+    public LayersManager ForegroundLayers { get => foregroundLayers; }
+
+    public GameObject ActuatorFolder { get => actuatorFolder; }
+
+    public GameObject ExplosionPrefab { get => explosionPrefab; }
 }

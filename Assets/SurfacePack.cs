@@ -6,17 +6,14 @@ using UnityEngine;
 public class SurfacePack : ScriptableObject
 {
     [Serializable]
-    public class Pack
+    public class SurfaceAsset
     {
         [Header("Tracking")]
         public bool enableTracking = false;
         public TrackingPointMapPack trackingPointMapPack;
     }
 
-    [SerializeField] Pack pack;
+    [SerializeField] SurfaceAsset pack;
 
-    public Pack GetPack()
-    {
-        return pack;
-    }
+    public SurfaceAsset Pack { get => pack; }
 }

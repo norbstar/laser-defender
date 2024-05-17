@@ -3,22 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(HealthAttributes))]
 public class DynamicPlayerController : BaseMonoBehaviour
 {
     public delegate void OnShipEnaged();
     public delegate void OnShipDisengaged();
-    //public delegate void OnShipLayerChanged(RenderLayer layer);
-    public delegate void OnRequisitionLayerChange(RenderLayer layer);
 
     public class Delegates
     {
         public OnShipEnaged OnShipEngagedDelegate { get; set; }
         public OnShipDisengaged OnShipDisengagedDelegate { get; set; }
-        //public OnShipLayerChanged OnShipLayerChangedDelegate { get; set; }
-        public OnRequisitionLayerChange OnRequisitionLayerChangeDelegate { get; set; }
     }
 
     [Serializable]
@@ -47,10 +42,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
         public float YMin { get; set; }
         public float YMax { get; set; }
 
-        public override string ToString()
-        {
-            return $"({XMin}, {YMin}, {XMax}, {YMax})";
-        }
+        public override string ToString() => $"({XMin}, {YMin}, {XMax}, {YMax})";
     }
 
     private class ExhaustComponent
@@ -60,9 +52,9 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
     public enum ProjectileMode
     {
-        SINGLE,
-        DUAL,
-        ALL
+        Single,
+        Dual,
+        All
     }
 
     private Animator animator;
@@ -73,9 +65,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
     private long targetTicks;
     private bool controlsActive = false;
     private Vector3 defaultPlayerPosition;
-    private OnShipDisengaged onShipDisengagedDelegate;
     private RenderLayer layer;
-    private Vector3 nativeScale;
 
     public override void Awake()
     {
@@ -84,7 +74,6 @@ public class DynamicPlayerController : BaseMonoBehaviour
         ResolveComponents();
         ConfigureMovementBoundaries();
 
-        nativeScale = transform.localScale;
         layer = RenderLayer.SURFACE;
     }
 
@@ -92,17 +81,13 @@ public class DynamicPlayerController : BaseMonoBehaviour
     void Start()
     {
         defaultPlayerPosition = transform.position;
-
         EngageShip();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!ControlsEnabled())
-        {
-            return;
-        }
+        if (!ControlsEnabled()) return;
 
         transform.position = CalculateKeyInputPosition();
 
@@ -115,53 +100,23 @@ public class DynamicPlayerController : BaseMonoBehaviour
         {
             StartCoroutine(FireSecondaryProjectileCoroutine());
         }
-
-        if (Input.GetButtonDown("Fire3"))
-        {
-            //StartCoroutine(TransitionGameplayLayerCoroutine());
-            //delegates?.OnRequisitionLayerChange((layer == RenderLayer.SURFACE) ? RenderLayer.SUB_SURFACE : RenderLayer.SURFACE);
-        }
     }
 
-    public void RegisterDelegates(Delegates delegates)
-    {
-        this.delegates = delegates;
-    }
+    public void RegisterDelegates(Delegates delegates) => this.delegates = delegates;
 
-    public GameObject[] GetExhausts()
-    {
-        return exhausts;
-    }
+    public GameObject[] GetExhausts() => exhausts;
 
-    public GameObject GetReverseLeftTrust()
-    {
-        return reverseLeftTrust;
-    }
+    public GameObject GetReverseLeftTrust() => reverseLeftTrust;
 
-    public GameObject GetReverseRightTrust()
-    {
-        return reverseRightTrust;
-    }
+    public GameObject GetReverseRightTrust() => reverseRightTrust;
 
-    public void EnableControls()
-    {
-        controlsActive = true;
-    }
+    public void EnableControls() => controlsActive = true;
 
-    public void DisableControls()
-    {
-        controlsActive = false;
-    }
+    public void DisableControls() => controlsActive = false;
 
-    public bool ControlsEnabled()
-    {
-        return controlsActive;
-    }
+    public bool ControlsEnabled() => controlsActive;
 
-    public void EngageShip()
-    {
-        StartCoroutine(EngageShipCoroutine());
-    }
+    public void EngageShip() => StartCoroutine(EngageShipCoroutine());
 
     private IEnumerator EngageShipCoroutine()
     {
@@ -178,7 +133,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
             float fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
             transform.position = Vector3.Lerp(originPosition, targetPosition, (float)fractionComplete);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1.0f;
 
             if (complete)
             {
@@ -191,10 +146,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
         SetExhaustThrust(0.0f);
     }
 
-    public void DisengageShip()
-    {
-        StartCoroutine(DisengageShipCoroutine());
-    }
+    public void DisengageShip() => StartCoroutine(DisengageShipCoroutine());
 
     private IEnumerator DisengageShipCoroutine()
     {
@@ -242,7 +194,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
             if (ticks >= targetTicks)
             {
-                FireProjectiles(ProjectileMode.SINGLE, ProjectileController.Type.MEDIUM_BULLET);
+                FireProjectiles(ProjectileMode.Single, ProjectileController.Type.MEDIUM_BULLET);
                 targetTicks = ticks + (projectilesDelayMs * TimeSpan.TicksPerMillisecond);
             }
 
@@ -261,7 +213,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
             if (ticks >= targetTicks)
             {
-                FireProjectiles(ProjectileMode.DUAL, ProjectileController.Type.HEAVY_PROTON);
+                FireProjectiles(ProjectileMode.Dual, ProjectileController.Type.HEAVY_PROTON);
                 targetTicks = ticks + (projectilesDelayMs * TimeSpan.TicksPerMillisecond);
             }
 
@@ -269,87 +221,6 @@ public class DynamicPlayerController : BaseMonoBehaviour
             yield return null;
         }
     }
-
-    //private IEnumerator TransitionGameplayLayerCoroutine()
-    //{
-    //    Vector3? originScale = null;
-    //    Vector3? targetScale = null;
-    //    float duration = 0.25f;
-    //    float startTime = Time.time;
-
-    //    switch (layer)
-    //    {
-    //        case RenderLayer.SURFACE:
-    //            originScale = nativeScale;
-    //            targetScale = nativeScale * 0.9f;
-    //            break;
-
-    //        case RenderLayer.SUB_SURFACE:
-    //            originScale = nativeScale * 0.9f;
-    //            targetScale = nativeScale;
-    //            break;
-    //    }
-
-    //    bool complete = false;
-
-    //    while (!complete)
-    //    {
-    //        float fractionComplete = (Time.time - startTime) / duration;
-
-    //        if (fractionComplete >= 0.0f)
-    //        {
-    //            //transform.localScale = Vector3.Lerp(originScale.Value, targetScale.Value, fractionComplete);
-    //            ScaleObjects();
-    //            complete = (fractionComplete >= 1.0f);
-    //        }
-
-    //        if (complete)
-    //        {
-    //            OnTransitionGameplayLayerComplete();
-    //        }
-
-    //        yield return null;
-    //    }
-    //}
-
-    //private void ScaleObjects()
-    //{
-    //    GameObject[] rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
-
-    //    foreach (GameObject gameObject in rootObjects)
-    //    {
-    //        if (gameObject.GetComponentsInChildren<IModify>() is IModify[] iModifys)
-    //        {
-    //            foreach (IModify iModify in iModifys)
-    //            {
-    //                RenderLayer layer = iModify.GetLayer();
-
-    //                if (layer == RenderLayer.SUB_SURFACE)
-    //                {
-    //                    float multiplier = 1.0f;
-
-    //                    if (transform.gameObject.layer == (int) RenderLayer.SURFACE)
-    //                    {
-    //                        multiplier = 0.9f;
-    //                    }
-
-    //                    iModify.SetScale(multiplier);
-    //                }
-    //                else if (layer == RenderLayer.SURFACE)
-    //                {
-    //                    float multiplier = 1.0f;
-
-    //                    if (transform.gameObject.layer == (int) RenderLayer.SUB_SURFACE)
-    //                    {
-    //                        multiplier = 1.19f;
-    //                    }
-
-    //                    iModify.SetScale(multiplier);
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
 
     private Vector3 CalculateKeyInputPosition()
     {
@@ -363,24 +234,6 @@ public class DynamicPlayerController : BaseMonoBehaviour
         reverseLeftTrust.SetActive(input.y < 0.0f);
         reverseRightTrust.SetActive(input.y < 0.0f);
 
-        //if (input.x != 0.0f)
-        //{
-        //    animator.SetFloat("speed", input.x);
-        //}
-
-        //if (input.y != 0.0f)
-        //{
-        //    SetExhaustThrust(input.y);
-
-        //    reverseLeftTrust.SetActive(input.y < 0.0f);
-        //    reverseRightTrust.SetActive(input.y < 0.0f);
-        //}
-        //else
-        //{
-        //    reverseLeftTrust.SetActive(false);
-        //    reverseRightTrust.SetActive(false);
-        //}
-
         var positionX = transform.position.x + regulatedInput.x;
         float unitPositionX = Mathf.Clamp(positionX, boundary.XMin + 1.0f, boundary.XMax - 1.0f);
 
@@ -392,7 +245,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
     private void ConfigureMovementBoundaries()
     {
-        Camera mainCamera = Camera.main;
+        var mainCamera = Camera.main;
 
         boundary = new Boundary
         {
@@ -422,36 +275,29 @@ public class DynamicPlayerController : BaseMonoBehaviour
     {
         switch (mode)
         {
-            case ProjectileMode.SINGLE:
+            case ProjectileMode.Single:
                 SpawnPrimaryProjectile(type);
                 break;
 
-            case ProjectileMode.DUAL:
+            case ProjectileMode.Dual:
                 SpawnWingProjectiles(type);
                 break;
 
-            case ProjectileMode.ALL:
+            case ProjectileMode.All:
                 SpawnPrimaryProjectile(type);
                 SpawnWingProjectiles(type);
                 break;
         }
     }
 
-    private IList<GameObject> SpawnPrimaryProjectile(ProjectileController.Type type)
-    {
-        IList<GameObject> shots = new List<GameObject>();
-        shots.Add(SpawnProjectileAndActuate(type, new Vector2(transform.position.x, transform.position.y + 0.8f)));
-
-        return shots;
-    }
+    private IList<GameObject> SpawnPrimaryProjectile(ProjectileController.Type type) => new List<GameObject>{SpawnProjectileAndActuate(type, new Vector2(transform.position.x, transform.position.y + 0.8f))};
 
     private IList<GameObject> SpawnWingProjectiles(ProjectileController.Type type)
     {
-        IList<GameObject> shots = new List<GameObject>();
-        shots.Add(SpawnProjectileAndActuate(type, new Vector2(transform.position.x - 0.5f, transform.position.y)));
-        shots.Add(SpawnProjectileAndActuate(type, new Vector2(transform.position.x + 0.5f, transform.position.y)));
-
-        return shots;
+        return new List<GameObject>{
+            SpawnProjectileAndActuate(type, new Vector2(transform.position.x - 0.5f, transform.position.y)),
+            SpawnProjectileAndActuate(type, new Vector2(transform.position.x + 0.5f, transform.position.y))
+        };
     }
 
     private GameObject SpawnProjectileAndActuate(ProjectileController.Type type, Vector2 position)
@@ -507,20 +353,11 @@ public class DynamicPlayerController : BaseMonoBehaviour
         return projectile;
     }
 
-    public void Reset()
-    {
-        transform.position = defaultPlayerPosition;
-    }
+    public void Reset() => transform.position = defaultPlayerPosition;
 
-    private void OnShipEngagedComplete()
-    {
-        delegates?.OnShipEngagedDelegate?.Invoke();
-    }
+    private void OnShipEngagedComplete() => delegates?.OnShipEngagedDelegate?.Invoke();
 
-    private void OnShipDisengagedComplete()
-    {
-        delegates?.OnShipDisengagedDelegate?.Invoke();
-    }
+    private void OnShipDisengagedComplete() => delegates?.OnShipDisengagedDelegate?.Invoke();
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
@@ -552,7 +389,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
                 }
                 else
                 {
-                    //Debug.Log($"You lost a life!!!");
+                    Debug.Log($"You lost a life!!!");
                     // TODO Life Lost
                 }
             }
@@ -590,21 +427,4 @@ public class DynamicPlayerController : BaseMonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
     }
-
-    //private void OnTransitionGameplayLayerComplete()
-    //{
-    //    switch (layer)
-    //    {
-    //        case RenderLayer.SURFACE:
-    //            layer = RenderLayer.SUB_SURFACE;
-    //            break;
-
-    //        case RenderLayer.SUB_SURFACE:
-    //            layer = RenderLayer.SURFACE;
-    //            break;
-    //    }
-
-    //    gameObject.layer = (int) layer;
-    //    delegates?.OnShipLayerChangedDelegate(layer);
-    //}
 }

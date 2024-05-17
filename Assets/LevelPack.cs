@@ -4,13 +4,13 @@
 public class LevelPack : ScriptableObject
 {
     [Header("Canvas")]
-    [SerializeField] SpriteAssetPack canvasAssetPack;
+    [SerializeField] SpriteAssetPack spritePack;
 
     [Header("Background")]
     [SerializeField] SurfacePack backgroundPack;
 
     [Header("Gameplay")]
-    [SerializeField] GameplaySurfacePack gameplayPack;
+    [SerializeField] SurfacePack gameplayPack;
 
     [Header("Foreground")]
     [SerializeField] SurfacePack foregroundPack;
@@ -24,37 +24,17 @@ public class LevelPack : ScriptableObject
     [Header("Exposition")]
     [SerializeField] TextPack expositionPack;
 
-    public SpriteAssetPack GetCanvasAssetPack()
-    {
-        return canvasAssetPack;
-    }
+    public SpriteAssetPack SpritePack { get => spritePack; }
 
-    public SurfacePack GetBackgroundPack()
-    {
-        return backgroundPack;
-    }
+    public SurfacePack BackgroundPack { get => backgroundPack; }
 
-    public GameplaySurfacePack GetGameplayPack()
-    {
-        return gameplayPack;
-    }
+    public SurfacePack GameplayPack { get => gameplayPack; }
 
-    public SurfacePack GetForegroundPack()
-    {
-        return foregroundPack;
-    }
+    public SurfacePack ForegroundPack { get => foregroundPack; }
 
-    public WaveConfigPack GetWaveConfigPack()
-    {
-        return waveConfigPack;
-    }
+    public WaveConfigPack WaveConfigPack { get => waveConfigPack; }
 
-    public AudioClip GetAudioClip()
-    {
-        return audioClip;
-    }
-    public TextPack GetExpositionPack()
-    {
-        return expositionPack;
-    }
+    public AudioClip AudioClip { get => audioClip; }
+
+    public TextPack ExpositionPack { get => expositionPack; }
 }

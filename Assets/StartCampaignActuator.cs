@@ -17,6 +17,6 @@ public class StartCampaignActuator : MonoBehaviour, IActuate
             Debug.Log($"Start Campaign: {subMenuItem.name}");
         }
 
-        SceneManager.LoadScene("InGame", LoadSceneMode.Single);
+        SceneManager.LoadScene("In Game", LoadSceneMode.Single);
     }
 }

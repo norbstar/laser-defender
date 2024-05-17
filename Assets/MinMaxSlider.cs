@@ -1,41 +1,43 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MinMaxSlider : EditorWindow
+namespace UnityEditor
 {
-    private float minVal = 10;
-    private float minLimit = 0;
-    private float maxVal = 10;
-    private float maxLimit = 15;
-
-    [MenuItem("Examples/Place Object Randomly")]
-    static void Init()
+    public class MinMaxSlider : EditorWindow
     {
-        MinMaxSlider window = (MinMaxSlider) GetWindow(typeof(MinMaxSlider));
-        window.Show();
-    }
+        private float minVal = 10;
+        private float minLimit = 0;
+        private float maxVal = 10;
+        private float maxLimit = 15;
 
-    void OnGUI()
-    {
-        EditorGUILayout.LabelField("Min:", minVal.ToString());
-        EditorGUILayout.LabelField("Max:", maxVal.ToString());
-        EditorGUILayout.MinMaxSlider(ref minVal, ref maxVal, minLimit, maxLimit);
-
-        if (GUILayout.Button("Move!"))
+        [MenuItem("Examples/Place Object Randomly")]
+        static void Init()
         {
-            PlaceRandomly();
+            MinMaxSlider window = (MinMaxSlider)GetWindow(typeof(MinMaxSlider));
+            window.Show();
         }
-    }
 
-    void PlaceRandomly()
-    {
-        if (Selection.activeTransform)
+        void OnGUI()
         {
-            Selection.activeTransform.position = new Vector3(Random.Range(minVal, maxVal), Random.Range(minVal, maxVal), Random.Range(minVal, maxVal));
+            EditorGUILayout.LabelField("Min:", minVal.ToString());
+            EditorGUILayout.LabelField("Max:", maxVal.ToString());
+            EditorGUILayout.MinMaxSlider(ref minVal, ref maxVal, minLimit, maxLimit);
+
+            if (GUILayout.Button("Move!"))
+            {
+                PlaceRandomly();
+            }
         }
-        else
+
+        void PlaceRandomly()
         {
-            Debug.LogError("Select a GameObject to randomize its position.");
+            if (Selection.activeTransform)
+            {
+                Selection.activeTransform.position = new Vector3(Random.Range(minVal, maxVal), Random.Range(minVal, maxVal), Random.Range(minVal, maxVal));
+            }
+            else
+            {
+                Debug.LogError("Select a GameObject to randomize its position.");
+            }
         }
     }
 }

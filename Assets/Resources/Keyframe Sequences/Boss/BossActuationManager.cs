@@ -38,7 +38,7 @@ public class BossActuationManager : MonoBehaviour, IActuate
         ResolveDependencies();
 
         GameObject prefab = Instantiate(bossPrefab, new Vector3(-1.0f, -1.0f, 1.0f), Quaternion.identity) as GameObject;
-        prefab.transform.parent = generalResources.GetActuatorFolder().transform;
+        prefab.transform.parent = generalResources.ActuatorFolder.transform;
 
         bossController = prefab.GetComponent<BossController>() as BossController;
         Vector3 spawnPoint = bossController.GetSpawnPoint();

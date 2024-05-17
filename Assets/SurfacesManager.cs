@@ -18,10 +18,15 @@ public class SurfacesManager : MonoBehaviour
 
             if (surfaceManagers != null)
             {
+                int surfaceId = 0;
+
                 foreach (SurfaceManager surfaceManager in surfaceManagers)
                 {
                     float scrollSpeed = surfaceManager.GetDefaultScrollSpeed() * speed;
                     surfaceManager.SetScrollSpeed(scrollSpeed);
+                    surfaceManager.SetPanelGuideOffset(0.5f + (0.75f * surfaceId));
+
+                    ++surfaceId;
                 }
             }
 

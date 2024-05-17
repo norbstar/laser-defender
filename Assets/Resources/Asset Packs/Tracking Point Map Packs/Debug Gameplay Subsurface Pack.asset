@@ -17,4 +17,3 @@ MonoBehaviour:
     - id: 1
       prefab: {fileID: 5918661455557947332, guid: 6747f69feba7ede4cb7ce76d0eac10fa,
         type: 3}
-      layer: 10

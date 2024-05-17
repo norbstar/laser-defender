@@ -52,7 +52,7 @@ public class ExpositionUIManager : MonoBehaviour, IActuate
 
         if (textPack != null)
         {
-            foreach (TextPack.TextAsset textAsset in textPack.GetPack())
+            foreach (TextPack.TextAsset textAsset in textPack.Pack)
             {
                 string text = textAsset.text;
                 textUIManager.SetText(text);

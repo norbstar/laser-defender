@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Level")]
 public class LevelOld : ScriptableObject
 {
     [Header("Backdrop")]
-    [SerializeField] SpriteAssetPack backdropAssetPack;
+    [SerializeField] SpriteAssetPack spritePack;
 
     [Header("Background")]
     [SerializeField] LayerPack backgroundLayerPack;
@@ -24,37 +24,17 @@ public class LevelOld : ScriptableObject
     [Header("Exposition")]
     [SerializeField] TextPack expositionPack;
 
-    public SpriteAssetPack GetBackdropAssetPack()
-    {
-        return backdropAssetPack;
-    }
+    public SpriteAssetPack SpritePack { get => spritePack; }
 
-    public LayerPack GetGameplayLayerPack()
-    {
-        return gameplayLayerPack;
-    }
+    public LayerPack GameplayLayerPack { get => gameplayLayerPack; }
 
-    public LayerPack GetBackgroundLayerPack()
-    {
-        return backgroundLayerPack;
-    }
+    public LayerPack BackgroundLayerPack { get => backgroundLayerPack; }
 
-    public LayerPack GetForegroundLayerPack()
-    {
-        return foregroundLayerPack;
-    }
+    public LayerPack ForegroundLayerPack { get => foregroundLayerPack; }
 
-    public WaveConfigPack GetWaveConfigPack()
-    {
-        return waveConfigPack;
-    }
+    public WaveConfigPack WaveConfigPack { get => waveConfigPack; }
 
-    public AudioClip GetAudioClip()
-    {
-        return audioClip;
-    }
-    public TextPack GetExpositionPack()
-    {
-        return expositionPack;
-    }
+    public AudioClip AudioClip { get => audioClip; }
+
+    public TextPack ExpositionPack { get => expositionPack; }
 }

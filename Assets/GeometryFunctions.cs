@@ -18,7 +18,7 @@ public class GeometryFunctions : MonoBehaviour
         if (renderer != null)
         {
             Vector3 position = gameObject.transform.position;
-            position -= new Vector3(0.0f, InGameManager.ScreenHeightInUnits, 0.0f);
+            position -= new Vector3(0.0f, InGameManager.ScreenRatio.y, 0.0f);
             Vector3 size = renderer.bounds.size;
 
             float top = position.y + (size.y / 2);
@@ -55,7 +55,7 @@ public class GeometryFunctions : MonoBehaviour
 
             if (bounds != null)
             {
-                Vector2 position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - InGameManager.ScreenHeightInUnits);
+                Vector2 position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - InGameManager.ScreenRatio.y);
                 
                 aggregateBounds = new Bounds
                 {

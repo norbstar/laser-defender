@@ -8,7 +8,7 @@ public abstract class GUIMonoBehaviour : MonoBehaviour
 
     protected void ConfigGUIStyle(string fontName = "Block Stock")
     {
-        Font myFont = (Font) Resources.Load($"Fonts/{fontName}", typeof(Font));
+        var myFont = (Font) Resources.Load($"Fonts/{fontName}", typeof(Font));
 
         guiStyle = new GUIStyle
         {
@@ -20,13 +20,7 @@ public abstract class GUIMonoBehaviour : MonoBehaviour
         guiStyle.normal.textColor = Color.white;
     }
 
-    public GUIStyle GetGUIStyle()
-    {
-        return guiStyle;
-    }
+    public GUIStyle GUIStyle { get => guiStyle; }
 
-    void OnGUI()
-    {
-        SetGUIAttributes(guiStyle);
-    }
+    void OnGUI() => SetGUIAttributes(guiStyle);
 }

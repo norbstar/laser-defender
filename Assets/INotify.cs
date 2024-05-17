@@ -1,4 +1,1 @@
-﻿public interface INotify
-{
-    void OnLayerChange(int layer);
-}
+﻿public interface INotify { }

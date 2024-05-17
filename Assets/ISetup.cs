@@ -1,4 +1,1 @@
-﻿public interface ISetup
-{
-    RenderLayer GetActiveLayer();
-}
+﻿public interface ISetup { }

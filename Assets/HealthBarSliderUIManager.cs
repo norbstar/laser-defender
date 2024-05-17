@@ -18,6 +18,17 @@ public class HealthBarSliderUIManager : MonoBehaviour
         slider = GetComponent<Slider>() as Slider;
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        slider.onValueChanged.AddListener(delegate { OnValueChanged(); });
+    }
+
+    private void OnValueChanged()
+    {
+        SetHealth(slider.value);
+    }
+
     public void SetHealth(float health)
     {
         slider.value = health;

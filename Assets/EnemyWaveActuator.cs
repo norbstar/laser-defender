@@ -68,7 +68,7 @@ public class EnemyWaveActuator : MonoBehaviour, IActuate
     {
         if (!selfAdministered)
         {
-            Destroy(Instantiate(generalResources.GetExplosionPrefab(), gameObject.transform.position, Quaternion.identity), 0.15f);
+            Destroy(Instantiate(generalResources.ExplosionPrefab, gameObject.transform.position, Quaternion.identity), 0.15f);
         }
 
         --enemyCount;
