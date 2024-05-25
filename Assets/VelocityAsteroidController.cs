@@ -77,10 +77,10 @@ public class VelocityAsteroidController : BaseMonoBehaviour, IActuate, IModify, 
             }
         }
 
-        StartCoroutine(ActuateCoroutine(startTime, vector, speed, rotation));
+        StartCoroutine(Co_Actuate(startTime, vector, speed, rotation));
     }
 
-    private IEnumerator ActuateCoroutine(float startTime, Vector2 vector, float speed, float rotation)
+    private IEnumerator Co_Actuate(float startTime, Vector2 vector, float speed, float rotation)
     {
         gameObject.layer = (int) layer;
 
@@ -139,7 +139,7 @@ public class VelocityAsteroidController : BaseMonoBehaviour, IActuate, IModify, 
 
                 if (healthAttributes.GetHealthMetric() > 0.0f)
                 {
-                    StartCoroutine(ManifestDamage());
+                    StartCoroutine(Co_ManifestDamage());
                     delegates?.OnAsteroidDamagedDelegate?.Invoke(gameObject, trigger, healthAttributes);
                 }
                 else
@@ -215,7 +215,7 @@ public class VelocityAsteroidController : BaseMonoBehaviour, IActuate, IModify, 
     //    }
     //}
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 3; ++itr)
         {

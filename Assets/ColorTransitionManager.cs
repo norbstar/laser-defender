@@ -1,31 +1,24 @@
 ﻿using UnityEngine;
 
-public class BackgroundManager : MonoBehaviour
+public class ColorTransitionManager : MonoBehaviour
 {
     [SerializeField] Color[] colors;
     [SerializeField] float speed = 1.0f;
 
     private new SpriteRenderer renderer;
-    //private Color[] colors;
     private int colorIndex;
+    private Color originColor;
+    private Color targetColor;
     private float startTime;
-    private Color originColor, targetColor;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        ResolveComponents();
-
-        //colors = new Color[] { Color.white, Color.cyan };
-        colorIndex = 0;
-
-        QueueNextTransform();
-    }
-
-    private void ResolveComponents()
+    void Awake()
     {
         renderer = GetComponent<SpriteRenderer>();
+        colorIndex = 0;
     }
+
+    // Start is called before the first frame update
+    void Start() => QueueNextTransform();
 
     private void QueueNextTransform()
     {
@@ -47,8 +40,8 @@ public class BackgroundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        double fractionComplete = (Time.time - startTime) * speed;
-        renderer.material.SetColor("_Color", Color.Lerp(originColor, targetColor, (float)fractionComplete));
+        var fractionComplete = (Time.time - startTime) * speed;
+        renderer.material.SetColor("_Color", Color.Lerp(originColor, targetColor, fractionComplete));
 
         if (fractionComplete > 1.0f)
         {

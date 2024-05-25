@@ -24,7 +24,7 @@ public class BossActuationManager : MonoBehaviour, IActuate
     {
         if (gameObject.activeSelf)
         {
-            StartCoroutine(ActuateCoroutine());
+            StartCoroutine(Co_Actuate());
         }
     }
 
@@ -33,7 +33,7 @@ public class BossActuationManager : MonoBehaviour, IActuate
         bossPrefab = bossConfig.GetBossPrefab();
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         ResolveDependencies();
 

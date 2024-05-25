@@ -15,7 +15,7 @@ public class CountdownUIActuator : MonoBehaviour, IActuate
     {
         if (gameObject.activeSelf)
         {
-            StartCoroutine(ActuateCoroutine());
+            StartCoroutine(Co_Actuate());
         }
     }
 
@@ -24,7 +24,7 @@ public class CountdownUIActuator : MonoBehaviour, IActuate
         countdownUIManager = FindObjectOfType<CountdownUIManager>() as CountdownUIManager;
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         countdownUIManager.RegisterDelegate(OnCountdownComplete);
         countdownUIManager.Actuate();

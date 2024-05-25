@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShotSpongeDetector : MonoBehaviour
+public class ProjectileSponge : MonoBehaviour
 {
     public void OnTriggerEnter2D(Collider2D collider)
     {

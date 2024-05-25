@@ -11,9 +11,13 @@ public class GeneralResources : MonoBehaviour
     [SerializeField] CockpitUIManager cockpitManager;
 
     [Header("Layers")]
+    [SerializeField] BackdropManager backdropLayer;
     [SerializeField] LayersManager backgroundLayers;
     [SerializeField] LayersManager gameplayLayers;
     [SerializeField] LayersManager foregroundLayers;
+
+    [Header("Player")]
+    [SerializeField] DynamicPlayerController player;
 
     [Header("Prefabs")]
     [SerializeField] GameObject explosionPrefab;
@@ -33,11 +37,15 @@ public class GeneralResources : MonoBehaviour
 
     public CockpitUIManager CockpitManager { get => cockpitManager; }
 
+    public BackdropManager BackdropLayer { get => backdropLayer; }
+
     public LayersManager BackgroundLayers { get => backgroundLayers; }
 
     public LayersManager GameplayLayers { get => gameplayLayers; }
 
     public LayersManager ForegroundLayers { get => foregroundLayers; }
+
+    public DynamicPlayerController Player { get => player; }
 
     public GameObject ActuatorFolder { get => actuatorFolder; }
 

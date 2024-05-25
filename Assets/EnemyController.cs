@@ -69,13 +69,13 @@ public class EnemyController : MonoBehaviour, IActuate
 
         if (gameObject.activeSelf)
         {
-            StartCoroutine(ActuateCoroutine());
+            StartCoroutine(Co_Actuate());
         }
     }
 
     private void ResolveDependencies() { }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         ResolveDependencies();
 
@@ -85,7 +85,7 @@ public class EnemyController : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (speed * magnitude);
+            var fractionComplete = (Time.time - startTime) * (speed * magnitude);
 
             if (fractionComplete >= 0.0f)
             {
@@ -108,7 +108,7 @@ public class EnemyController : MonoBehaviour, IActuate
                     transform.rotation = MathFunctions.AlignZRotationToVector(transform.rotation, positionVector.Position, (Vector2) positionVector.ProjectedPosition, 90);
                 }
 
-                complete = (fractionComplete >= 1.0f);
+                complete = fractionComplete >= 1f;
             }
 
             if (complete)
@@ -328,7 +328,7 @@ public class EnemyController : MonoBehaviour, IActuate
                 if (healthAttributes.GetHealthMetric() > 0)
                 {
                     delegates?.OnEnemyDamagedDelegate?.Invoke(gameObject, waveSequence, healthAttributes);
-                    StartCoroutine(ManifestDamage());
+                    StartCoroutine(Co_ManifestDamage());
                 }
                 else
                 {
@@ -338,7 +338,7 @@ public class EnemyController : MonoBehaviour, IActuate
         }
     }
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 5; ++itr)
         {

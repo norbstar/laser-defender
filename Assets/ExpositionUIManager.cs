@@ -40,13 +40,13 @@ public class ExpositionUIManager : MonoBehaviour, IActuate
 
         if (gameObject.activeSelf)
         {
-            StartCoroutine(ActuateCoroutine());
+            StartCoroutine(Co_Actuate());
         }
     }
 
     private void ResolveDependencies() { }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         ResolveDependencies();
 
@@ -63,9 +63,9 @@ public class ExpositionUIManager : MonoBehaviour, IActuate
                 Color textColor = textAsset.textColor;
                 textUIManager.SetTextColor(textColor);
 
-                yield return StartCoroutine(FadeInText());
+                yield return StartCoroutine(Co_FadeInText());
                 yield return new WaitForSeconds(promptDelay);
-                yield return StartCoroutine(FadeOutText());
+                yield return StartCoroutine(Co_FadeOutText());
                 yield return new WaitForSeconds(interPromptDelay);
             }
 
@@ -74,7 +74,7 @@ public class ExpositionUIManager : MonoBehaviour, IActuate
         }
     }
 
-    private IEnumerator FadeInText()
+    private IEnumerator Co_FadeInText()
     {
         Color originalColor = textUIManager.GetTextColor();
         float startTime = Time.time;
@@ -83,11 +83,11 @@ public class ExpositionUIManager : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
 
             textUIManager.SetTextColor(new Color(originalColor.r, originalColor.g, originalColor.b, fractionComplete));
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -98,7 +98,7 @@ public class ExpositionUIManager : MonoBehaviour, IActuate
         }
     }
 
-    private IEnumerator FadeOutText()
+    private IEnumerator Co_FadeOutText()
     {
         Color originalColor = textUIManager.GetTextColor();
         float startTime = Time.time;
@@ -107,11 +107,11 @@ public class ExpositionUIManager : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
 
             textUIManager.SetTextColor(new Color(originalColor.r, originalColor.g, originalColor.b, 1.0f - fractionComplete));
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

@@ -16,12 +16,6 @@ MonoBehaviour:
     enableAsteroidLayer: 0
     overrides:
       enableOverrides: 0
-      spawnSettings:
-        interSpawnDelay: 5
-        speed: 0.1
-        rotation: 10
-        scale: 0.5
-        spawnCount: 15
     enableDebrisLayer: 0
     enableTrackingLayer: 1
     trackingPointMapPack: {fileID: 11400000, guid: d6bba2bc833654143bddd751b45becd7,

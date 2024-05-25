@@ -58,7 +58,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
             surfaceTrackingPointMapPack = pack.surfaceTrackingPointMapPack;
         }
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
     private Dependencies ResolveDependencies(GameObject prefab)
@@ -77,7 +77,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         return null;
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         foreach (Transform child in transform)
         {
@@ -147,7 +147,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
             }
         }
 
-        StartCoroutine(ScrollBackgroundCoroutine());
+        StartCoroutine(Co_Scroll());
 
         yield return null;
     }
@@ -167,12 +167,12 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         return null;
     }
 
-    private IEnumerator ScrollBackgroundCoroutine()
+    private IEnumerator Co_Scroll()
     {
         if (subSurfaceTrackingPointMapPack != null)
         {
             Dependencies dependencies = ResolveDependencies(gameplaySubsurfacePrefab);
-            SetTrackingIdentifiers(dependencies);
+            UpdateIdentifiers(dependencies);
             TrackingPointMapPack.Map subSurfaceTrackingPointMap = GetTrackingPointMap(subSurfaceTrackingPointMapPack, bufferCanvasId);
 
             if (subSurfaceTrackingPointMap != null)
@@ -193,7 +193,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         if (surfaceTrackingPointMapPack != null)
         {
             Dependencies dependencies = ResolveDependencies(gameplaySurfacePrefab);
-            SetTrackingIdentifiers(dependencies);
+            UpdateIdentifiers(dependencies);
             TrackingPointMapPack.Map nextTrackingMap = GetTrackingPointMap(surfaceTrackingPointMapPack, bufferCanvasId);
 
             if (nextTrackingMap != null)
@@ -211,27 +211,28 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
             }
         }
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
+        Vector3 targetPosition = new Vector3(0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
         float journeyLength = InGameManager.ScreenRatio.y;
-        float accumulativeDeltaTime = 0.0f;
+        float speedAdjustedDeltaTime = 0f;
         bool complete = false;
 
         while (!complete)
         {
-            float fractionComplete = accumulativeDeltaTime / journeyLength;
+            var fractionComplete = speedAdjustedDeltaTime / journeyLength;
 
-            transform.position = Vector3.Lerp(originPosition, targetPosition, (float) fractionComplete);
+            transform.position = Vector3.Lerp(originPosition, targetPosition, fractionComplete);
 
-            StartCoroutine(ActionActuators());
+            StartCoroutine(Co_ActionActuators());
 
-            complete = fractionComplete >= 1.0f;
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
                 OnComplete();
             }
 
-            accumulativeDeltaTime += Time.deltaTime * scrollSpeed;
+            speedAdjustedDeltaTime += scrollSpeed * Time.deltaTime;
+            // Debug.Log($"Scroll Speed: {scrollSpeed} Speed Adjusted Delta Time: {speedAdjustedDeltaTime}");
 
             yield return null;
         }
@@ -246,15 +247,13 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         }
     }
 
-    private void SetTrackingIdentifiers(Dependencies dependencies)
+    private void UpdateIdentifiers(Dependencies dependencies)
     {
-        TextMesh textMesh;
-
-        textMesh = dependencies.MainIdTag.GetComponent<TextMesh>() as TextMesh;
+        var textMesh = dependencies.MainIdTag.GetComponent<TextMesh>();
         textMesh.color = idTagColor;
         textMesh.text = mainCanvasId.ToString();
 
-        textMesh = dependencies.BufferIdTag.GetComponent<TextMesh>() as TextMesh;
+        textMesh = dependencies.BufferIdTag.GetComponent<TextMesh>();
         textMesh.color = idTagColor;
         textMesh.text = bufferCanvasId.ToString();
     }
@@ -305,13 +304,13 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         return actuators;
     }
 
-    private IEnumerator ActionActuators()
+    private IEnumerator Co_ActionActuators()
     {
-        yield return StartCoroutine(ActionActuators(RenderLayer.SUB_SURFACE, subSurfaceActuators));
-        yield return StartCoroutine(ActionActuators(RenderLayer.SURFACE, surfaceActuators));
+        yield return StartCoroutine(Co_ActionActuators(RenderLayer.SUB_SURFACE, subSurfaceActuators));
+        yield return StartCoroutine(Co_ActionActuators(RenderLayer.SURFACE, surfaceActuators));
     }
 
-    private IEnumerator ActionActuators(RenderLayer layer, SortedList<float, GameObject> actuators)
+    private IEnumerator Co_ActionActuators(RenderLayer layer, SortedList<float, GameObject> actuators)
     {
         if (actuators != null)
         {
@@ -399,7 +398,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         bufferCanvasId = index + 1;
         transform.position = originPosition;
 
-        StartCoroutine(ScrollBackgroundCoroutine());
+        StartCoroutine(Co_Scroll());
     }
 
     private void OnComplete(Dependencies dependencies)

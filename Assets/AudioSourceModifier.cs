@@ -20,25 +20,24 @@ public class AudioSourceModifier : MonoBehaviour
 
     public void TransformVolume(float volume, float? duration = null)
     {
-        StartCoroutine(TransformVolumeCoroutine(volume, duration));
+        StartCoroutine(Co_TransformVolume(volume, duration));
     }
 
-    private IEnumerator TransformVolumeCoroutine(float volume, float? duration = null)
+    private IEnumerator Co_TransformVolume(float volume, float? duration = null)
     {
         float originVolume = audioSource.volume;
         float targetVolume = volume;
-        float appliedDuration = (duration.HasValue) ? duration.Value : this.duration;
+        float appliedDuration = duration.HasValue ? duration.Value : this.duration;
         float startTime = Time.time;
         bool complete = false;
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / appliedDuration;
-
-            float value = Mathf.Lerp(originVolume, targetVolume, fractionComplete);
+            var fractionComplete = (Time.time - startTime) / appliedDuration;
+            var value = Mathf.Lerp(originVolume, targetVolume, fractionComplete);
             audioSource.volume = value;
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

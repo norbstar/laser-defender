@@ -54,10 +54,10 @@ public class PropagationWaveController : MonoBehaviour, IActuate
             }
         }
 
-        StartCoroutine(AcuateCoroutine());
+        StartCoroutine(Co_Acuate());
     }
 
-    private IEnumerator AcuateCoroutine()
+    private IEnumerator Co_Acuate()
     {
         gameObject.layer = (int) layer;
 
@@ -75,14 +75,14 @@ public class PropagationWaveController : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (propagationSpeed * 5.0f);
+            var fractionComplete = (Time.time - startTime) * (propagationSpeed * 5.0f);
 
             if (fractionComplete >= 0.0f)
             {
                 transform.localScale = Vector3.Lerp(originScale, targetScale, fractionComplete);
-                renderer.material.SetColor("_Color", Color.Lerp(originColor, targetColor, (float) fractionComplete));
+                renderer.material.SetColor("_Color", Color.Lerp(originColor, targetColor, fractionComplete));
 
-                complete = (fractionComplete >= 1.0f);
+                complete = fractionComplete >= 1f;
             }
 
             if (complete)

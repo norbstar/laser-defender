@@ -60,7 +60,7 @@ public class ShieldController : MonoBehaviour
             if (healthAttributes.GetHealthMetric() > 0)
             {
                 delegates?.OnShieldDamagedDelegate?.Invoke(healthAttributes);
-                StartCoroutine(ManifestDamage());
+                StartCoroutine(Co_ManifestDamage());
             }
             else
             {
@@ -72,7 +72,7 @@ public class ShieldController : MonoBehaviour
         }
     }
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 3; ++itr)
         {

@@ -18,10 +18,9 @@ namespace Tests
         private void ResolveComponents()
         {
             generalResources = GetComponent<GeneralResources>();
+            backdropManager = generalResources.BackdropLayer;
             layersManager = generalResources.GameplayLayers;
-            
-            backdropManager = FindObjectOfType<BackdropManager>();
-            playerController = FindObjectOfType<DynamicPlayerController>();
+            playerController = generalResources.Player;
         }
 
         // Start is called before the first frame update

@@ -17,9 +17,9 @@ public class MineController : BaseMineController, IActuate, IModify, INotify
     [SerializeField] GameObject explosionPrefab;
     [SerializeField] AudioClip explosiveAudio;
 
-    protected override IEnumerator ActuateCoroutine()
+    protected override IEnumerator Co_Actuate()
     {
-        Debug.Log($"{name} ActuateCoroutine");
+        Debug.Log($"{name} Co_Actuate");
 
         gameObject.layer = (int) layer;
 
@@ -41,8 +41,6 @@ public class MineController : BaseMineController, IActuate, IModify, INotify
 
     private void DestroyObject()
     {
-        Debug.Log($"{name} DestroyObject");
-        
         var explosion = Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
         explosion.transform.localScale = transform.localScale;
 
@@ -79,7 +77,7 @@ public class MineController : BaseMineController, IActuate, IModify, INotify
 
             if (healthAttributes.GetHealthMetric() > 0.0f)
             {
-                StartCoroutine(ManifestDamage());
+                StartCoroutine(Co_ManifestDamage());
                 delegates?.OnMineDamagedDelegate?.Invoke(gameObject, healthAttributes);
             }
             else

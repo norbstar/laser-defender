@@ -74,10 +74,10 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
             if (typeof(Configuration).IsInstanceOfType(configuration)) { }
         }
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         gameObject.layer = (int) layer;
 
@@ -117,7 +117,7 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
             if (target != null)
             {
                 bool success = false;
-                yield return StartCoroutine(LockOnTargetCoroutine(target, value => success = value));
+                yield return StartCoroutine(Co_LockOnTarget(target, value => success = value));
 
                 if (success)
                 {
@@ -215,7 +215,7 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
         return true;
     }
 
-    private IEnumerator LockOnTargetCoroutine(GameObject target, Action<bool> success)
+    private IEnumerator Co_LockOnTarget(GameObject target, Action<bool> success)
     {
         bool complete = false;
 
@@ -333,7 +333,7 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
 
             if (healthAttributes.GetHealthMetric() > 0.0f)
             {
-                StartCoroutine(ManifestDamage());
+                StartCoroutine(Co_ManifestDamage());
                 delegates?.OnTurretDamagedDelegate?.Invoke(gameObject, healthAttributes);
             }
             else
@@ -363,7 +363,7 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
         }
     }
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 3; ++itr)
         {

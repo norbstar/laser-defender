@@ -48,7 +48,7 @@ public class BoxBoyController : MonoBehaviour
                 transform.parent = pivotPoint.transform;
 
                 Quaternion rotation = pivotPoint.transform.localRotation * Quaternion.Euler(0.0f, 0.0f, 90.0f);
-                StartCoroutine(RotateCoroutine(pivotPoint, rotation));
+                StartCoroutine(Co_Rotate(pivotPoint, rotation));
             }
 
             if (Input.GetKeyDown(KeyCode.D))
@@ -63,12 +63,12 @@ public class BoxBoyController : MonoBehaviour
                 transform.parent = pivotPoint.transform;
 
                 Quaternion rotation = pivotPoint.transform.localRotation * Quaternion.Euler(0.0f, 0.0f, -90.0f);
-                StartCoroutine(RotateCoroutine(pivotPoint, rotation));
+                StartCoroutine(Co_Rotate(pivotPoint, rotation));
             }
         }
     }
 
-    private IEnumerator RotateCoroutine(GameObject pivotPoint, Quaternion targetRotation)
+    private IEnumerator Co_Rotate(GameObject pivotPoint, Quaternion targetRotation)
     {
         acceptInput = false;
 
@@ -78,12 +78,12 @@ public class BoxBoyController : MonoBehaviour
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
             //Debug.Log($"Fraction Complete: {fractionComplete}");
 
             pivotPoint.transform.localRotation = Quaternion.Slerp(originRotation, targetRotation, fractionComplete);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

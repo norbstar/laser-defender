@@ -64,7 +64,7 @@ public abstract class AbstractMainMenuItemManager : MonoBehaviour
 
     public abstract bool IsSubMenuItemEnabled(int index);
 
-    public IEnumerator SelectItemCoroutine()
+    public IEnumerator Co_SelectItem()
     {
         SubMenuItem[] subMenuItems = GetSubMenuItems();
 
@@ -76,7 +76,7 @@ public abstract class AbstractMainMenuItemManager : MonoBehaviour
         delegates?.OnSubMenuItemsShownDelegate?.Invoke(this);
     }
 
-    public IEnumerator DeselectItemCoroutine()
+    public IEnumerator Co_DeselectItem()
     {
         description.GetComponent<Text>().text = "";
 
@@ -289,7 +289,7 @@ public abstract class AbstractMainMenuItemManager : MonoBehaviour
             float value = Mathf.Lerp(originColor, targetColor, fractionComplete);
             text.color = new Color(originalSubMenuItemTextColor.r, originalSubMenuItemTextColor.g, originalSubMenuItemTextColor.b, value);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

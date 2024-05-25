@@ -39,13 +39,13 @@ public class CountdownUIManager : MonoBehaviour, IActuate
 
         if (gameObject.activeSelf)
         {
-            StartCoroutine(ActuateCoroutine());
+            StartCoroutine(Co_Actuate());
         }
     }
 
     private void ResolveDependencies() { }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         ResolveDependencies();
 
@@ -59,7 +59,7 @@ public class CountdownUIManager : MonoBehaviour, IActuate
 
             //yield return StartCoroutine(FadeInText());
             //yield return new WaitForSeconds(promptDelay);
-            yield return StartCoroutine(FadeOutText());
+            yield return StartCoroutine(Co_FadeOutText());
             yield return new WaitForSeconds(interPromptDelay);
         }
 
@@ -67,7 +67,7 @@ public class CountdownUIManager : MonoBehaviour, IActuate
         onCountdownCompleteDelegate?.Invoke();
     }
 
-    private IEnumerator FadeInText()
+    private IEnumerator Co_FadeInText()
     {
         float startTime = Time.time;
         float duration = transitionDelay;
@@ -75,11 +75,11 @@ public class CountdownUIManager : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
 
             textUIManager.SetTextColor(new Color(originalColor.r, originalColor.g, originalColor.b, fractionComplete));
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -90,7 +90,7 @@ public class CountdownUIManager : MonoBehaviour, IActuate
         }
     }
 
-    private IEnumerator FadeOutText()
+    private IEnumerator Co_FadeOutText()
     {
         float startTime = Time.time;
         float duration = transitionDelay;
@@ -100,12 +100,12 @@ public class CountdownUIManager : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
 
             textUIManager.SetTextScale(Vector3.one * 2.0f * fractionComplete);
             textUIManager.SetTextColor(new Color(originalColor.r, originalColor.g, originalColor.b, 1.0f - fractionComplete));
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

@@ -9,10 +9,10 @@ public class Rotator : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
-        yield return StartCoroutine(RotateCoroutine());
+        yield return StartCoroutine(Co_Rotate());
     }
 
-    private IEnumerator RotateCoroutine()
+    private IEnumerator Co_Rotate()
     {
         while (true)
         {

@@ -49,7 +49,7 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
             trackingPointMapPack = pack.trackingPointMapPack;
         }
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
     private void ResolveDependencies(GameObject prefab)
@@ -61,7 +61,7 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
         bufferIdTag = prefab.transform.Find("Buffer Id Tag").gameObject as GameObject;
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         foreach (Transform child in transform)
         {
@@ -94,7 +94,7 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
             }
         }
 
-        StartCoroutine(ScrollBackgroundCoroutine());
+        StartCoroutine(Co_Scroll());
 
         yield return null;
     }
@@ -114,13 +114,13 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
         return null;
     }
 
-    private IEnumerator ScrollBackgroundCoroutine()
+    private IEnumerator Co_Scroll()
     {
-        SetTrackingIdentifiers();
+        UpdateIdentifiers();
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
+        Vector3 targetPosition = new Vector3(0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
         float journeyLength = InGameManager.ScreenRatio.y;
-        float accumulativeDeltaTime = 0.0f;
+        float speedAdjustedDeltaTime = 0f;
         bool complete = false;
 
         if (trackingPointMapPack != null)
@@ -147,20 +147,21 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
 
         while (!complete)
         {
-            float fractionComplete = accumulativeDeltaTime / journeyLength;
+            var fractionComplete = speedAdjustedDeltaTime / journeyLength;
 
-            transform.position = Vector3.Lerp(originPosition, targetPosition, (float) fractionComplete);
+            transform.position = Vector3.Lerp(originPosition, targetPosition, fractionComplete);
 
-            StartCoroutine(ActionActuators());
+            StartCoroutine(Co_ActionActuators());
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
                 OnComplete();
             }
 
-            accumulativeDeltaTime += Time.deltaTime * scrollSpeed;
+            speedAdjustedDeltaTime += scrollSpeed * Time.deltaTime;
+            // Debug.Log($"Scroll Speed: {scrollSpeed} Speed Adjusted Delta Time: {speedAdjustedDeltaTime}");
 
             yield return null;
         }
@@ -186,15 +187,13 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
         //}
     }
 
-    private void SetTrackingIdentifiers()
+    private void UpdateIdentifiers()
     {
-        TextMesh textMesh;
-
-        textMesh = mainIdTag.GetComponent<TextMesh>() as TextMesh;
+        var textMesh = mainIdTag.GetComponent<TextMesh>();
         textMesh.color = idTagColor;
         textMesh.text = mainCanvasId.ToString();
 
-        textMesh = bufferIdTag.GetComponent<TextMesh>() as TextMesh;
+        textMesh = bufferIdTag.GetComponent<TextMesh>();
         textMesh.color = idTagColor;
         textMesh.text = bufferCanvasId.ToString();
     }
@@ -247,7 +246,7 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
         return actuators;
     }
 
-    private IEnumerator ActionActuators()
+    private IEnumerator Co_ActionActuators()
     {
         while ((actuators != null) && (actuators.Count > 0))
         {
@@ -304,7 +303,7 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
         bufferCanvasId = index + 1;
         transform.position = originPosition;
 
-        StartCoroutine(ScrollBackgroundCoroutine());
+        StartCoroutine(Co_Scroll());
     }
 
     void OnDrawGizmos()

@@ -42,7 +42,7 @@ public class MainMenuScrollbarManager : MonoBehaviour
         scrollOffset = 1.0f / (menuItemCount - 1);
         enableControls = false;
 
-        StartCoroutine(HandleInterctions());
+        StartCoroutine(Co_HandleInterctions());
     }
 
     private void ResolveComponents()
@@ -55,7 +55,7 @@ public class MainMenuScrollbarManager : MonoBehaviour
         this.delegates = delegates;
     }
 
-    private IEnumerator HandleInterctions()
+    private IEnumerator Co_HandleInterctions()
     {
         GameObject gameObject = menuItems[selectedMenuItem];
         var abstractMainMenuItemManager = gameObject.GetComponent<AbstractMainMenuItemManager>() as AbstractMainMenuItemManager;
@@ -65,8 +65,8 @@ public class MainMenuScrollbarManager : MonoBehaviour
             OnSubMenuItemsHiddenDelegate = OnSubMenuItemsHidden
         });
 
-        StartCoroutine(TransformMenuItem(selectedMenuItem, FocusType.FOCUS));
-        yield return StartCoroutine(abstractMainMenuItemManager.SelectItemCoroutine());
+        StartCoroutine(Co_TransformMenuItem(selectedMenuItem, FocusType.FOCUS));
+        yield return StartCoroutine(abstractMainMenuItemManager.Co_SelectItem());
 
         while (true)
         {
@@ -86,10 +86,10 @@ public class MainMenuScrollbarManager : MonoBehaviour
                             OnSubMenuItemsHiddenDelegate = OnSubMenuItemsHidden
                         });
                         
-                        StartCoroutine(abstractMainMenuItemManager.DeselectItemCoroutine());
-                        StartCoroutine(TransformMenuItem(selectedMenuItem, FocusType.REVERT));
+                        StartCoroutine(abstractMainMenuItemManager.Co_DeselectItem());
+                        StartCoroutine(Co_TransformMenuItem(selectedMenuItem, FocusType.REVERT));
 
-                        yield return StartCoroutine(ScrollToRelativePosition(-scrollOffset));
+                        yield return StartCoroutine(Co_ScrollToRelativePosition(-scrollOffset));
 
                         selectedMenuItem -= 1;
                         
@@ -101,8 +101,8 @@ public class MainMenuScrollbarManager : MonoBehaviour
                             OnSubMenuItemsHiddenDelegate = OnSubMenuItemsHidden
                         });
 
-                        StartCoroutine(TransformMenuItem(selectedMenuItem, FocusType.FOCUS));
-                        StartCoroutine(abstractMainMenuItemManager.SelectItemCoroutine());
+                        StartCoroutine(Co_TransformMenuItem(selectedMenuItem, FocusType.FOCUS));
+                        StartCoroutine(abstractMainMenuItemManager.Co_SelectItem());
 
                         delegates?.OnItemTransitionDelegate?.Invoke();
                     }
@@ -116,10 +116,10 @@ public class MainMenuScrollbarManager : MonoBehaviour
                             OnSubMenuItemsHiddenDelegate = OnSubMenuItemsHidden
                         });
 
-                        StartCoroutine(abstractMainMenuItemManager.DeselectItemCoroutine());
-                        StartCoroutine(TransformMenuItem(selectedMenuItem, FocusType.REVERT));
+                        StartCoroutine(abstractMainMenuItemManager.Co_DeselectItem());
+                        StartCoroutine(Co_TransformMenuItem(selectedMenuItem, FocusType.REVERT));
 
-                        yield return StartCoroutine(ScrollToRelativePosition(scrollOffset));
+                        yield return StartCoroutine(Co_ScrollToRelativePosition(scrollOffset));
                         selectedMenuItem += 1;
                         gameObject = menuItems[selectedMenuItem];
                         abstractMainMenuItemManager = gameObject.GetComponent<AbstractMainMenuItemManager>() as AbstractMainMenuItemManager;
@@ -129,8 +129,8 @@ public class MainMenuScrollbarManager : MonoBehaviour
                             OnSubMenuItemsHiddenDelegate = OnSubMenuItemsHidden
                         });
 
-                        StartCoroutine(TransformMenuItem(selectedMenuItem, FocusType.FOCUS));
-                        StartCoroutine(abstractMainMenuItemManager.SelectItemCoroutine());
+                        StartCoroutine(Co_TransformMenuItem(selectedMenuItem, FocusType.FOCUS));
+                        StartCoroutine(abstractMainMenuItemManager.Co_SelectItem());
 
                         delegates?.OnItemTransitionDelegate?.Invoke();
                     }
@@ -185,7 +185,7 @@ public class MainMenuScrollbarManager : MonoBehaviour
         }
     }
 
-    private IEnumerator ScrollToRelativePosition(float offset)
+    private IEnumerator Co_ScrollToRelativePosition(float offset)
     {
         float originScrollBarValue = scrollbar.value;
         float targetScrollBarValue = scrollbar.value + offset;
@@ -197,12 +197,12 @@ public class MainMenuScrollbarManager : MonoBehaviour
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
 
-            float value = Mathf.Lerp(originScrollBarValue, targetScrollBarValue, fractionComplete);
+            var value = Mathf.Lerp(originScrollBarValue, targetScrollBarValue, fractionComplete);
             scrollbar.SetValueWithoutNotify(value);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -213,7 +213,7 @@ public class MainMenuScrollbarManager : MonoBehaviour
         }
     }
 
-    private IEnumerator TransformMenuItem(int index, FocusType focusType)
+    private IEnumerator Co_TransformMenuItem(int index, FocusType focusType)
     {
         GameObject gameObject = menuItems[index];
         var abstractMainMenuItemManager = gameObject.GetComponent<AbstractMainMenuItemManager>() as AbstractMainMenuItemManager;
@@ -248,13 +248,13 @@ public class MainMenuScrollbarManager : MonoBehaviour
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
 
-            float value = Mathf.Lerp(originScale, targetScale, fractionComplete);
+            var value = Mathf.Lerp(originScale, targetScale, fractionComplete);
             gameObject.transform.localScale = originalScale * value;
             abstractMainMenuItemManager.SetMenuItemColor(Color.Lerp(originColor, targetColor, fractionComplete));
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

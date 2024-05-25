@@ -45,7 +45,7 @@ public class CanvasSurfaceManager : SurfaceManager, IActuate
         nextIndex = GetNextIndex();
         transform.position = originPosition;
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
     private int GetNextIndex()
@@ -59,14 +59,12 @@ public class CanvasSurfaceManager : SurfaceManager, IActuate
         bufferCanvasRenderer.sprite = spritePack[nextIndex];
     }
 
-    private void SetTrackingIdentifiers()
+    private void UpdateIdentifiers()
     {
-        TextMesh textMesh;
-
-        textMesh = mainIdTag.GetComponent<TextMesh>() as TextMesh;
+        var textMesh = mainIdTag.GetComponent<TextMesh>();
         textMesh.text = mainCanvasId.ToString();
 
-        textMesh = bufferIdTag.GetComponent<TextMesh>() as TextMesh;
+        textMesh = bufferIdTag.GetComponent<TextMesh>();
         textMesh.text = bufferCanvasId.ToString();
     }
 
@@ -83,7 +81,7 @@ public class CanvasSurfaceManager : SurfaceManager, IActuate
         bufferIdTag = prefab.transform.Find("Buffer Id Tag").gameObject as GameObject;
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         foreach (Transform child in transform)
         {
@@ -100,27 +98,28 @@ public class CanvasSurfaceManager : SurfaceManager, IActuate
 
         ResolveDependencies(prefab);
         AssignCanvasSprites();
-        SetTrackingIdentifiers();
+        UpdateIdentifiers();
 
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
+        Vector3 targetPosition = new Vector3(0f, transform.position.y - InGameManager.ScreenRatio.y, transform.position.z);
         float distance = InGameManager.ScreenRatio.y;
-        float accumulativeDeltaTime = 0.0f;
+        float speedAdjustedDeltaTime = 0f;
         bool complete = false;
 
         while (!complete)
         {
-            float fractionComplete = accumulativeDeltaTime / distance;
+            var fractionComplete = speedAdjustedDeltaTime / distance;
+            
+            transform.position = Vector3.Lerp(originPosition, targetPosition, fractionComplete);
 
-            transform.position = Vector3.Lerp(originPosition, targetPosition, (float) fractionComplete);
-
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
                 OnComplete();
             }
 
-            accumulativeDeltaTime += Time.deltaTime * GetScrollSpeed();
+            speedAdjustedDeltaTime += scrollSpeed * Time.deltaTime;
+            // Debug.Log($"Scroll Speed: {scrollSpeed} Speed Adjusted Delta Time: {speedAdjustedDeltaTime}");
 
             yield return null;
         }
@@ -136,7 +135,7 @@ public class CanvasSurfaceManager : SurfaceManager, IActuate
 
         transform.position = originPosition;
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
     void OnDrawGizmos()

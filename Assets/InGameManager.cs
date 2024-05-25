@@ -260,7 +260,7 @@ public class InGameManager : MonoBehaviour, ISetup
         levelCompleteUIManager.Actuate();
         enemyWaveManager.SuspendFutureWaves();
 
-        StartCoroutine(PrepareNextLevel());
+        StartCoroutine(Co_PrepareNextLevel());
     }
 
     private bool HasNextLevel() => levelIndex + 1 < levelPacks.Length;
@@ -279,7 +279,7 @@ public class InGameManager : MonoBehaviour, ISetup
         return ResolveLevel(levelIndex);
     }
 
-    private IEnumerator PrepareNextLevel()
+    private IEnumerator Co_PrepareNextLevel()
     {
         yield return new WaitForSeconds(endOfLevelDelay);
 

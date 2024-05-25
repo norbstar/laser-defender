@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: 24b28db86c921f44e85859291aa36b0d
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Futura LT Pro
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 91796d23d343c5b478e4cc25103ad237, type: 3}
+  - {fileID: 12800000, guid: b0b48699cc4dfe64f8774cf2d27fd647, type: 3}
+  - {fileID: 12800000, guid: 0275a2e866aa77e4cb0aa0849440b371, type: 3}
+  - {fileID: 12800000, guid: 3049c823656070046bbdfaa83e7b4ec1, type: 3}
+  - {fileID: 12800000, guid: 1327979b3822de344953eae5095050bc, type: 3}
+  - {fileID: 12800000, guid: 62e68769a2fa5df42b4d4f33f28ed0dc, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

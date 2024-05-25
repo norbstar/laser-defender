@@ -15,14 +15,14 @@ public class ProjectileController : MonoBehaviour, IActuate
         HEAVY_PROTON
     }
 
-    [SerializeField] float speed = 1.0f;
+    [SerializeField] float speed = 1f;
 
     public void Actuate(IConfiguration configuration)
     {
-        StartCoroutine(LaunchProjectileCoroutine());
+        StartCoroutine(Co_LaunchProjectile());
     }
 
-    private IEnumerator LaunchProjectileCoroutine()
+    private IEnumerator Co_LaunchProjectile()
     {
         Vector3 originPosition = transform.position;
         Vector3 targetPosition = new Vector3(transform.position.x, InGameManagerOld.ScreenRatio.y, transform.position.z);
@@ -31,10 +31,10 @@ public class ProjectileController : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * Time.deltaTime * speed;
-            transform.position = Vector3.Lerp(originPosition, targetPosition, (float) fractionComplete);
+            var fractionComplete = (Time.time - startTime) * Time.deltaTime * speed;
+            transform.position = Vector3.Lerp(originPosition, targetPosition, fractionComplete);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

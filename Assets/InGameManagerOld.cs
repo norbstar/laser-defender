@@ -261,7 +261,7 @@ public class InGameManagerOld : GUIMonoBehaviour
         levelCompleteUIManager.Actuate();
         enemyWaveManager.SuspendFutureWaves();
 
-        StartCoroutine(PrepareNextLevel());
+        StartCoroutine(Co_PrepareNextLevel());
     }
 
     //public void OnBackdropDeactivated()
@@ -286,7 +286,7 @@ public class InGameManagerOld : GUIMonoBehaviour
         return ResolveLevel(levelIndex);
     }
 
-    private IEnumerator PrepareNextLevel()
+    private IEnumerator Co_PrepareNextLevel()
     {
         yield return new WaitForSeconds(endOfLevelDelay);
 

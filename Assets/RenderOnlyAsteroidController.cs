@@ -43,7 +43,7 @@ public class RenderOnlyAsteroidController : MonoBehaviour, IActuate
             rotation = ((Configuration)configuration).Rotation;
         }
 
-        StartCoroutine(ActuateCoroutine(startTime, targetPosition, speed, rotation));
+        StartCoroutine(Co_Actuate(startTime, targetPosition, speed, rotation));
     }
 
     public void RegisterDelegates(Delegates delegates)
@@ -51,7 +51,7 @@ public class RenderOnlyAsteroidController : MonoBehaviour, IActuate
         this.delegates = delegates;
     }
 
-    private IEnumerator ActuateCoroutine(float startTime, Vector3 targetPosition, float speed, float rotation)
+    private IEnumerator Co_Actuate(float startTime, Vector3 targetPosition, float speed, float rotation)
     {
         Vector3 originPosition = transform.position;
         float magnitude = (targetPosition - originPosition).magnitude * 0.01f;
@@ -63,11 +63,11 @@ public class RenderOnlyAsteroidController : MonoBehaviour, IActuate
 
             if (fractionComplete >= 0.0f)
             {
-                Vector2 position = CalculatePosition(originPosition, targetPosition, fractionComplete);
+                var position = CalculatePosition(originPosition, targetPosition, fractionComplete);
                 transform.localPosition = VectorFunctions.ToVector3(position, 0.0f);
                 transform.localRotation = CalculateRotation(rotation);
 
-                complete = (fractionComplete >= 1.0f);
+                complete = fractionComplete >= 1f;
             }
 
             if (complete)

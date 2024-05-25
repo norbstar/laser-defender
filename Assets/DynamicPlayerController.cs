@@ -93,12 +93,12 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            StartCoroutine(FirePrimaryProjectileCoroutine());
+            StartCoroutine(Co_FirePrimaryProjectile());
         }
 
         if (Input.GetButtonDown("Fire2"))
         {
-            StartCoroutine(FireSecondaryProjectileCoroutine());
+            StartCoroutine(Co_FireSecondaryProjectile());
         }
     }
 
@@ -116,24 +116,24 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
     public bool ControlsEnabled() => controlsActive;
 
-    public void EngageShip() => StartCoroutine(EngageShipCoroutine());
+    public void EngageShip() => StartCoroutine(Co_EngageShip());
 
-    private IEnumerator EngageShipCoroutine()
+    private IEnumerator Co_EngageShip()
     {
-        Vector3 originPosition = transform.position;
-        Vector3 targetPosition = new Vector3(originPosition.x, 1.5f, originPosition.z);
-        float magnitude = (targetPosition - originPosition).magnitude * 0.5f;
-        float startTime = Time.time;
-        bool complete = false;
+        var originPosition = transform.position;
+        var targetPosition = new Vector3(originPosition.x, 1.5f, originPosition.z);
+        var magnitude = (targetPosition - originPosition).magnitude * 0.5f;
+        var startTime = Time.time;
+        var complete = false;
 
         SetExhaustThrust(1.0f);
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
+            var fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
             transform.position = Vector3.Lerp(originPosition, targetPosition, (float)fractionComplete);
 
-            complete = fractionComplete >= 1.0f;
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -146,24 +146,24 @@ public class DynamicPlayerController : BaseMonoBehaviour
         SetExhaustThrust(0.0f);
     }
 
-    public void DisengageShip() => StartCoroutine(DisengageShipCoroutine());
+    public void DisengageShip() => StartCoroutine(Co_DisengageShip());
 
-    private IEnumerator DisengageShipCoroutine()
+    private IEnumerator Co_DisengageShip()
     {
-        Vector3 originPosition = transform.position;
-        Vector3 targetPosition = new Vector3(originPosition.x, 17, originPosition.z);
-        float magnitude = (targetPosition - originPosition).magnitude * 0.5f;
-        float startTime = Time.time;
-        bool complete = false;
+        var originPosition = transform.position;
+        var targetPosition = new Vector3(originPosition.x, 17, originPosition.z);
+        var magnitude = (targetPosition - originPosition).magnitude * 0.5f;
+        var startTime = Time.time;
+        var complete = false;
 
         SetExhaustThrust(1.0f);
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
+            var fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
             transform.position = Vector3.Lerp(originPosition, targetPosition, (float)fractionComplete);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -184,13 +184,13 @@ public class DynamicPlayerController : BaseMonoBehaviour
         }
     }
 
-    private IEnumerator FirePrimaryProjectileCoroutine()
+    private IEnumerator Co_FirePrimaryProjectile()
     {
-        bool firing = true;
+        var firing = true;
 
         while (firing)
         {
-            long ticks = DateTime.Now.Ticks;
+            var ticks = DateTime.Now.Ticks;
 
             if (ticks >= targetTicks)
             {
@@ -198,18 +198,18 @@ public class DynamicPlayerController : BaseMonoBehaviour
                 targetTicks = ticks + (projectilesDelayMs * TimeSpan.TicksPerMillisecond);
             }
 
-            firing = !(Input.GetButtonUp("Fire1"));
+            firing = !Input.GetButtonUp("Fire1");
             yield return null;
         }
     }
 
-    private IEnumerator FireSecondaryProjectileCoroutine()
+    private IEnumerator Co_FireSecondaryProjectile()
     {
         bool firing = true;
 
         while (firing)
         {
-            long ticks = DateTime.Now.Ticks;
+            var ticks = DateTime.Now.Ticks;
 
             if (ticks >= targetTicks)
             {
@@ -217,15 +217,15 @@ public class DynamicPlayerController : BaseMonoBehaviour
                 targetTicks = ticks + (projectilesDelayMs * TimeSpan.TicksPerMillisecond);
             }
 
-            firing = !(Input.GetButtonUp("Fire2"));
+            firing = !Input.GetButtonUp("Fire2");
             yield return null;
         }
     }
 
     private Vector3 CalculateKeyInputPosition()
     {
-        Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        Vector2 regulatedInput = input * Time.deltaTime * speed;
+        var input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        var regulatedInput = input * Time.deltaTime * speed;
 
         animator.SetFloat("speed", input.x);
 
@@ -235,10 +235,10 @@ public class DynamicPlayerController : BaseMonoBehaviour
         reverseRightTrust.SetActive(input.y < 0.0f);
 
         var positionX = transform.position.x + regulatedInput.x;
-        float unitPositionX = Mathf.Clamp(positionX, boundary.XMin + 1.0f, boundary.XMax - 1.0f);
+        var unitPositionX = Mathf.Clamp(positionX, boundary.XMin + 1.0f, boundary.XMax - 1.0f);
 
         var positionY = transform.position.y + regulatedInput.y;
-        float unitPositionY = Mathf.Clamp(positionY, boundary.YMin + 1.25f, boundary.YMax - 1.0f);
+        var unitPositionY = Mathf.Clamp(positionY, boundary.YMin + 1.25f, boundary.YMax - 1.0f);
 
         return new Vector3(unitPositionX, unitPositionY, transform.position.z);
     }
@@ -258,15 +258,15 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
     private void ResolveComponents()
     {
-        animator = ship.GetComponent<Animator>() as Animator;
-        healthAttributes = GetComponent<HealthAttributes>() as HealthAttributes;
+        animator = ship.GetComponent<Animator>();
+        healthAttributes = GetComponent<HealthAttributes>();
         exhaustComponents = new List<ExhaustComponent>();
 
-        foreach (GameObject exhaust in exhausts)
+        foreach (var exhaust in exhausts)
         {
             exhaustComponents.Add(new ExhaustComponent
             {
-                ExhaustController = exhaust.GetComponent<DynamicExhaustController>() as DynamicExhaustController
+                ExhaustController = exhaust.GetComponent<DynamicExhaustController>()
             });
         }
     }
@@ -302,9 +302,8 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
     private GameObject SpawnProjectileAndActuate(ProjectileController.Type type, Vector2 position)
     {
-        GameObject projectile = SpawnProjectile(type, position);
-
-        var velocityProjectileController = projectile.GetComponent<VelocityProjectileController>() as VelocityProjectileController;
+        var projectile = SpawnProjectile(type, position);
+        var velocityProjectileController = projectile.GetComponent<VelocityProjectileController>();
 
         velocityProjectileController.Actuate(new VelocityProjectileController.Configuration
         {
@@ -346,7 +345,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
                 break;
         }
 
-        var projectile = Instantiate(projectilePrefab, new Vector3(position.x, position.y, projectilePrefab.transform.position.z), Quaternion.identity) as GameObject;
+        var projectile = Instantiate(projectilePrefab, new Vector3(position.x, position.y, projectilePrefab.transform.position.z), Quaternion.identity);
         projectile.name = $"{projectilePrefab.name}-{Signature}";
         projectile.layer = (int) layer;
 
@@ -363,7 +362,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
     {
         if (collider != null)
         {
-            GameObject trigger = collider.gameObject;
+            var trigger = collider.gameObject;
 
             if (trigger.tag.Equals("Projectile"))
             {
@@ -376,16 +375,16 @@ public class DynamicPlayerController : BaseMonoBehaviour
                 Destroy(trigger);
             }
 
-            var damageAttributes = trigger.GetComponent<DamageAttributes>() as DamageAttributes;
+            var damageAttributes = trigger.GetComponent<DamageAttributes>();
 
             if (damageAttributes != null)
             {
-                float damageMetric = damageAttributes.GetDamageMetric();
+                var damageMetric = damageAttributes.GetDamageMetric();
                 healthAttributes.SubstractHealth(damageMetric);
 
                 if (healthAttributes.GetHealthMetric() > 0.0f)
                 {
-                    StartCoroutine(ManifestDamage());
+                    StartCoroutine(Co_ManifestDamage());
                 }
                 else
                 {
@@ -396,13 +395,13 @@ public class DynamicPlayerController : BaseMonoBehaviour
         }
     }
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
-        IList<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>();
+        var spriteRenderers = new List<SpriteRenderer>();
 
         foreach (Transform childTransform in transform)
         {
-            var spriteRenderer = childTransform.GetComponent<SpriteRenderer>() as SpriteRenderer;
+            var spriteRenderer = childTransform.GetComponent<SpriteRenderer>();
 
             if ((spriteRenderer != null) && (spriteRenderer.gameObject.activeSelf))
             {

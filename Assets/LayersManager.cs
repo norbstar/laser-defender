@@ -44,17 +44,17 @@ public class LayersManager : AbstractSceneryManager
 
     public void InstantiateAsteroidLayer()
     {
-        GameObject prefab = Instantiate(asteroidLayerPrefab, transform.position + new Vector3(0.0f, 0.0f, -0.1f), Quaternion.identity) as GameObject;
+        var prefab = Instantiate(asteroidLayerPrefab, transform.position + new Vector3(0f, 0f, -0.1f), Quaternion.identity);
         prefab.transform.parent = transform;
     }
 
     public void InstantiateTrackingLayer(TrackingPointMapPack trackingPointMapPack)
     {
-        GameObject prefab = Instantiate(trackingLayerPrefab, transform.position + new Vector3(0.0f, 8.0f, -0.2f), Quaternion.identity) as GameObject;
+        var prefab = Instantiate(trackingLayerPrefab, transform.position + new Vector3(0f, 8f, -0.2f), Quaternion.identity);
         prefab.transform.parent = transform;
 
         trackingLayerManager = prefab.GetComponent<TrackingLayerManager>();
-        trackingLayerManager.Initiate(trackingPointMapPack, GetScrollSpeed(), indicatorColor);
+        trackingLayerManager.Initiate(trackingPointMapPack, scrollSpeed, indicatorColor);
     }
 
     private void OnUpdateScrollSpeed(float scrollSpeed) => trackingLayerManager?.SetScrollSpeed(scrollSpeed);

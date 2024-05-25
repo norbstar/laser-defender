@@ -5,13 +5,17 @@ using UnityEngine;
 
 public class BackdropManager : AbstractSceneryManager
 {
+    public static Vector2 ScreenRatio = InGameManagerOld.ScreenRatio;
+
     public delegate void OnDeactivated();
 
-    [Header("Elements")]
+    [Header("Main")]
     [SerializeField] GameObject main;
-    [SerializeField] GameObject mainIdentifier;
+    [SerializeField] TextMesh mainIdentifier;
+
+    [Header("Buffer")]
     [SerializeField] GameObject buffer;
-    [SerializeField] GameObject bufferIdentifier;
+    [SerializeField] TextMesh bufferIdentifier;
 
     public class AlreadyActiveException : Exception
     {
@@ -22,7 +26,7 @@ public class BackdropManager : AbstractSceneryManager
 
     private OnDeactivated onDeactivatedDelegate;
     private Sprite[] spritePack;
-    private Vector3 originPosition, lastPosition;
+    private Vector3 startPosition, lastPosition;
     private SpriteRenderer primaryCanvasRenderer, nextCanvasRenderer;
     private int index, nextIndex;
     private bool isActive, shouldDeactivate;
@@ -31,14 +35,19 @@ public class BackdropManager : AbstractSceneryManager
     public override void Awake()
     {
         base.Awake();
-
         ResolveComponents();
 
         index = 0;
         primaryCanvasId = 0;
         bufferCanvasId = primaryCanvasId + 1;
-        originPosition = transform.position;
+        startPosition = transform.position;
         isActive = shouldDeactivate = false;
+    }
+
+    private void ResolveComponents()
+    {
+        primaryCanvasRenderer = main.GetComponent<SpriteRenderer>();
+        nextCanvasRenderer = buffer.GetComponent<SpriteRenderer>();
     }
 
     public void RegisterDelegate(OnDeactivated onDeactivatedDelegate) => this.onDeactivatedDelegate = onDeactivatedDelegate;
@@ -47,69 +56,53 @@ public class BackdropManager : AbstractSceneryManager
 
     public void Activate(SpriteAssetPack spriteAssetPack)
     {
-        if (isActive)
-        {
-            throw new AlreadyActiveException();
-        }
+        if (isActive) throw new AlreadyActiveException();
 
         spritePack = spriteAssetPack.Pack;
 
         index = 0;
         nextIndex = GetNextIndex();
-        transform.position = originPosition;
+        transform.position = startPosition;
 
         AssignCanvasSprites();
-        StartCoroutine(ScrollBackgroundCoroutine());
+        StartCoroutine(Co_Scroll());
     }
 
     public void Deactivate() => shouldDeactivate = true;
 
     public Vector2 GetLastPosition() => lastPosition;
 
-    private void ResolveComponents()
+    private void UpdateIdentifiers()
     {
-        primaryCanvasRenderer = main.GetComponent<SpriteRenderer>();
-        nextCanvasRenderer = buffer.GetComponent<SpriteRenderer>();
+        mainIdentifier.text = primaryCanvasId.ToString();
+        bufferIdentifier.text = bufferCanvasId.ToString();
     }
 
-    private void SetTrackingIdentifiers()
+    private IEnumerator Co_Scroll()
     {
-        var textMesh = mainIdentifier.GetComponent<TextMesh>() as TextMesh;
-        textMesh.text = primaryCanvasId.ToString();
+        UpdateIdentifiers();
 
-        textMesh = bufferIdentifier.GetComponent<TextMesh>() as TextMesh;
-        textMesh.text = bufferCanvasId.ToString();
-    }
-
-    private IEnumerator ScrollBackgroundCoroutine()
-    {
-        SetTrackingIdentifiers();
-
-        Vector3 targetPosition = new Vector3(0.0f, transform.position.y - InGameManagerOld.ScreenRatio.y, transform.position.z);
-        //float magnitude = (targetPosition - originPosition).magnitude * 0.01f;
-        //float startTransformTime = Time.time;
-        float journeyLength = InGameManagerOld.ScreenRatio.y;
-        float accumulativeDeltaTime = 0.0f;
-        bool complete = false;
+        var endPosition = new Vector3(0f, transform.position.y - ScreenRatio.y, transform.position.z);
+        var speedAdjustedDeltaTime = 0f;
+        var complete = false;
         isActive = true;
 
         while (!complete && !shouldDeactivate)
         {
-            //float fractionComplete = (Time.time - startTransformTime) * GetSpeed(); /* (speed * magnitude);*/
-            float fractionComplete = accumulativeDeltaTime / journeyLength;
+            var fractionComplete = speedAdjustedDeltaTime / ScreenRatio.y;
 
             lastPosition = transform.position;
-            transform.position = Vector3.Lerp(originPosition, targetPosition, (float) fractionComplete);
+            transform.position = Vector3.Lerp(startPosition, endPosition, fractionComplete);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
                 OnComplete();
             }
 
-            accumulativeDeltaTime += Time.deltaTime * GetScrollSpeed();
-            //Debug.Log($"Backdrop Manager -> Scroll Speed: {GetScrollSpeed()} Accumulative Delta Time: {accumulativeDeltaTime}");
+            speedAdjustedDeltaTime += scrollSpeed * Time.deltaTime;
+            // Debug.Log($"Scroll Speed: {scrollSpeed} Speed Adjusted Delta Time: {speedAdjustedDeltaTime}");
 
             yield return null;
         }
@@ -121,26 +114,24 @@ public class BackdropManager : AbstractSceneryManager
         }
     }
 
+    private int GetNextIndex() => (index + 1 <= spritePack.Length - 1) ? index + 1 : 0;
+
     private void AssignCanvasSprites()
     {
         primaryCanvasRenderer.sprite = spritePack[index];
         nextCanvasRenderer.sprite = spritePack[nextIndex];
     }
 
-    private int GetNextIndex() => (index + 1 <= spritePack.Length - 1) ? index + 1 : 0;
-
     private void OnComplete()
     {
         index = GetNextIndex();
         nextIndex = GetNextIndex();
-
         ++primaryCanvasId;
         bufferCanvasId = primaryCanvasId + 1;
-
-        transform.position = originPosition;
+        transform.position = startPosition;
 
         AssignCanvasSprites();
-        StartCoroutine(ScrollBackgroundCoroutine());
+        StartCoroutine(Co_Scroll());
     }
 
 #if (false)

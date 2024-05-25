@@ -69,7 +69,7 @@ public class CloakedMineController : MonoBehaviour
 
             if (healthAttributes.GetHealthMetric() > 0.0f)
             {
-                StartCoroutine(ManifestDamage());
+                StartCoroutine(Co_ManifestDamage());
                 delegates?.OnMineDamagedDelegate?.Invoke(gameObject, healthAttributes);
             }
             else
@@ -98,7 +98,7 @@ public class CloakedMineController : MonoBehaviour
         }
     }
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 3; ++itr)
         {

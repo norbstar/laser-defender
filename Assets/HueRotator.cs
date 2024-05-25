@@ -14,7 +14,7 @@ public class HueRotator : MonoBehaviour
 
     [SerializeField] Direction direction;
 
-    private SpriteRenderer renderer;
+    private new SpriteRenderer renderer;
 
     void Awake()
     {
@@ -24,7 +24,7 @@ public class HueRotator : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
-        yield return StartCoroutine(ColorShiftCoroutine());
+        yield return StartCoroutine(Co_ColorShift());
     }
 
     private void ResolveComponents()
@@ -32,14 +32,14 @@ public class HueRotator : MonoBehaviour
         renderer = GetComponent<SpriteRenderer>() as SpriteRenderer;
     }
 
-    private IEnumerator ColorShiftCoroutine()
+    private IEnumerator Co_ColorShift()
     {
         float startTime = Time.time;
         bool complete = false;
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
 
             if (direction == Direction.FORWARD)
             {
@@ -50,7 +50,7 @@ public class HueRotator : MonoBehaviour
                 renderer.color = gradient.Evaluate(1.0f - fractionComplete);
             }
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -63,6 +63,6 @@ public class HueRotator : MonoBehaviour
 
     private void OnColorShiftComplete()
     {
-        StartCoroutine(ColorShiftCoroutine());
+        StartCoroutine(Co_ColorShift());
     }
 }

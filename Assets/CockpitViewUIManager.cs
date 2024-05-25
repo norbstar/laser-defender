@@ -44,20 +44,20 @@ public class CockpitViewUIManager : MonoBehaviour
 
     public void ShowCockpit()
     {
-        StartCoroutine(ShowCockpitCoroutine());
+        StartCoroutine(Co_ShowCockpit());
     }
 
-    private IEnumerator ShowCockpitCoroutine()
+    private IEnumerator Co_ShowCockpit()
     {
         float startTime = Time.time;
         bool complete = false;
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * speed;
-            image.color = new Color(originalColor.r, originalColor.g, originalColor.b, Mathf.Lerp(0.0f, 1.0f, (float) fractionComplete));
+            var fractionComplete = (Time.time - startTime) * speed;
+            image.color = new Color(originalColor.r, originalColor.g, originalColor.b, Mathf.Lerp(0f, 1f, fractionComplete));
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -72,20 +72,20 @@ public class CockpitViewUIManager : MonoBehaviour
 
     public void HideCockpit()
     {
-        StartCoroutine(HideCockpitCoroutine());
+        StartCoroutine(Co_HideCockpit());
     }
 
-    private IEnumerator HideCockpitCoroutine()
+    private IEnumerator Co_HideCockpit()
     {
         float startTime = Time.time;
         bool complete = false;
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * speed;
-            image.color = new Color(originalColor.r, originalColor.g, originalColor.b, Mathf.Lerp(1.0f, 0.0f, (float) fractionComplete));
+            var fractionComplete = (Time.time - startTime) * speed;
+            image.color = new Color(originalColor.r, originalColor.g, originalColor.b, Mathf.Lerp(1f, 0f, fractionComplete));
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

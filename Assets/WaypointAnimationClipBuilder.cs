@@ -13,12 +13,9 @@ public class WaypointAnimationClipBuilder : MonoBehaviour
    [SerializeField] GameObject[] paths;
 
    // Start is called before the first frame update
-   void Start()
-   {
-       StartCoroutine(CreateWaypointAnimationClips());
-   }
+   void Start() => StartCoroutine(Co_CreateWaypointAnimationClips());
 
-   IEnumerator CreateWaypointAnimationClips()
+   private IEnumerator Co_CreateWaypointAnimationClips()
    {
        foreach (GameObject path in paths)
        {

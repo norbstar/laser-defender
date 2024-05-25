@@ -62,15 +62,15 @@ public class MissileController : MonoBehaviour, IActuate
             target = ((Configuration) configuration).Target;
         }
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
-        yield return StartCoroutine(MoveForwardCoroutine());
+        yield return StartCoroutine(Co_MoveForward());
     }
 
-    private IEnumerator MoveForwardCoroutine()
+    private IEnumerator Co_MoveForward()
     {
         Vector3 originPosition = transform.position;
         Vector3 targetPosition = (transform.position + (Vector3.up * moveForwardOffset));
@@ -80,7 +80,7 @@ public class MissileController : MonoBehaviour, IActuate
         while (!complete)
         {
             //float fractionComplete = (Time.time - startTime) * speed;
-            float fractionComplete = (targetPosition - originPosition).magnitude * Time.deltaTime * speed;
+            var fractionComplete = (targetPosition - originPosition).magnitude * Time.deltaTime * speed;
             transform.position = Vector3.Lerp(transform.position, targetPosition, fractionComplete);
 
             //transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * speed);
@@ -89,7 +89,7 @@ public class MissileController : MonoBehaviour, IActuate
             //float finalSpeed = (distance / speed);
             //transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime / finalSpeed);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -100,7 +100,7 @@ public class MissileController : MonoBehaviour, IActuate
         }
     }
 
-    private IEnumerator HomeOnTargetCoroutine()
+    private IEnumerator Co_HomeOnTarget()
     {
         Vector3 originPosition = transform.position;
         Vector3 targetPosition = target.transform.position;
@@ -109,11 +109,11 @@ public class MissileController : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * speed;
+            var fractionComplete = (Time.time - startTime) * speed;
             transform.position = Vector3.Lerp(originPosition, targetPosition, fractionComplete);
             //transform.rotation = MathFunctions.AlignZRotationToVector(transform.rotation, transform.position, transform.up, 90);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -146,7 +146,7 @@ public class MissileController : MonoBehaviour, IActuate
 
     private void OnMoveForwardComplete()
     {
-        StartCoroutine(HomeOnTargetCoroutine());
+        StartCoroutine(Co_HomeOnTarget());
     }
 
     private void OnHomeOnTargetComplete() { }

@@ -35,8 +35,8 @@ public abstract class BaseMineController : BaseMonoBehaviour, IActuate, IModify,
 
     public void Actuate(IConfiguration configuration)
     {
-        Debug.Log($"{name} Actuate");
-        
+        // Debug.Log($"{name} Actuate");
+
         if (configuration != null)
         {
             if (typeof(GameplayConfiguration).IsInstanceOfType(configuration))
@@ -45,10 +45,10 @@ public abstract class BaseMineController : BaseMonoBehaviour, IActuate, IModify,
             }
         }
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
-    protected abstract IEnumerator ActuateCoroutine();
+    protected abstract IEnumerator Co_Actuate();
 
     protected abstract void ResolveComponents();
 
@@ -56,7 +56,7 @@ public abstract class BaseMineController : BaseMonoBehaviour, IActuate, IModify,
 
     protected abstract void OnTriggerEnter2D(Collider2D collider);
 
-    protected IEnumerator ManifestDamage()
+    protected IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 3; ++itr)
         {

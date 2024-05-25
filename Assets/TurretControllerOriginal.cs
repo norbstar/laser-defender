@@ -80,10 +80,10 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
             }
         }
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         gameObject.layer = (int) layer;
 
@@ -124,7 +124,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
 
                 if (canFire)
                 {
-                    StartCoroutine(FireProjectilesCoroutine(localAngle + differentialAngle));
+                    StartCoroutine(Co_FireProjectiles(localAngle + differentialAngle));
                 }
             }
 
@@ -132,7 +132,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
         }
     }
 
-    private IEnumerator FireProjectilesCoroutine(float targetAngle)
+    private IEnumerator Co_FireProjectiles(float targetAngle)
     {
         bool firing = true;
 
@@ -250,7 +250,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
 
                 if (healthAttributes.GetHealthMetric() > 0.0f)
                 {
-                    StartCoroutine(ManifestDamage());
+                    StartCoroutine(Co_ManifestDamage());
                     delegates?.OnTurretDamagedDelegate?.Invoke(gameObject, healthAttributes);
                 }
                 else
@@ -281,7 +281,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
         }
     }
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 3; ++itr)
         {

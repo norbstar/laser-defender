@@ -123,7 +123,7 @@ public class AsteroidLayerManager : MonoBehaviour
 
     IEnumerator Start()
     {
-        yield return StartCoroutine(SpawnAsteroids());
+        yield return StartCoroutine(Co_SpawnAsteroids());
     }
 
     public GameObject[] GetZones()
@@ -148,7 +148,7 @@ public class AsteroidLayerManager : MonoBehaviour
 
     private void ResolveComponents() { }
 
-    private IEnumerator SpawnAsteroids()
+    private IEnumerator Co_SpawnAsteroids()
     {
         //spawnCount = UnityEngine.Random.Range(settings.minSpawnCount, spawnSsettingsettings.spawnCount + 1);
         spawnCount = UnityEngine.Random.Range(settings.spawnCount.min, settings.spawnCount.max + 1);
@@ -171,7 +171,7 @@ public class AsteroidLayerManager : MonoBehaviour
                     speed /= scale;
                 }
 
-                yield return StartCoroutine(SpawnAsteroid(asteroidPrefab, speed, rotation, scale));
+                yield return StartCoroutine(Co_SpawnAsteroid(asteroidPrefab, speed, rotation, scale));
                 ++activeSpawnCount;
 
                 //float delay = UnityEngine.Random.Range(Settings.minInterSpawnDelay, settings.interSpawnDelay);
@@ -185,7 +185,7 @@ public class AsteroidLayerManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnAsteroid(GameObject asteroidPrefab, float speed, float rotation, float scale)
+    private IEnumerator Co_SpawnAsteroid(GameObject asteroidPrefab, float speed, float rotation, float scale)
     {
         Journey journey = CreateJourney();
         Vector2 origin = journey.Origin;

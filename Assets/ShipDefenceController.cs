@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(HealthAttributes))]
 public class ShipDefenceController : BaseMonoBehaviour
 {
-    [SerializeField] Camera camera;
+    [SerializeField] new Camera camera;
     [SerializeField] float turnSpeed = 10.0f;
     [SerializeField] long projectilesDelayMs = 250;
 
@@ -55,7 +55,7 @@ public class ShipDefenceController : BaseMonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            StartCoroutine(FireCoroutine());
+            StartCoroutine(Co_Fire());
         }
     }
 
@@ -65,7 +65,7 @@ public class ShipDefenceController : BaseMonoBehaviour
         guiAttributes = GetComponent<GUIAttributes>() as GUIAttributes;
     }
 
-    private IEnumerator FireCoroutine()
+    private IEnumerator Co_Fire()
     {
         bool firing = true;
 

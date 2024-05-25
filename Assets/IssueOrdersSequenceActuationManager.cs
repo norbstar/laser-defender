@@ -27,7 +27,7 @@ public class IssueOrdersSequenceActuationManager : MonoBehaviour, IActuate
     {
         if (gameObject.activeSelf)
         {
-            StartCoroutine(ActuateCoroutine());
+            StartCoroutine(Co_Actuate());
         }
     }
 
@@ -40,7 +40,7 @@ public class IssueOrdersSequenceActuationManager : MonoBehaviour, IActuate
         cockpitViewUIManager = cockpitUIManager.GetCockpitViewUIManager();
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         ResolveDependencies();
 

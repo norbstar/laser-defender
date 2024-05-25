@@ -97,7 +97,7 @@ public class PlayerController : /*GUI*/MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            StartCoroutine(FireProjectilesCoroutine());
+            StartCoroutine(Co_FireProjectiles());
         }
     }
 
@@ -155,7 +155,7 @@ public class PlayerController : /*GUI*/MonoBehaviour
 
     public void EngageShip()
     {
-        StartCoroutine(EngageShipCoroutine());
+        StartCoroutine(Co_EngageShip());
     }
 
     //public IEnumerator EngageShip()
@@ -163,20 +163,20 @@ public class PlayerController : /*GUI*/MonoBehaviour
     //    yield return StartCoroutine(EngageShipCoroutine());
     //}
 
-    private IEnumerator EngageShipCoroutine()
+    private IEnumerator Co_EngageShip()
     {
-        Vector3 originPosition = transform.position;
-        Vector3 targetPosition = new Vector3(originPosition.x, 1.5f, originPosition.z);
-        float magnitude = (targetPosition - originPosition).magnitude * 0.5f;
-        float startTime = Time.time;
-        bool complete = false;
+        var originPosition = transform.position;
+        var targetPosition = new Vector3(originPosition.x, 1.5f, originPosition.z);
+        var magnitude = (targetPosition - originPosition).magnitude * 0.5f;
+        var startTime = Time.time;
+        var complete = false;
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
-            transform.position = Vector3.Lerp(originPosition, targetPosition, (float) fractionComplete);
+            var fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
+            transform.position = Vector3.Lerp(originPosition, targetPosition, fractionComplete);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -187,25 +187,25 @@ public class PlayerController : /*GUI*/MonoBehaviour
         }
     }
 
-    public IEnumerator DisengageShip()
-    {
-        yield return StartCoroutine(DisengageShipCoroutine());
-    }
+    // public IEnumerator DisengageShip()
+    // {
+    //     yield return StartCoroutine(DisengageShipCoroutine());
+    // }
 
-    IEnumerator DisengageShipCoroutine()
+    IEnumerator Co_DisengageShip()
     {
-        Vector3 originPosition = transform.position;
-        Vector3 targetPosition = new Vector3(originPosition.x, 17, originPosition.z);
-        float magnitude = (targetPosition - originPosition).magnitude * 0.5f;
-        float startTime = Time.time;
-        bool complete = false;
+        var originPosition = transform.position;
+        var targetPosition = new Vector3(originPosition.x, 17, originPosition.z);
+        var magnitude = (targetPosition - originPosition).magnitude * 0.5f;
+        var startTime = Time.time;
+        var complete = false;
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
-            transform.position = Vector3.Lerp(originPosition, targetPosition, (float) fractionComplete);
+            var fractionComplete = (Time.time - startTime) * (transitionSpeed / magnitude);
+            transform.position = Vector3.Lerp(originPosition, targetPosition, fractionComplete);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {
@@ -216,7 +216,7 @@ public class PlayerController : /*GUI*/MonoBehaviour
         }
     }
 
-    IEnumerator FireProjectilesCoroutine()
+    IEnumerator Co_FireProjectiles()
     {
         bool firing = true;
 

@@ -57,7 +57,7 @@ public class EnemySandbox : MonoBehaviour
        }
 
     //    CreateEnemy();
-       StartCoroutine(CreateEmemies(speed));
+       StartCoroutine(Co_CreateEmemies(speed));
    }
 
    private void CreateEnemy()
@@ -71,7 +71,7 @@ public class EnemySandbox : MonoBehaviour
        }
    }
 
-   IEnumerator CreateEmemies(float speed)
+   private IEnumerator Co_CreateEmemies(float speed)
    {
       for (int itr = 0; itr < waveSize; ++itr)
       {

@@ -79,10 +79,10 @@ public class AsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
             }
         }
 
-        StartCoroutine(ActuateCoroutine(startTime, targetPosition, speed, rotation));
+        StartCoroutine(Co_Actuate(startTime, targetPosition, speed, rotation));
     }
 
-    private IEnumerator ActuateCoroutine(float startTime, Vector2 targetPosition, float speed, float rotation)
+    private IEnumerator Co_Actuate(float startTime, Vector2 targetPosition, float speed, float rotation)
     {
         gameObject.layer = (int) layer;
 
@@ -95,15 +95,15 @@ public class AsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (speed * magnitude);
+            var fractionComplete = (Time.time - startTime) * (speed * magnitude);
 
             if (fractionComplete >= 0.0f)
             {
-                Vector2 position = CalculatePosition(originPosition, targetPosition, fractionComplete);
+                var position = CalculatePosition(originPosition, targetPosition, fractionComplete);
                 transform.localPosition = VectorFunctions.ToVector3(position, 0.0f);
                 transform.localRotation = CalculateRotation(rotation);
 
-                complete = (fractionComplete >= 1.0f);
+                complete = fractionComplete >= 1f;
             }
 
             if (complete)
@@ -156,7 +156,7 @@ public class AsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
 
                 if (healthAttributes.GetHealthMetric() > 0.0f)
                 {
-                    StartCoroutine(ManifestDamage());
+                    StartCoroutine(Co_ManifestDamage());
                     delegates?.OnAsteroidDamagedDelegate?.Invoke(gameObject, trigger, healthAttributes);
                 }
                 else
@@ -205,7 +205,7 @@ public class AsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
         }
     }
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 3; ++itr)
         {

@@ -93,10 +93,10 @@ public class EnemyWaveManager : GUIMonoBehaviour
 
     public void SpawnAllWaves()
     {
-        StartCoroutine(SpawnAllWavesCoroutine());
+        StartCoroutine(Co_SpawnAllWaves());
     }
 
-    private IEnumerator SpawnAllWavesCoroutine()
+    private IEnumerator Co_SpawnAllWaves()
     {
         active = true;
         waveIndex = 0;
@@ -105,7 +105,7 @@ public class EnemyWaveManager : GUIMonoBehaviour
         while (active)
         {
             waveConfig = waveConfigs[waveIndex];
-            yield return StartCoroutine(SpawnAllEmemiesInWave(waveConfig));
+            yield return StartCoroutine(Co_SpawnAllEmemiesInWave(waveConfig));
 
             waveIndex = ((waveIndex + 1) <= (waveConfigs.Length - 1)) ? waveIndex + 1 : 0;
             yield return new WaitForSeconds(timeBetweenWaves);
@@ -121,7 +121,7 @@ public class EnemyWaveManager : GUIMonoBehaviour
     //    yield return new WaitForSeconds(delay);
     //}
 
-    private IEnumerator SpawnAllEmemiesInWave(WaveConfig waveConfig/*, float delay = 0.0f*/)
+    private IEnumerator Co_SpawnAllEmemiesInWave(WaveConfig waveConfig/*, float delay = 0.0f*/)
     {
         //activeWaveConfig = waveConfig;
         ResolveDependencies(waveConfig);

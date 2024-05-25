@@ -21,7 +21,7 @@ public class Vector3SlerpDemo : MonoBehaviour
         // Note the time at the start of the animation.
         startTime = Time.time;
 
-        StartCoroutine(ITweenTest());
+        StartCoroutine(Co_ITweenTest());
     }
 
 #if (false)
@@ -54,7 +54,7 @@ public class Vector3SlerpDemo : MonoBehaviour
     }
 #endif
 
-    private IEnumerator ITweenTest()
+    private IEnumerator Co_ITweenTest()
     {
         //iTween.MoveBy(gameObject, iTween.Hash("x", 2, "easeType", "easeInOutExpo", "loopType", "pingPong", "delay", .1));
         //iTween.RotateBy(gameObject, iTween.Hash("z", -1, "easeType", "easeInOutBack", "loopType", "pingPong", "delay", .4));

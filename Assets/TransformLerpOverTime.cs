@@ -18,10 +18,10 @@ public class TransformLerpOverTime : AbstractTransformBehaviour, IActuate, IAcut
 
     public void Actuate(IConfiguration configuration)
     {
-        StartCoroutine(TransformCoroutine());
+        StartCoroutine(Co_Transform());
     }
 
-    private IEnumerator TransformCoroutine()
+    private IEnumerator Co_Transform()
     {
         transform.localPosition = originPosition;
         transform.localRotation = Quaternion.Euler(originRotation);
@@ -32,7 +32,7 @@ public class TransformLerpOverTime : AbstractTransformBehaviour, IActuate, IAcut
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) / duration;
+            var fractionComplete = (Time.time - startTime) / duration;
 
             if (position.enable)
             {
@@ -49,7 +49,7 @@ public class TransformLerpOverTime : AbstractTransformBehaviour, IActuate, IAcut
                 transform.localScale = Vector2.Lerp(originScale, scale.target, fractionComplete);
             }
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

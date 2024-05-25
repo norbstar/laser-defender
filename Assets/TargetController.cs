@@ -22,10 +22,10 @@ public class TargetController : GUIMonoBehaviour
     IEnumerator Start()
     {
         PlotPoints();
-        yield return StartCoroutine(StartJourneyCororutine());
+        yield return StartCoroutine(Co_StartJourney());
     }
 
-    private IEnumerator StartJourneyCororutine()
+    private IEnumerator Co_StartJourney()
     {
         while (true)
         {
@@ -67,7 +67,7 @@ public class TargetController : GUIMonoBehaviour
         rightUpPosition = rightPosition + leftUpVector * offset;
     }
 
-    private IEnumerator StartFixedJourneyCororutine()
+    private IEnumerator Co_StartFixedJourney()
     {
         Vector3 origin = transform.position;
         Vector3 target = origin + transform.up * 1.0f;
@@ -79,10 +79,10 @@ public class TargetController : GUIMonoBehaviour
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * speed;
+            var fractionComplete = (Time.time - startTime) * speed;
             transform.position = Vector3.Lerp(origin, target, (float)fractionComplete);
 
-            complete = (fractionComplete >= 1.0f);
+            complete = fractionComplete >= 1f;
 
             if (complete)
             {

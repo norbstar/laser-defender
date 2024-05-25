@@ -30,13 +30,13 @@ public class LevelCompleteUIManager : MonoBehaviour, IActuate
     {
         if (gameObject.activeSelf)
         {
-            StartCoroutine(ActuateCoroutine());
+            StartCoroutine(Co_Actuate());
         }
     }
 
     private void ResolveDependencies() { }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         ResolveDependencies();
 

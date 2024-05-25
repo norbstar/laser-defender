@@ -65,12 +65,12 @@ public class BossController : MonoBehaviour, IActuate
 
         turretCount = turrets.Length;
 
-        StartCoroutine(ActuateCoroutine());
+        StartCoroutine(Co_Actuate());
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
-        yield return StartCoroutine(MoveIntoPositionCoroutine());
+        yield return StartCoroutine(Co_MoveIntoPosition());
     }
 
     public Vector3 GetSpawnPoint()
@@ -78,7 +78,7 @@ public class BossController : MonoBehaviour, IActuate
         return spawnPoint;
     }
 
-    private IEnumerator MoveIntoPositionCoroutine()
+    private IEnumerator Co_MoveIntoPosition()
     {
         Vector3 originPosition = transform.position;
         Vector3 targetPosition = transform.position + ingressPoint;
@@ -88,12 +88,12 @@ public class BossController : MonoBehaviour, IActuate
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (ingressSpeed * magnitude * 5.0f);
+            var fractionComplete = (Time.time - startTime) * (ingressSpeed * magnitude * 5.0f);
 
             if (fractionComplete >= 0.0f)
             {
                 transform.position = Vector3.Lerp(originPosition, targetPosition, fractionComplete);
-                complete = (fractionComplete >= 1.0f);
+                complete = fractionComplete >= 1f;
             }
 
             if (complete)
@@ -170,7 +170,7 @@ public class BossController : MonoBehaviour, IActuate
 
     public void OnBodyDamaged(GameObject gameObject, HealthAttributes healthAttributes)
     {
-        StartCoroutine(ManifestBodyDamage());
+        StartCoroutine(Co_ManifestBodyDamage());
     }
 
     public void OnBodyDestroyed(GameObject gameObject)
@@ -203,7 +203,7 @@ public class BossController : MonoBehaviour, IActuate
         }
     }
 
-    private IEnumerator ManifestBodyDamage()
+    private IEnumerator Co_ManifestBodyDamage()
     {
         IList<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>();
 

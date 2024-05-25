@@ -35,7 +35,7 @@ public class KeyframeSequenceActuationManager : MonoBehaviour, IActuate
     {
         if (gameObject.activeSelf)
         {
-            StartCoroutine(ActuateCoroutine());
+            StartCoroutine(Co_Actuate());
         }
     }
 
@@ -50,7 +50,7 @@ public class KeyframeSequenceActuationManager : MonoBehaviour, IActuate
         this.onKeyframeDelegate = onKeyframeDelegate;
     }
 
-    private IEnumerator ActuateCoroutine()
+    private IEnumerator Co_Actuate()
     {
         ResolveDependencies();
 

@@ -133,7 +133,7 @@
     <Compile Include="Assets\EnemyWaveActuator.cs" />
     <Compile Include="Assets\UnityEditorAnimationFunctions.cs" />
     <Compile Include="Assets\GeometryTest.cs" />
-    <Compile Include="Assets\BackgroundManager.cs" />
+    <Compile Include="Assets\ColorTransitionManager.cs" />
     <Compile Include="Assets\MissileController.cs" />
     <Compile Include="Assets\DamageManager.cs" />
     <Compile Include="Assets\SpinAnimator.cs" />
@@ -208,7 +208,7 @@
     <Compile Include="Assets\Resources\Keyframe Sequences\KeyframeSequenceActuationManagerDemo.cs" />
     <Compile Include="Assets\Resources\Keyframe Sequences\KeyframeSequence.cs" />
     <Compile Include="Assets\ShowOnlyAttribute.cs" />
-    <Compile Include="Assets\ShotSpongeDetector.cs" />
+    <Compile Include="Assets\ProjectileSponge.cs" />
     <Compile Include="Assets\TextAudioPack.cs" />
     <Compile Include="Assets\MainMenuExitGameManager.cs" />
     <Compile Include="Assets\RenderOnlyAsteroidController.cs" />

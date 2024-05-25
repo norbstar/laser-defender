@@ -84,10 +84,10 @@ public class EnemyControllerOriginal : GUIMonoBehaviour
 
     public void LaunchEnemy(float startTime)
     {
-        StartCoroutine(LaunchEnemyCoroutine(startTime));
+        StartCoroutine(Co_LaunchEnemy(startTime));
     }
 
-    private IEnumerator LaunchEnemyCoroutine(float startTime)
+    private IEnumerator Co_LaunchEnemy(float startTime)
     {
         this.startTime = startTime;
         bool complete = false;
@@ -95,7 +95,7 @@ public class EnemyControllerOriginal : GUIMonoBehaviour
 
         while (!complete)
         {
-            float fractionComplete = (Time.time - startTime) * (speed * magnitude);
+            var fractionComplete = (Time.time - startTime) * (speed * magnitude);
 
             if (fractionComplete >= 0.0f)
             {
@@ -127,7 +127,7 @@ public class EnemyControllerOriginal : GUIMonoBehaviour
                     //transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle);
                 }
 
-                complete = (fractionComplete >= 1.0f);
+                complete = fractionComplete >= 1f;
             }
 
             if (complete)
@@ -347,7 +347,7 @@ public class EnemyControllerOriginal : GUIMonoBehaviour
                 if (healthAttributes.GetHealthMetric() > 0)
                 {
                     delegates?.OnEnemyDamagedDelegate?.Invoke(gameObject, waveSequence, healthAttributes);
-                    StartCoroutine(ManifestDamage());
+                    StartCoroutine(Co_ManifestDamage());
                 }
                 else
                 {
@@ -357,7 +357,7 @@ public class EnemyControllerOriginal : GUIMonoBehaviour
         }
     }
 
-    private IEnumerator ManifestDamage()
+    private IEnumerator Co_ManifestDamage()
     {
         for (int itr = 0; itr < 5; ++itr)
         {

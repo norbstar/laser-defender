@@ -11,7 +11,7 @@ public class CoroutineDemo : MonoBehaviour
     void Start()
     {
         Debug.Log("Start StartCoroutine");
-        heavyLiftingCoroutine = StartCoroutine(HeavyLiftingCoroutine());
+        heavyLiftingCoroutine = StartCoroutine(Co_HeavyLifting());
         Debug.Log("Start StartCoroutine Executing");
 
         //Debug.Log("Start Method");
@@ -29,7 +29,7 @@ public class CoroutineDemo : MonoBehaviour
         }
     }
 
-    IEnumerator HeavyLiftingCoroutine()
+    private IEnumerator Co_HeavyLifting()
     {
         isComplete = false;
         int count = 1000, loopCount = 100, itrCount = 0;

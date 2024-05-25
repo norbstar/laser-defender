@@ -59,10 +59,10 @@ public class TransformLerpWithSpeed : AbstractTransformBehaviour, IActuate, IAcu
             };
         }
 
-        StartCoroutine(TransformCoroutine());
+        StartCoroutine(Co_Transform());
     }
 
-    private IEnumerator TransformCoroutine()
+    private IEnumerator Co_Transform()
     {
         transform.localPosition = originPosition;
         transform.localRotation = Quaternion.Euler(originRotation);

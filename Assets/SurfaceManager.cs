@@ -15,37 +15,19 @@ public abstract class SurfaceManager : MonoBehaviour
     private float panelGuideOffset;
     private OnScrollSpeedUpdate onScrollSpeedUpdateDelegate;
 
-    public virtual void Awake()
-    {
-        scrollSpeed = defaultScrollSpeed = 1.0f / transform.position.z;
-    }
+    public virtual void Awake() => scrollSpeed = defaultScrollSpeed = 1.0f / transform.position.z;
 
-    public void RegisterDelegate(OnScrollSpeedUpdate onScrollSpeedUpdateDelegate)
-    {
-        this.onScrollSpeedUpdateDelegate = onScrollSpeedUpdateDelegate;
-    }
+    public void RegisterDelegate(OnScrollSpeedUpdate onScrollSpeedUpdateDelegate) => this.onScrollSpeedUpdateDelegate = onScrollSpeedUpdateDelegate;
 
-    public float GetDefaultScrollSpeed()
-    {
-        return defaultScrollSpeed;
-    }
-
-    public float GetScrollSpeed()
-    {
-        return scrollSpeed;
-    }
+    public float GetDefaultScrollSpeed() => defaultScrollSpeed;
 
     public void SetScrollSpeed(float scrollSpeed)
     {
         this.scrollSpeed = scrollSpeed;
-
         onScrollSpeedUpdateDelegate?.Invoke(scrollSpeed);
     }
 
-    public void SetPanelGuideOffset(float offset)
-    {
-        panelGuideOffset = offset;
-    }
+    public void SetPanelGuideOffset(float offset) => panelGuideOffset = offset;
 
     protected void DrawPanelGuide(Vector3 position)
     {

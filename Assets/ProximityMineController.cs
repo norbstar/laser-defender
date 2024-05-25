@@ -23,16 +23,16 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
     private TextUIManager textUIManager;
     private DamageAttributes damageAttributes;
 
-    protected override IEnumerator ActuateCoroutine()
+    protected override IEnumerator Co_Actuate()
     {
-        Debug.Log($"{name} ActuateCoroutine");
+        // Debug.Log($"{name} ActuateCoroutine");
 
         gameObject.layer = (int) layer;
 
         var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
-        StartCoroutine(DetectRadialCollidersCoroutine());
+        StartCoroutine(Co_DetectRadialColliders());
 
         while (healthAttributes.GetHealthMetric() > 0.0f)
         {
@@ -49,9 +49,9 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
         damageAttributes = GetComponent<DamageAttributes>();
     }
 
-    private IEnumerator DetectRadialCollidersCoroutine()
+    private IEnumerator Co_DetectRadialColliders()
     {
-        Debug.Log($"{name} DetectRadialCollidersCoroutine Range: {range}");
+        // Debug.Log($"{name} Co_DetectRadialColliders Range: {range}");
 
         bool autoDestruct = false;
 
@@ -65,18 +65,15 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
                 {
                     var trigger = collider.gameObject;
 
-                    Debug.Log($"{name} DetectRadialCollidersCoroutine Trigger: {trigger.name}");
+                    // Debug.Log($"{name} Co_DetectRadialColliders Trigger: {trigger.name}");
 
                     if (trigger != gameObject)
                     {
-                        // if (trigger.tag.Equals("Boundary")) continue;
+                        if (trigger.layer != (int) layer) continue;
 
-                        // if (trigger.layer != (int) layer) continue;
+                        if (!trigger.tag.Equals("Player")) continue;
 
-                        if (trigger.tag.Equals("Player"))
-                        {
-                            autoDestruct = true;
-                        }
+                        autoDestruct = true;
                     }
                 }
             }
@@ -84,14 +81,12 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
             yield return null;
         }
 
-        StartCoroutine(DestroyObjectCoroutine());
+        StartCoroutine(Co_DestroyObject());
         delegates?.OnMineDestroyedDelegate?.Invoke(gameObject);
     }
 
     private void DestroyObject()
     {
-        Debug.Log($"{name} DestroyObject");
-
         var explosion = Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity) as GameObject;
         explosion.transform.localScale = transform.localScale;
 
@@ -111,10 +106,8 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
         delegates?.OnMineDestroyedDelegate?.Invoke(gameObject);
     }
 
-    private IEnumerator DestroyObjectCoroutine()
+    private IEnumerator Co_DestroyObject()
     {
-        Debug.Log($"{name} DestroyObjectCoroutine");
-
         healthBarCanvas.GetComponent<Canvas>().enabled = false;
 
         var activationIntervalDelay = activationDelay / startAtCount;
@@ -130,8 +123,6 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
 
     protected override void OnTriggerEnter2D(Collider2D collider)
     {
-        Debug.Log($"{name} OnTriggerEnter2D");
-
         var trigger = collider.gameObject;
         var damageAttributes = trigger.GetComponent<DamageAttributes>();
 
@@ -143,7 +134,7 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
 
             if (healthAttributes.GetHealthMetric() > 0.0f)
             {
-                StartCoroutine(ManifestDamage());
+                StartCoroutine(Co_ManifestDamage());
                 delegates?.OnMineDamagedDelegate?.Invoke(gameObject, healthAttributes);
             }
             else
