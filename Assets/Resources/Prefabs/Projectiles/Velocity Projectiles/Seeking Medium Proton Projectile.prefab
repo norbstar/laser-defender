@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3527352956734640112}
   - component: {fileID: 3527352956734640127}
-  - component: {fileID: 3527352956734640126}
   - component: {fileID: 8906786062191571637}
   - component: {fileID: 8931285168238956426}
   - component: {fileID: 6227814904304831206}
   - component: {fileID: 3753899804035514842}
+  - component: {fileID: 8735826706512978561}
   m_Layer: 0
-  m_Name: Medium Proton Projectile
+  m_Name: Seeking Medium Proton Projectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,19 +89,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3527352956734640126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3527352956734640125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51a0505e203798a48a7175185dc8e278, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 20
 --- !u!82 &8906786062191571637
 AudioSource:
   m_ObjectHideFlags: 0
@@ -248,3 +235,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMetric: 4
+--- !u!114 &8735826706512978561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3527352956734640125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7dc72fd703fe545b705b77e5615ed3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 15

@@ -86,7 +86,7 @@ public class AsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
     {
         gameObject.layer = (int) layer;
 
-        int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
+        var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
         Vector2 originPosition = VectorFunctions.ToVector2(transform.position);

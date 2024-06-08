@@ -61,7 +61,7 @@ public class PropagationWaveController : MonoBehaviour, IActuate
     {
         gameObject.layer = (int) layer;
 
-        int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
+        var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
         Vector3 originScale = transform.localScale;

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9033124357675267517}
   - component: {fileID: 2996244446086011496}
   - component: {fileID: 6002218898559636527}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Exhaust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.523, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6902399790754025962}
   m_RootOrder: 1
@@ -45,10 +46,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -87,7 +90,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &9033124357675267517
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -100,6 +103,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -226,7 +230,7 @@ GameObject:
   - component: {fileID: 5396288064122816169}
   - component: {fileID: 1342015572733724268}
   - component: {fileID: 7329271314170707795}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,6 +247,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.75, y: 1.75, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6902399790754025962}
   m_RootOrder: 4
@@ -258,10 +263,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -329,7 +336,7 @@ CircleCollider2D:
   m_Radius: 0.5504371
 --- !u!95 &1342015572733724268
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -342,6 +349,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -372,7 +380,7 @@ GameObject:
   - component: {fileID: 6408440053882428768}
   - component: {fileID: 4536974221710881957}
   - component: {fileID: 5285225260472695526}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Reverse Left Thrust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,6 +397,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.33, y: 0.113000005, z: 0}
   m_LocalScale: {x: 0.75, y: 0.75, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6902399790754025962}
   m_RootOrder: 2
@@ -404,10 +413,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -446,7 +457,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &4536974221710881957
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -459,6 +470,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -573,7 +585,7 @@ GameObject:
   - component: {fileID: 6154575996327208426}
   - component: {fileID: 5841259852138264433}
   - component: {fileID: 2485955573035662035}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Dynamic Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -590,6 +602,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6862571169557558055}
   - {fileID: 557407947969642806}
@@ -611,6 +624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0307d71cba2f6634fa833890ba696d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  signature: 
   ship: {fileID: 6488698531781344527}
   exhausts:
   - {fileID: 2439406954702411103}
@@ -625,9 +639,15 @@ MonoBehaviour:
       type: 3}
     lightProton: {fileID: 2179974358676485158, guid: 1ed25d708eaa4264c8c8c9401ea5500a,
       type: 3}
+    seekingLightProton: {fileID: 2179974358676485158, guid: bede54d1cfce5fd488e07915bf1cbb45,
+      type: 3}
     mediumProton: {fileID: 3527352956734640125, guid: 49672dacd4d38b04ca4caed31a763116,
       type: 3}
+    seekingMediumProton: {fileID: 3527352956734640125, guid: c9eeb3b33ab5eef45abb7129607b6020,
+      type: 3}
     heavyProton: {fileID: 7790778190429586567, guid: 2c33ef933528c2749ac484c6c0275dbd,
+      type: 3}
+    seekingHeavyProton: {fileID: 7790778190429586567, guid: bc88eeb3d0eefd3498a319ee62bf2562,
       type: 3}
   speed: 10
   transitionSpeed: 2.5
@@ -724,7 +744,7 @@ GameObject:
   - component: {fileID: 6862571169557558055}
   - component: {fileID: 2119932038957231421}
   - component: {fileID: 4066516820575519694}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -741,6 +761,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6902399790754025962}
   m_RootOrder: 0
@@ -756,10 +777,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -798,7 +821,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &4066516820575519694
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -811,6 +834,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -827,7 +851,7 @@ GameObject:
   - component: {fileID: 6751774399971662224}
   - component: {fileID: 5170725659910146826}
   - component: {fileID: 7752621489166360255}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Reverse Right Thrust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -844,6 +868,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.33, y: 0.113, z: 0}
   m_LocalScale: {x: 0.75, y: 0.75, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6902399790754025962}
   m_RootOrder: 3
@@ -859,10 +884,12 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -901,7 +928,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &5170725659910146826
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -914,6 +941,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1

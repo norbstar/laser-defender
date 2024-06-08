@@ -5586,7 +5586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e846fa3afcbf1f84b86f5bd8b2b28127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spritePack: {fileID: 11400000, guid: f19f7905961d1ee449bf5827a28cddc2, type: 2}
+  spritePack: {fileID: 11400000, guid: b52c48ead2864c94ba490c4cc98f6f47, type: 2}
   layerPack: {fileID: 11400000, guid: 3afa0dcd301f565498649dc67bcf4732, type: 2}
 --- !u!1001 &1425347918
 PrefabInstance:

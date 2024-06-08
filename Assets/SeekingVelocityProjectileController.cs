@@ -2,17 +2,17 @@
 
 using UnityEngine;
 
-public class VelocityProjectileController : MonoBehaviour, IActuate
+public class SeekingVelocityProjectileController : MonoBehaviour, IActuate
 {
     [SerializeField] float speed = 1.0f;
 
     public class Configuration : GameplayConfiguration
     {
-        public Vector2 Direction { get; set; }
+        public GameObject Target { get; set; }
     }
 
     private new Rigidbody2D rigidbody;
-    private Vector2 direction;
+    private GameObject target;
     private RenderLayer layer;
 
     void Awake()
@@ -36,7 +36,7 @@ public class VelocityProjectileController : MonoBehaviour, IActuate
 
             if (typeof(Configuration).IsInstanceOfType(configuration))
             {
-                direction = ((Configuration) configuration).Direction;
+                target = ((Configuration) configuration).Target;
             }
         }
 
@@ -50,7 +50,7 @@ public class VelocityProjectileController : MonoBehaviour, IActuate
         var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
-        rigidbody.velocity = direction * speed;
+        // rigidbody.velocity = direction * speed;
         yield return null;
     }
 

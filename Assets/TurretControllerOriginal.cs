@@ -87,7 +87,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
     {
         gameObject.layer = (int) layer;
 
-        int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
+        var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
         while (healthAttributes.GetHealthMetric() > 0.0f)

@@ -26,7 +26,7 @@ public class LayerActuator : BaseMonoBehaviour, IActuate
     {
         gameObject.layer = (int) layer;
 
-        int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
+        var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
         yield return null;

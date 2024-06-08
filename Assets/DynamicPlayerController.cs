@@ -23,8 +23,11 @@ public class DynamicPlayerController : BaseMonoBehaviour
         public GameObject mediumBullet;
         public GameObject heavyBullet;
         public GameObject lightProton;
+        public GameObject seekingLightProton;
         public GameObject mediumProton;
+        public GameObject seekingMediumProton;
         public GameObject heavyProton;
+        public GameObject seekingHeavyProton;
     }
 
     [SerializeField] GameObject ship;
@@ -50,10 +53,10 @@ public class DynamicPlayerController : BaseMonoBehaviour
         public DynamicExhaustController ExhaustController { get; set; }
     }
 
-    public enum ProjectileMode
+    public enum ProjectileCategory
     {
-        Single,
-        Dual,
+        Guns,
+        Missiles,
         All
     }
 
@@ -66,6 +69,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
     private bool controlsActive = false;
     private Vector3 defaultPlayerPosition;
     private RenderLayer layer;
+    private ProjectileController.Mode projectileMode;
 
     public override void Awake()
     {
@@ -89,16 +93,21 @@ public class DynamicPlayerController : BaseMonoBehaviour
     {
         if (!ControlsEnabled()) return;
 
-        transform.position = CalculateKeyInputPosition();
+        transform.position = CalculatePosition();
 
         if (Input.GetButtonDown("Fire1"))
         {
-            StartCoroutine(Co_FirePrimaryProjectile());
+            StartCoroutine(Co_FireBullets());
         }
 
         if (Input.GetButtonDown("Fire2"))
         {
-            StartCoroutine(Co_FireSecondaryProjectile());
+            StartCoroutine(Co_FireMissiles());
+        }
+
+        if (Input.GetButtonDown("Fire3"))
+        {
+            SwitchMode();
         }
     }
 
@@ -184,7 +193,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
         }
     }
 
-    private IEnumerator Co_FirePrimaryProjectile()
+    private IEnumerator Co_FireBullets()
     {
         var firing = true;
 
@@ -194,7 +203,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
             if (ticks >= targetTicks)
             {
-                FireProjectiles(ProjectileMode.Single, ProjectileController.Type.MEDIUM_BULLET);
+                Fire(ProjectileCategory.Guns, ProjectileController.Type.LIGHT_BULLET);
                 targetTicks = ticks + (projectilesDelayMs * TimeSpan.TicksPerMillisecond);
             }
 
@@ -203,7 +212,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
         }
     }
 
-    private IEnumerator Co_FireSecondaryProjectile()
+    private IEnumerator Co_FireMissiles()
     {
         bool firing = true;
 
@@ -213,7 +222,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
             if (ticks >= targetTicks)
             {
-                FireProjectiles(ProjectileMode.Dual, ProjectileController.Type.HEAVY_PROTON);
+                Fire(ProjectileCategory.Missiles, projectileMode == ProjectileController.Mode.SEEKING ? ProjectileController.Type.SEEKING_HEAVY_PROTON : ProjectileController.Type.HEAVY_PROTON);
                 targetTicks = ticks + (projectilesDelayMs * TimeSpan.TicksPerMillisecond);
             }
 
@@ -222,13 +231,14 @@ public class DynamicPlayerController : BaseMonoBehaviour
         }
     }
 
-    private Vector3 CalculateKeyInputPosition()
+    private void SwitchMode() => projectileMode = projectileMode == ProjectileController.Mode.NORMAL ? ProjectileController.Mode.SEEKING : ProjectileController.Mode.NORMAL;
+
+    private Vector3 CalculatePosition()
     {
         var input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         var regulatedInput = input * Time.deltaTime * speed;
 
         animator.SetFloat("speed", input.x);
-
         SetExhaustThrust(input.y);
 
         reverseLeftTrust.SetActive(input.y < 0.0f);
@@ -271,47 +281,61 @@ public class DynamicPlayerController : BaseMonoBehaviour
         }
     }
 
-    private void FireProjectiles(ProjectileMode mode, ProjectileController.Type type)
+    private void Fire(ProjectileCategory category, ProjectileController.Type type)
     {
-        switch (mode)
+        switch (category)
         {
-            case ProjectileMode.Single:
-                SpawnPrimaryProjectile(type);
+            case ProjectileCategory.Guns:
+                FireGuns(type);
                 break;
 
-            case ProjectileMode.Dual:
-                SpawnWingProjectiles(type);
+            case ProjectileCategory.Missiles:
+                FireMissiles(type);
                 break;
 
-            case ProjectileMode.All:
-                SpawnPrimaryProjectile(type);
-                SpawnWingProjectiles(type);
+            case ProjectileCategory.All:
+                FireGuns(type);
+                FireMissiles(type);
                 break;
         }
     }
 
-    private IList<GameObject> SpawnPrimaryProjectile(ProjectileController.Type type) => new List<GameObject>{SpawnProjectileAndActuate(type, new Vector2(transform.position.x, transform.position.y + 0.8f))};
-
-    private IList<GameObject> SpawnWingProjectiles(ProjectileController.Type type)
+    private IList<GameObject> FireGuns(ProjectileController.Type type)
     {
         return new List<GameObject>{
-            SpawnProjectileAndActuate(type, new Vector2(transform.position.x - 0.5f, transform.position.y)),
-            SpawnProjectileAndActuate(type, new Vector2(transform.position.x + 0.5f, transform.position.y))
+            FireAction(type, new Vector2(transform.position.x - 0.275f, transform.position.y + 0.08f)),
+            FireAction(type, new Vector2(transform.position.x + 0.275f, transform.position.y + 0.08f)),
         };
     }
 
-    private GameObject SpawnProjectileAndActuate(ProjectileController.Type type, Vector2 position)
+    private IList<GameObject> FireMissiles(ProjectileController.Type type)
     {
-        var projectile = SpawnProjectile(type, position);
-        var velocityProjectileController = projectile.GetComponent<VelocityProjectileController>();
+        return new List<GameObject>{
+            FireAction(type, new Vector2(transform.position.x - 0.5f, transform.position.y)),
+            FireAction(type, new Vector2(transform.position.x + 0.5f, transform.position.y))
+        };
+    }
 
-        velocityProjectileController.Actuate(new VelocityProjectileController.Configuration
+    private GameObject ResolveTarget() => null;
+
+    private void ActuateProjectile(GameObject projectile)
+    {
+        if (projectile.TryGetComponent<SeekingVelocityProjectileController>(out var seekingVelocityController))
         {
-            Layer = layer,
-            Direction = new Vector2(0.0f, 1.0f)
-        });
-
-        return projectile;
+            seekingVelocityController.Actuate(new SeekingVelocityProjectileController.Configuration
+            {
+                Layer = layer,
+                Target = ResolveTarget()
+            });
+        }
+        else if (projectile.TryGetComponent<VelocityProjectileController>(out var velocityController))
+        {
+            velocityController.Actuate(new VelocityProjectileController.Configuration
+            {
+                Layer = layer,
+                Direction = new Vector2(0.0f, 1.0f)
+            });
+        }
     }
 
     private GameObject SpawnProjectile(ProjectileController.Type type, Vector2 position)
@@ -328,12 +352,20 @@ public class DynamicPlayerController : BaseMonoBehaviour
                 projectilePrefab = prefabs.lightProton;
                 break;
 
+            case ProjectileController.Type.SEEKING_LIGHT_PROTON:
+                projectilePrefab = prefabs.seekingLightProton;
+                break;
+
             case ProjectileController.Type.MEDIUM_BULLET:
                 projectilePrefab = prefabs.mediumBullet;
                 break;
 
             case ProjectileController.Type.MEDIUM_PROTON:
                 projectilePrefab = prefabs.mediumProton;
+                break;
+
+            case ProjectileController.Type.SEEKING_MEDIUM_PROTON:
+                projectilePrefab = prefabs.seekingMediumProton;
                 break;
 
             case ProjectileController.Type.HEAVY_BULLET:
@@ -343,12 +375,23 @@ public class DynamicPlayerController : BaseMonoBehaviour
             case ProjectileController.Type.HEAVY_PROTON:
                 projectilePrefab = prefabs.heavyProton;
                 break;
+
+            case ProjectileController.Type.SEEKING_HEAVY_PROTON:
+                projectilePrefab = prefabs.seekingHeavyProton;
+                break;
         }
 
         var projectile = Instantiate(projectilePrefab, new Vector3(position.x, position.y, projectilePrefab.transform.position.z), Quaternion.identity);
         projectile.name = $"{projectilePrefab.name}-{Signature}";
         projectile.layer = (int) layer;
 
+        return projectile;
+    }
+
+    private GameObject FireAction(ProjectileController.Type type, Vector2 position)
+    {
+        var projectile = SpawnProjectile(type, position);
+        ActuateProjectile(projectile);
         return projectile;
     }
 

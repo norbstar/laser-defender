@@ -9,10 +9,19 @@ public class ProjectileController : MonoBehaviour, IActuate
     {
         LIGHT_BULLET,
         LIGHT_PROTON,
+        SEEKING_LIGHT_PROTON,
         MEDIUM_BULLET,
         MEDIUM_PROTON,
+        SEEKING_MEDIUM_PROTON,
         HEAVY_BULLET,
-        HEAVY_PROTON
+        HEAVY_PROTON,
+        SEEKING_HEAVY_PROTON
+    }
+
+    public enum Mode
+    {
+        NORMAL,
+        SEEKING
     }
 
     [SerializeField] float speed = 1f;

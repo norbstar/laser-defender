@@ -47,7 +47,7 @@ public class FragmentationController : MonoBehaviour, IActuate
             particalSystem.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.x) * 0.5f;
 
             var particleSystemRenderer = particalSystem.GetComponent<ParticleSystemRenderer>() as ParticleSystemRenderer;
-            int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
+            var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
             particleSystemRenderer.sortingLayerID = sortingOrderId;
 
             Destroy(particalSystem, 1.0f);

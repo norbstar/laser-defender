@@ -81,7 +81,7 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
     {
         gameObject.layer = (int) layer;
 
-        int sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
+        var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
         
         long targetTicks = 0;
