@@ -47,7 +47,7 @@ public class BossController : MonoBehaviour, IActuate
     // Start is called before the first frame update
     void Start()
     {
-        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.GetHealthMetric());
+        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.HealthMetric);
     }
 
     //IEnumerator Start()
@@ -152,11 +152,11 @@ public class BossController : MonoBehaviour, IActuate
 
             if (damageAttributes != null)
             {
-                float damageMetric = damageAttributes.GetDamageMetric();
+                float damageMetric = damageAttributes.DamageMetric;
                 healthAttributes.SubstractHealth(damageMetric);
-                healthBarSliderUIManager.SetHealth(healthAttributes.GetHealthMetric());
+                healthBarSliderUIManager.SetHealth(healthAttributes.HealthMetric);
 
-                if (healthAttributes.GetHealthMetric() > 0.0f)
+                if (healthAttributes.HealthMetric > 0.0f)
                 {
                     OnBodyDamaged(gameObject, healthAttributes);
                 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(HealthAttributes))]
 [RequireComponent(typeof(DamageAttributes))]
-public class ProximityMineController : BaseMineController, IActuate, IModify, INotify
+public class ProximityMineController : BaseMineController, IActuate, IModify, INotify, IFocus
 {
     [Header("Mine")]
     [Range(0.1f, 10.0f)]
@@ -25,16 +25,15 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
 
     protected override IEnumerator Co_Actuate()
     {
-        // Debug.Log($"{name} ActuateCoroutine");
+        // Debug.Log($"{name} Co_Actuate");
 
-        gameObject.layer = (int) layer;
-
+        // gameObject.layer = (int) layer;        
         var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
         StartCoroutine(Co_DetectRadialColliders());
 
-        while (healthAttributes.GetHealthMetric() > 0.0f)
+        while (healthAttributes.HealthMetric > 0.0f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, transform.rotation * Quaternion.Euler(0.0f, 0.0f, 1.0f), turnSpeed * 10.0f * Time.deltaTime); ;
             yield return null;
@@ -96,7 +95,7 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
             Layer = layer,
             Range = range,
             Speed = propagationWaveSpeed,
-            DamageMetric = damageAttributes.GetDamageMetric()
+            DamageMetric = damageAttributes.DamageMetric
         });
 
         Destroy(explosion, 0.15f);
@@ -123,16 +122,18 @@ public class ProximityMineController : BaseMineController, IActuate, IModify, IN
 
     protected override void OnTriggerEnter2D(Collider2D collider)
     {
+        // Debug.Log($"{name} OnTriggerEnter2D");
+        
         var trigger = collider.gameObject;
         var damageAttributes = trigger.GetComponent<DamageAttributes>();
 
         if (damageAttributes != null)
         {
-            var damageMetric = damageAttributes.GetDamageMetric();
+            var damageMetric = damageAttributes.DamageMetric;
             healthAttributes.SubstractHealth(damageMetric);
-            healthBarSliderUIManager?.SetHealth(healthAttributes.GetHealthMetric());
+            healthBarSliderUIManager?.SetHealth(healthAttributes.HealthMetric);
 
-            if (healthAttributes.GetHealthMetric() > 0.0f)
+            if (healthAttributes.HealthMetric > 0.0f)
             {
                 StartCoroutine(Co_ManifestDamage());
                 delegates?.OnMineDamagedDelegate?.Invoke(gameObject, healthAttributes);

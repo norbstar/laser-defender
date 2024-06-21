@@ -37,7 +37,7 @@ public class CloakedMineController : MonoBehaviour
 
     IEnumerator Start()
     {
-        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.GetHealthMetric());
+        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.HealthMetric);
         
         while (true)
         {
@@ -63,11 +63,11 @@ public class CloakedMineController : MonoBehaviour
             GameObject trigger = collider.gameObject;
 
             var damageAttributes = trigger.GetComponent<DamageAttributes>() as DamageAttributes;
-            float damageMetric = damageAttributes.GetDamageMetric();
+            float damageMetric = damageAttributes.DamageMetric;
             healthAttributes.SubstractHealth(damageMetric);
-            healthBarSliderUIManager.SetHealth(healthAttributes.GetHealthMetric());
+            healthBarSliderUIManager.SetHealth(healthAttributes.HealthMetric);
 
-            if (healthAttributes.GetHealthMetric() > 0.0f)
+            if (healthAttributes.HealthMetric > 0.0f)
             {
                 StartCoroutine(Co_ManifestDamage());
                 delegates?.OnMineDamagedDelegate?.Invoke(gameObject, healthAttributes);
@@ -84,7 +84,7 @@ public class CloakedMineController : MonoBehaviour
                 {
                     Range = 2.5f,
                     Speed = 0.5f,
-                    DamageMetric = mineDamageAttributes.GetDamageMetric()
+                    DamageMetric = mineDamageAttributes.DamageMetric
                 });
 
                 Destroy(explosion, 0.15f);

@@ -19,12 +19,14 @@ public class TrackingLayerManager : MonoBehaviour
     [Header("Gizmos")]
     [SerializeField] bool showGizmos;
 
+    private int layer;
     private TrackingPointMapPack trackingPointMapPack;
     private Vector3 startPosition, lastPosition;
     private int primaryCanvasId, bufferCanvasId;
     private Color indicatorColor;
     private GameObject map;
     private SortedList<float, GameObject> actuators;
+    private ActuatorManager actuatorManager;
     private float scrollSpeed;
 
     void Awake()
@@ -32,10 +34,12 @@ public class TrackingLayerManager : MonoBehaviour
         primaryCanvasId = 0;
         bufferCanvasId = primaryCanvasId + 1;
         startPosition = transform.position;
+        actuatorManager = FindObjectOfType<ActuatorManager>(); // ActuatorManager.Instance;
     }
 
-    public void Initiate(TrackingPointMapPack trackingPointMapPack, float scrollSpeed, Color indicatorColor)
+    public void Initiate(int layer, TrackingPointMapPack trackingPointMapPack, float scrollSpeed, Color indicatorColor)
     {
+        this.layer = layer;
         this.trackingPointMapPack = trackingPointMapPack;
         this.indicatorColor = indicatorColor;
         this.scrollSpeed = scrollSpeed;
@@ -64,7 +68,6 @@ public class TrackingLayerManager : MonoBehaviour
     {
         mainIdentifier.color = indicatorColor;
         mainIdentifier.text = primaryCanvasId.ToString();
-
         bufferIdentifier.color = indicatorColor;
         bufferIdentifier.text = bufferCanvasId.ToString();
     }
@@ -117,6 +120,7 @@ public class TrackingLayerManager : MonoBehaviour
             }
 
             speedAdjustedDeltaTime += scrollSpeed * Time.deltaTime;
+            
             // Debug.Log($"Scroll Speed: {scrollSpeed} Speed Adjusted Delta Time: {speedAdjustedDeltaTime}");
 
             yield return null;
@@ -156,9 +160,13 @@ public class TrackingLayerManager : MonoBehaviour
         {
             var child = childTransform.gameObject;
             var actuation = child.GetComponent<IActuate>();
+         
+            child.layer = layer;
 
             if (actuation != null && childTransform.gameObject.activeSelf)
             {
+                // Debug.Log($"CaptureActuators Child: {child.name} Layer: {layer}");
+
                 var bounds = GeometryFunctions.GetAggregateBounds(child);
 
                 if (bounds != null)
@@ -181,21 +189,24 @@ public class TrackingLayerManager : MonoBehaviour
     {
         while (actuators.Count > 0)
         {
-            var key = actuators.Keys[0];
-            var gameObject = actuators.Values[0];
-
-            var target = 16f - key;
-            var delta = 8f + this.gameObject.transform.position.y - target;
+            var vHeight = actuators.Keys[0];
+            var actuator = actuators.Values[0];
+            var target = 16f - vHeight;
+            var delta = 8f + gameObject.transform.position.y - target;
 
             if (delta <= 0)
             {
                 actuators.RemoveAt(0);
 
-                var actuation = gameObject.GetComponent<IActuate>();
+                // Debug.Log($"Co_ActionActuators VHeight: {vHeight} Actuator: {actuator.name} Target: {target} Delta: {delta}");
 
-                if (actuation != null && gameObject.activeSelf)
+                var actuation = actuator.GetComponent<IActuate>();
+
+                if (actuation != null && actuator.activeSelf)
                 {
                     actuation.Actuate();
+                    // ActuatorManager.Add(gameObject);
+                    actuatorManager.Add(actuator);
                 }
             }
             else
@@ -211,6 +222,8 @@ public class TrackingLayerManager : MonoBehaviour
     {
         foreach (Transform childTransform in main.transform)
         {
+            // ActuatorManager.Remove(childTransform.gameObject);
+            actuatorManager.Remove(childTransform.gameObject);
             Destroy(childTransform.gameObject);
         }
 

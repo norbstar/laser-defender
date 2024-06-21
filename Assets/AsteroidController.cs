@@ -58,7 +58,7 @@ public class AsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
         ResolveComponents();
 
         //range = transform.localScale.x * 2.5f;
-        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.GetHealthMetric());
+        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.HealthMetric);
     }
 
     public void Actuate(IConfiguration configuration)
@@ -150,11 +150,11 @@ public class AsteroidController : BaseMonoBehaviour, IActuate, IModify, INotify
 
             if (damageAttributes != null)
             {
-                float damageMetric = damageAttributes.GetDamageMetric();
+                float damageMetric = damageAttributes.DamageMetric;
                 healthAttributes.SubstractHealth(damageMetric);
-                healthBarSliderUIManager?.SetHealth(healthAttributes.GetHealthMetric());
+                healthBarSliderUIManager?.SetHealth(healthAttributes.HealthMetric);
 
-                if (healthAttributes.GetHealthMetric() > 0.0f)
+                if (healthAttributes.HealthMetric > 0.0f)
                 {
                     StartCoroutine(Co_ManifestDamage());
                     delegates?.OnAsteroidDamagedDelegate?.Invoke(gameObject, trigger, healthAttributes);

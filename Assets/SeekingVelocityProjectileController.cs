@@ -50,7 +50,7 @@ public class SeekingVelocityProjectileController : MonoBehaviour, IActuate
         var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
-        // rigidbody.velocity = direction * speed;
+        rigidbody.velocity = new Vector2(0.0f, 1.0f) * speed;
         yield return null;
     }
 
@@ -63,7 +63,7 @@ public class SeekingVelocityProjectileController : MonoBehaviour, IActuate
             destroyObject = false;
         }
 
-        var baseMonoBehaviour = collider.gameObject.GetComponent<BaseMonoBehaviour>() as BaseMonoBehaviour;
+        var baseMonoBehaviour = collider.gameObject.GetComponent<BaseMonoBehaviour>();
 
         if (baseMonoBehaviour != null)
         {

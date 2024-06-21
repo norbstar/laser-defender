@@ -4,8 +4,11 @@ using UnityEngine;
 
 [RequireComponent(typeof(HealthAttributes))]
 [RequireComponent(typeof(DamageAttributes))]
-public abstract class BaseMineController : BaseMonoBehaviour, IActuate, IModify, INotify
+public abstract class BaseMineController : BaseMonoBehaviour, IActuate, IModify, INotify, IFocus
 {
+    [Header("Components")]
+    [SerializeField] GameObject focus;
+
     public delegate void OnMineDamaged(GameObject gameObject, HealthAttributes healthAttributes);
     public delegate void OnMineDestroyed(GameObject gameObject);
 
@@ -30,13 +33,11 @@ public abstract class BaseMineController : BaseMonoBehaviour, IActuate, IModify,
         ResolveComponents();
 
         range = transform.localScale.x * 2.5f;
-        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.GetHealthMetric());
+        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.HealthMetric);
     }
 
     public void Actuate(IConfiguration configuration)
     {
-        // Debug.Log($"{name} Actuate");
-
         if (configuration != null)
         {
             if (typeof(GameplayConfiguration).IsInstanceOfType(configuration))
@@ -71,4 +72,6 @@ public abstract class BaseMineController : BaseMonoBehaviour, IActuate, IModify,
     public new Defaults GetDefaults() => base.GetDefaults();
 
     public RenderLayer GetLayer() => layer;
+
+    public void ShowCue(bool show = true) => focus.SetActive(show);
 }

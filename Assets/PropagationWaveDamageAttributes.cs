@@ -15,11 +15,14 @@ public class PropagationWaveDamageAttributes : DamageAttributes
         propagationWaveController = GetComponent<PropagationWaveController>() as PropagationWaveController;
     }
 
-    public override float GetDamageMetric()
+    public override float DamageMetric
     {
-        float damageMetric = propagationWaveController.GetDamageMetric();
-        SetDamageMetric(damageMetric);
+        get
+        {
+            float damageMetric = propagationWaveController.GetDamageMetric();
+            SetDamageMetric(damageMetric);
 
-        return damageMetric;
+            return damageMetric;
+        }
     }
 }

@@ -34,10 +34,10 @@ public class VelocityProjectileController : MonoBehaviour, IActuate
                 layer = ((GameplayConfiguration) configuration).Layer;
             }
 
-            if (typeof(Configuration).IsInstanceOfType(configuration))
-            {
-                direction = ((Configuration) configuration).Direction;
-            }
+            // if (typeof(Configuration).IsInstanceOfType(configuration))
+            // {
+            //     direction = ((Configuration) configuration).Direction;
+            // }
         }
 
         StartCoroutine(Co_Actuate());
@@ -50,7 +50,7 @@ public class VelocityProjectileController : MonoBehaviour, IActuate
         var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
-        rigidbody.velocity = direction * speed;
+        rigidbody.velocity = /*direction*/ new Vector2(0.0f, 1.0f) * speed;
         yield return null;
     }
 

@@ -90,7 +90,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
         var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
-        while (healthAttributes.GetHealthMetric() > 0.0f)
+        while (healthAttributes.HealthMetric > 0.0f)
         {
             localAngle = (float) Math.Round(transform.rotation.eulerAngles.z);
             relativeAngle = MathFunctions.TrueAngle((float) Math.Round(MathFunctions.GetAngle(transform.position, target.transform.position, -90)));
@@ -244,11 +244,11 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
 
             if (damageAttributes != null)
             {
-                float damageMetric = damageAttributes.GetDamageMetric();
+                float damageMetric = damageAttributes.DamageMetric;
                 healthAttributes.SubstractHealth(damageMetric);
-                healthBarSliderUIManager.SetHealth(healthAttributes.GetHealthMetric());
+                healthBarSliderUIManager.SetHealth(healthAttributes.HealthMetric);
 
-                if (healthAttributes.GetHealthMetric() > 0.0f)
+                if (healthAttributes.HealthMetric > 0.0f)
                 {
                     StartCoroutine(Co_ManifestDamage());
                     delegates?.OnTurretDamagedDelegate?.Invoke(gameObject, healthAttributes);
@@ -266,7 +266,7 @@ public class TurretControllerOriginal : BaseMonoBehaviour, IActuate, IModify, IN
                         Layer = layer,
                         Range = 2.5f,
                         Speed = 0.5f,
-                        DamageMetric = mineDamageAttributes.GetDamageMetric()
+                        DamageMetric = mineDamageAttributes.DamageMetric
                     });
 
                     Destroy(explosion, 0.15f);

@@ -53,11 +53,11 @@ public class ShieldController : MonoBehaviour
 
             if (damageAttributes != null)
             {
-                float damageMetric = damageAttributes.GetDamageMetric();
+                float damageMetric = damageAttributes.DamageMetric;
                 healthAttributes.SubstractHealth(damageMetric);
             }
 
-            if (healthAttributes.GetHealthMetric() > 0)
+            if (healthAttributes.HealthMetric > 0)
             {
                 delegates?.OnShieldDamagedDelegate?.Invoke(healthAttributes);
                 StartCoroutine(Co_ManifestDamage());

@@ -57,7 +57,7 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
 
         ResolveComponents();
 
-        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.GetHealthMetric());
+        healthBarSliderUIManager?.SetMaxHealth(healthAttributes.HealthMetric);
         //mode = activeMode = Mode.INACTIVE;
         //mode = Mode.INACTIVE;
     }
@@ -86,7 +86,7 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
         
         long targetTicks = 0;
 
-        while (healthAttributes.GetHealthMetric() > 0.0f)
+        while (healthAttributes.HealthMetric > 0.0f)
         {
             SortedList<float, GameObject> viableTargets = IdentifyViableTargets();
             GameObject target = null;
@@ -327,11 +327,11 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
 
         if (damageAttributes != null)
         {
-            float damageMetric = damageAttributes.GetDamageMetric();
+            float damageMetric = damageAttributes.DamageMetric;
             healthAttributes.SubstractHealth(damageMetric);
-            healthBarSliderUIManager.SetHealth(healthAttributes.GetHealthMetric());
+            healthBarSliderUIManager.SetHealth(healthAttributes.HealthMetric);
 
-            if (healthAttributes.GetHealthMetric() > 0.0f)
+            if (healthAttributes.HealthMetric > 0.0f)
             {
                 StartCoroutine(Co_ManifestDamage());
                 delegates?.OnTurretDamagedDelegate?.Invoke(gameObject, healthAttributes);
@@ -349,7 +349,7 @@ public class SmartTurretController : BaseMonoBehaviour, IActuate, IModify, INoti
                     Layer = layer,
                     Range = 2.5f,
                     Speed = 0.5f,
-                    DamageMetric = mineDamageAttributes.GetDamageMetric()
+                    DamageMetric = mineDamageAttributes.DamageMetric
                 });
 
                 Destroy(explosion, 0.15f);

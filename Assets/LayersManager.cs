@@ -54,7 +54,7 @@ public class LayersManager : AbstractSceneryManager
         prefab.transform.parent = transform;
 
         trackingLayerManager = prefab.GetComponent<TrackingLayerManager>();
-        trackingLayerManager.Initiate(trackingPointMapPack, scrollSpeed, indicatorColor);
+        trackingLayerManager.Initiate(gameObject.layer, trackingPointMapPack, scrollSpeed, indicatorColor);
     }
 
     private void OnUpdateScrollSpeed(float scrollSpeed) => trackingLayerManager?.SetScrollSpeed(scrollSpeed);

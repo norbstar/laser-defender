@@ -33,11 +33,11 @@ TagManager:
   - UI
   - 
   - 
-  - Canvas Surface
-  - Background Surface
-  - Gameplay Subsurface
-  - Gameplay Surface
-  - Foreground Surface
+  - Canvas Layer
+  - Background Layer
+  - Gameplay Subsurface Layer
+  - Gameplay Layer
+  - Foreground Layer
   - 
   - 
   - 

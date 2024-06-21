@@ -321,11 +321,11 @@ public class EnemyController : MonoBehaviour, IActuate
 
                 if (damageAttributes != null)
                 {
-                    float damageMetric = damageAttributes.GetDamageMetric();
+                    float damageMetric = damageAttributes.DamageMetric;
                     healthAttributes.SubstractHealth(damageMetric);
                 }
 
-                if (healthAttributes.GetHealthMetric() > 0)
+                if (healthAttributes.HealthMetric > 0)
                 {
                     delegates?.OnEnemyDamagedDelegate?.Invoke(gameObject, waveSequence, healthAttributes);
                     StartCoroutine(Co_ManifestDamage());
@@ -362,7 +362,7 @@ public class EnemyController : MonoBehaviour, IActuate
 
     private void OnDestroyed(int waveSequence)
     {
-        if (healthAttributes.GetHealthMetric() <= 0.0f)
+        if (healthAttributes.HealthMetric <= 0.0f)
         {
             delegates.OnEnemyDestroyedDelegate?.Invoke(gameObject, waveSequence, false);
         }
