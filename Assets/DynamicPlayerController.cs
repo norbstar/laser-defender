@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -36,12 +35,12 @@ public class DynamicPlayerController : BaseMonoBehaviour
         public GameObject lightBullet;
         public GameObject mediumBullet;
         public GameObject heavyBullet;
-        public GameObject lightProton;
-        public GameObject seekingLightProton;
-        public GameObject mediumProton;
-        public GameObject seekingMediumProton;
-        public GameObject heavyProton;
-        public GameObject seekingHeavyProton;
+        public GameObject lightMissile;
+        public GameObject seekingLightMissile;
+        public GameObject mediumMissile;
+        public GameObject seekingMediumMissile;
+        public GameObject heavyMissile;
+        public GameObject seekingHeavyMissile;
     }
 
     [SerializeField] GameObject ship;
@@ -96,7 +95,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
         ResolveComponents();
         ConfigureMovementBoundaries();
 
-        layer = RenderLayer.SURFACE;
+        layer = (RenderLayer) gameObject.layer;
         inputActions = new DualInputActions();
         actuatorManager = FindObjectOfType<ActuatorManager>(); // ActuatorManager.Instance;
         targetLayerMask = LayerMask.GetMask("Gameplay Layer");
@@ -106,7 +105,6 @@ public class DynamicPlayerController : BaseMonoBehaviour
     void Start()
     {
         defaultPlayerPosition = transform.position;
-        target = null;
         EngageShip();
     }
 
@@ -273,6 +271,21 @@ public class DynamicPlayerController : BaseMonoBehaviour
         // var colliders = Physics2D.OverlapCircleAll(VectorFunctions.ToVector2(transform.position), targetRadius, targetLayerMask);
         // Debug.Log($"Update Collider Count: {colliders.Length}");
         // FilterTargetCandidates(colliders);
+
+        if (target != null && target.TryGetComponent<IFocus>(out var priorFocus))
+        {
+            priorFocus.ShowCue(false);
+        }
+
+        if (inputActions.Player.Action.IsPressed())
+        {
+            target = ResolveTarget();
+
+            if (target != null && target.TryGetComponent<IFocus>(out var focus))
+            {
+                focus.ShowCue();
+            }
+        }
     }
 
     public void RegisterDelegates(Delegates delegates) => this.delegates = delegates;
@@ -387,7 +400,9 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
             if (ticks >= targetTicks)
             {
-                var type = inputActions.Player.Action.IsPressed() ? ProjectileController.Type.SEEKING_HEAVY_PROTON : ProjectileController.Type.HEAVY_PROTON;
+                var actionPressed = inputActions.Player.Action.IsPressed();
+
+                var type = actionPressed && target != null ? ProjectileController.Type.SEEKING_HEAVY_MISSILE : ProjectileController.Type.HEAVY_MISSILE;
                 Fire(ProjectileCategory.Missiles, type);
                 targetTicks = ticks + (projectilesDelayMs * TimeSpan.TicksPerMillisecond);
             }
@@ -544,30 +559,35 @@ public class DynamicPlayerController : BaseMonoBehaviour
         //     Debug.Log($"ResolveViableTarget Position: {position}");
         // }
 
-        if (target != null && target.TryGetComponent<IFocus>(out var priorFocus))
-        {
-            priorFocus.ShowCue(false);
-        }
+        // if (target != null && target.TryGetComponent<IFocus>(out var priorFocus))
+        // {
+        //     priorFocus.ShowCue(false);
+        // }
 
         var higestThreatTargets = ResolveHighestThreatTargets();
 
-        float shortestDistance = float.MaxValue;
+        // float shortestDistance = float.MaxValue;
 
-        foreach (var target in higestThreatTargets)
+        // foreach (var target in higestThreatTargets)
+        // {
+        //     var distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+
+        //     if (distanceToTarget < shortestDistance)
+        //     {
+        //         shortestDistance = distanceToTarget;
+        //         this.target = target;
+        //     }
+        // }
+
+        if (higestThreatTargets.Count > 0)
         {
-            var distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
-
-            if (distanceToTarget < shortestDistance)
-            {
-                shortestDistance = distanceToTarget;
-                this.target = target;
-            }
+            target = higestThreatTargets[0];
         }
 
-        if (target != null && target.TryGetComponent<IFocus>(out var focus))
-        {
-            focus.ShowCue();
-        }
+        // if (target != null && target.TryGetComponent<IFocus>(out var focus))
+        // {
+        //     focus.ShowCue();
+        // }
 
         return target;
     }
@@ -576,14 +596,16 @@ public class DynamicPlayerController : BaseMonoBehaviour
     {
         if (projectile.TryGetComponent<SeekingVelocityProjectileController>(out var seekingVelocityController))
         {
+            seekingVelocityController.Signature = Signature;
             seekingVelocityController.Actuate(new SeekingVelocityProjectileController.Configuration
             {
                 Layer = layer,
-                Target = ResolveTarget()
+                Target = target
             });
         }
         else if (projectile.TryGetComponent<VelocityProjectileController>(out var velocityController))
         {
+            velocityController.Signature = Signature;
             velocityController.Actuate(new VelocityProjectileController.Configuration
             {
                 Layer = layer,
@@ -594,6 +616,7 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
     private GameObject SpawnProjectile(ProjectileController.Type type, Vector2 position)
     {
+        // Debug.Log($"SpawnProjectile TYpe: {type} Position: {position}");
         GameObject projectilePrefab = null;
 
         switch (type)
@@ -602,36 +625,36 @@ public class DynamicPlayerController : BaseMonoBehaviour
                 projectilePrefab = prefabs.lightBullet;
                 break;
 
-            case ProjectileController.Type.LIGHT_PROTON:
-                projectilePrefab = prefabs.lightProton;
+            case ProjectileController.Type.LIGHT_MISSILE:
+                projectilePrefab = prefabs.lightMissile;
                 break;
 
-            case ProjectileController.Type.SEEKING_LIGHT_PROTON:
-                projectilePrefab = prefabs.seekingLightProton;
+            case ProjectileController.Type.SEEKING_LIGHT_MISSILE:
+                projectilePrefab = prefabs.seekingLightMissile;
                 break;
 
             case ProjectileController.Type.MEDIUM_BULLET:
                 projectilePrefab = prefabs.mediumBullet;
                 break;
 
-            case ProjectileController.Type.MEDIUM_PROTON:
-                projectilePrefab = prefabs.mediumProton;
+            case ProjectileController.Type.MEDIUM_MISSILE:
+                projectilePrefab = prefabs.mediumMissile;
                 break;
 
-            case ProjectileController.Type.SEEKING_MEDIUM_PROTON:
-                projectilePrefab = prefabs.seekingMediumProton;
+            case ProjectileController.Type.SEEKING_MEDIUM_MISSILE:
+                projectilePrefab = prefabs.seekingMediumMissile;
                 break;
 
             case ProjectileController.Type.HEAVY_BULLET:
                 projectilePrefab = prefabs.heavyBullet;
                 break;
 
-            case ProjectileController.Type.HEAVY_PROTON:
-                projectilePrefab = prefabs.heavyProton;
+            case ProjectileController.Type.HEAVY_MISSILE:
+                projectilePrefab = prefabs.heavyMissile;
                 break;
 
-            case ProjectileController.Type.SEEKING_HEAVY_PROTON:
-                projectilePrefab = prefabs.seekingHeavyProton;
+            case ProjectileController.Type.SEEKING_HEAVY_MISSILE:
+                projectilePrefab = prefabs.seekingHeavyMissile;
                 break;
         }
 
@@ -655,41 +678,73 @@ public class DynamicPlayerController : BaseMonoBehaviour
 
     private void OnShipDisengagedComplete() => delegates?.OnShipDisengagedDelegate?.Invoke();
 
-    private void OnLifeLost() { }
+    private bool SharesSameSignature(GameObject obj) => obj.name.Contains(Signature);
+
+    private void OnDestroyed()
+    {
+        // RELAY THE EVENT TO A HIGHER POWER AND DEPLOY A NEW SHIP
+    }
+
+    private void ApplyDamage(DamageAttributes damageAttributes)
+    {
+        if (damageAttributes != null)
+        {
+            var damageMetric = damageAttributes.DamageMetric;
+            healthAttributes.SubstractHealth(damageMetric);
+
+            if (healthAttributes.HealthMetric > 0.0f)
+            {
+                StartCoroutine(Co_ManifestDamage());
+            }
+            else
+            {
+                OnDestroyed();
+            }
+        }
+    }
+
+    private bool SharesSameLayer(GameObject obj) => obj.layer == gameObject.layer;
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider != null)
         {
             var trigger = collider.gameObject;
+            // bool acknowledgeTrigger = false;
+            // bool destroyTrigger = false;
 
-            if (trigger.tag.Equals("Projectile"))
+            // if (trigger.tag.Equals(PROJECTILE_TAG))
+            // {
+            //     if (HasOwnership(trigger))
+            //     {
+            //         destroyTrigger = true;
+            //     }
+            // }
+
+            // if (destroyTrigger)
+            // {
+            //     Destroy(trigger);
+            //     return;
+            // }
+
+            // ApplyDamage(trigger);
+
+            // if (trigger.tag.Equals(PROJECTILE_TAG))
+            // {
+            //     acknowledgeTrigger = true;
+            // }
+
+            if (SharesSameLayer(collider.gameObject)) return;
+
+            if (trigger.TryGetComponent<DamageAttributes>(out var damageAttributes))
             {
-                if (trigger.name.Contains(Signature))
-                {
-                    // Ignore as it's signature matches that of the game object instance
-                    return;
-                }
-
-                Destroy(trigger);
+                ApplyDamage(damageAttributes);
             }
 
-            var damageAttributes = trigger.GetComponent<DamageAttributes>();
-
-            if (damageAttributes != null)
-            {
-                var damageMetric = damageAttributes.DamageMetric;
-                healthAttributes.SubstractHealth(damageMetric);
-
-                if (healthAttributes.HealthMetric > 0.0f)
-                {
-                    StartCoroutine(Co_ManifestDamage());
-                }
-                else
-                {
-                    OnLifeLost();
-                }
-            }
+            // if (/*acknowledgeTrigger && */!SharesSameSignature(trigger))
+            // {
+            //     ApplyDamage(trigger);
+            // }
         }
     }
 

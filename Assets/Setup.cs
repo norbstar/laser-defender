@@ -6,7 +6,7 @@ public class Setup : MonoBehaviour, ISetup
 
     void Awake()
     {
-        activeLayer = RenderLayer.SURFACE;
+        activeLayer = RenderLayer.GAMEPLAY;
 
         SetupHelper.SetSetupManager(this);
     }

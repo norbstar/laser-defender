@@ -2,7 +2,8 @@
 {
     CANVAS = 8,
     BACKGROUND = 9,
-    SUB_SURFACE = 10,
-    SURFACE = 11,
-    FOREGROUND = 12
+    GAMEPLAY = 10,
+    PLAYER = 11,
+    FOREGROUND = 12,
+    SUB_SURFACE = 13
 }

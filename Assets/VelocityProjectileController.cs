@@ -2,8 +2,9 @@
 
 using UnityEngine;
 
-public class VelocityProjectileController : MonoBehaviour, IActuate
+public class VelocityProjectileController : SignatureMonoBehaviour, IActuate
 {
+    [Header("Config")]
     [SerializeField] float speed = 1.0f;
 
     public class Configuration : GameplayConfiguration
@@ -12,17 +13,14 @@ public class VelocityProjectileController : MonoBehaviour, IActuate
     }
 
     private new Rigidbody2D rigidbody;
-    private Vector2 direction;
+    // private Vector2 direction;
     private RenderLayer layer;
 
-    void Awake()
+    public override void Awake()
     {
-        ResolveComponents();
-    }
+        base.Awake();
 
-    private void ResolveComponents()
-    {
-        rigidbody = GetComponent<Rigidbody2D>() as Rigidbody2D;
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     public void Actuate(IConfiguration configuration)
@@ -43,6 +41,8 @@ public class VelocityProjectileController : MonoBehaviour, IActuate
         StartCoroutine(Co_Actuate());
     }
 
+    private void ApplyVelocity() => rigidbody.velocity = /*direction*/ new Vector2(0.0f, 1.0f) * speed;
+
     private IEnumerator Co_Actuate()
     {
         gameObject.layer = (int) layer;
@@ -50,32 +50,49 @@ public class VelocityProjectileController : MonoBehaviour, IActuate
         var sortingOrderId = GameObjectFunctions.GetSortingOrderId(layer);
         GameObjectFunctions.DesignateSortingLayer(gameObject, sortingOrderId);
 
-        rigidbody.velocity = /*direction*/ new Vector2(0.0f, 1.0f) * speed;
+        ApplyVelocity();
         yield return null;
     }
 
+    private bool SharesSameLayer(GameObject obj) => obj.layer == gameObject.layer;
+
+    // private bool SharesSameTag(GameObject obj) => obj.tag.Equals(gameObject.tag);
+
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        bool destroyObject = true;
+        // bool destroyObject = true;
 
-        if (gameObject.layer != collider.gameObject.layer)
-        {
-            destroyObject = false;
-        }
+        // if (gameObject.layer != collider.gameObject.layer || collider.gameObject.tag.Equals(gameObject.tag))
+        // {
+        //     destroyObject = false;
+        // }
 
-        var baseMonoBehaviour = collider.gameObject.GetComponent<BaseMonoBehaviour>() as BaseMonoBehaviour;
+        // var baseMonoBehaviour = collider.gameObject.GetComponent<BaseMonoBehaviour>() as BaseMonoBehaviour;
 
-        if (baseMonoBehaviour != null)
-        {
-            if (gameObject.name.Contains(baseMonoBehaviour.Signature))
-            {
-                destroyObject = false;
-            }
-        }
+        // if (baseMonoBehaviour != null)
+        // {
+        //     if (gameObject.name.Contains(baseMonoBehaviour.Signature))
+        //     {
+        //         destroyObject = false;
+        //     }
+        // }
 
-        if (destroyObject)
-        {
-            Destroy(gameObject);
-        }
+        // if (SharesSameLayer(collider.gameObject)) return;
+
+        if (SharesSameSignature(collider.gameObject)) return;
+
+        Destroy(gameObject);
+
+        // bool destroyObject = false;
+
+        // if (SharesSameLayer(collider.gameObject) && !SharesSameTag(collider.gameObject))
+        // {
+        //     destroyObject = true;
+        // }
+
+        // if (destroyObject)
+        // {
+        //     Destroy(gameObject);
+        // }
     }
 }

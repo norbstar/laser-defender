@@ -19,9 +19,9 @@ public class TrackingPointMapPack : ScriptableObject
     }
 
     [SerializeField] Pack pack;
+    [SerializeField] bool loopOn;
 
-    public Pack GetPack()
-    {
-        return pack;
-    }
+    public Pack MapPack => pack;
+
+    public bool LoopOn => loopOn;
 }

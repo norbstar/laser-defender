@@ -34,7 +34,7 @@ public class ShipDefenceController : BaseMonoBehaviour
 
         ResolveComponents();
 
-        layer = RenderLayer.SURFACE;
+        layer = RenderLayer.GAMEPLAY;
     }
 
     // Update is called once per frame
@@ -117,7 +117,7 @@ public class ShipDefenceController : BaseMonoBehaviour
                 projectilePrefab = prefabs.lightBullet;
                 break;
 
-            case ProjectileController.Type.LIGHT_PROTON:
+            case ProjectileController.Type.LIGHT_MISSILE:
                 projectilePrefab = prefabs.lightProton;
                 break;
 
@@ -125,7 +125,7 @@ public class ShipDefenceController : BaseMonoBehaviour
                 projectilePrefab = prefabs.mediumBullet;
                 break;
 
-            case ProjectileController.Type.MEDIUM_PROTON:
+            case ProjectileController.Type.MEDIUM_MISSILE:
                 projectilePrefab = prefabs.mediumProton;
                 break;
 
@@ -133,7 +133,7 @@ public class ShipDefenceController : BaseMonoBehaviour
                 projectilePrefab = prefabs.heavyBullet;
                 break;
 
-            case ProjectileController.Type.HEAVY_PROTON:
+            case ProjectileController.Type.HEAVY_MISSILE:
                 projectilePrefab = prefabs.heavyProton;
                 break;
         }

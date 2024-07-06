@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9033124357675267517}
   - component: {fileID: 2996244446086011496}
   - component: {fileID: 6002218898559636527}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Exhaust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 5396288064122816169}
   - component: {fileID: 1342015572733724268}
   - component: {fileID: 7329271314170707795}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 6408440053882428768}
   - component: {fileID: 4536974221710881957}
   - component: {fileID: 5285225260472695526}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Reverse Left Thrust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -585,7 +585,7 @@ GameObject:
   - component: {fileID: 6154575996327208426}
   - component: {fileID: 5841259852138264433}
   - component: {fileID: 2485955573035662035}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Dynamic Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -744,7 +744,6 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   targetRadius: 5
-  colliders: []
   ship: {fileID: 6488698531781344527}
   exhausts:
   - {fileID: 2439406954702411103}
@@ -757,17 +756,17 @@ MonoBehaviour:
       type: 3}
     heavyBullet: {fileID: 3229605695284106717, guid: b727c12e658ee344a85981e1696eba5e,
       type: 3}
-    lightProton: {fileID: 2179974358676485158, guid: 1ed25d708eaa4264c8c8c9401ea5500a,
+    lightMissile: {fileID: 2179974358676485158, guid: 1ed25d708eaa4264c8c8c9401ea5500a,
       type: 3}
-    seekingLightProton: {fileID: 2179974358676485158, guid: bede54d1cfce5fd488e07915bf1cbb45,
+    seekingLightMissile: {fileID: 2179974358676485158, guid: bede54d1cfce5fd488e07915bf1cbb45,
       type: 3}
-    mediumProton: {fileID: 3527352956734640125, guid: 49672dacd4d38b04ca4caed31a763116,
+    mediumMissile: {fileID: 3527352956734640125, guid: 49672dacd4d38b04ca4caed31a763116,
       type: 3}
-    seekingMediumProton: {fileID: 3527352956734640125, guid: c9eeb3b33ab5eef45abb7129607b6020,
+    seekingMediumMissile: {fileID: 3527352956734640125, guid: c9eeb3b33ab5eef45abb7129607b6020,
       type: 3}
-    heavyProton: {fileID: 7790778190429586567, guid: 2c33ef933528c2749ac484c6c0275dbd,
+    heavyMissile: {fileID: 7790778190429586567, guid: 2c33ef933528c2749ac484c6c0275dbd,
       type: 3}
-    seekingHeavyProton: {fileID: 7790778190429586567, guid: bc88eeb3d0eefd3498a319ee62bf2562,
+    seekingHeavyMissile: {fileID: 7790778190429586567, guid: bc88eeb3d0eefd3498a319ee62bf2562,
       type: 3}
   speed: 10
   transitionSpeed: 2.5
@@ -864,7 +863,7 @@ GameObject:
   - component: {fileID: 6862571169557558055}
   - component: {fileID: 2119932038957231421}
   - component: {fileID: 4066516820575519694}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Ship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -969,7 +968,7 @@ GameObject:
   m_Component:
   - component: {fileID: 983518077175624343}
   - component: {fileID: 8628391289477720122}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Target Radius
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1055,7 +1054,7 @@ GameObject:
   - component: {fileID: 6751774399971662224}
   - component: {fileID: 5170725659910146826}
   - component: {fileID: 7752621489166360255}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Reverse Right Thrust
   m_TagString: Untagged
   m_Icon: {fileID: 0}

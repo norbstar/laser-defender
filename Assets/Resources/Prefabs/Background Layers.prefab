@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6997047143241865068}
-  - component: {fileID: 6997047143241865067}
-  m_Layer: 0
+  - component: {fileID: 536055024}
+  m_Layer: 11
   m_Name: Background Layers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,11 +27,12 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6997047143241865067
+--- !u!114 &536055024
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,10 +41,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6997047143241865066}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18f380ca9cbc4244da66bc5e72c8e3f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 4aa704f3a4b492748ae99bbe7a16d35f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollSpeed: 1
   asteroidLayerPrefab: {fileID: 3775341219258015458, guid: 62785edefca692c499a6b49e3d4d2be0,
     type: 3}
   trackingLayerPrefab: {fileID: 4825360706353357625, guid: dffa6a1777de4ee4782b67ad7615045c,
     type: 3}
+  indicatorColor: {r: 0.5019608, g: 0.99607843, b: 1, a: 1}

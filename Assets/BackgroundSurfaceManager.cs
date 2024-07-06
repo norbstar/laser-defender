@@ -101,9 +101,9 @@ public class BackgroundSurfaceManager : SurfaceManager, IActuate
 
     private TrackingPointMapPack.Map GetTrackingPointMap(int id)
     {
-        TrackingPointMapPack.Pack pack = trackingPointMapPack.GetPack();
+        var pack = trackingPointMapPack.MapPack;
 
-        foreach (TrackingPointMapPack.Map map in pack.maps)
+        foreach (var map in pack.maps)
         {
             if (map.id == id)
             {

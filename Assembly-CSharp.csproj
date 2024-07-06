@@ -131,6 +131,7 @@
     <Compile Include="Assets\VectorFunctions.cs" />
     <Compile Include="Assets\PathConfig.cs" />
     <Compile Include="Assets\Resources\Keyframe Sequences\Boss\BossActuator.cs" />
+    <Compile Include="Assets\ThreatLevelAttributes.cs" />
     <Compile Include="Assets\ForegroundSurfaceManager.cs" />
     <Compile Include="Assets\EnemyWaveActuator.cs" />
     <Compile Include="Assets\UnityEditorAnimationFunctions.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Assets\PlayerController.cs" />
     <Compile Include="Assets\LevelPack.cs" />
     <Compile Include="Assets\SingletonMonoBehaviour.cs" />
+    <Compile Include="Assets\IFocus.cs" />
     <Compile Include="Assets\WaveActuator.cs" />
     <Compile Include="Assets\HealthBarSliderUIManager.cs" />
     <Compile Include="Assets\EnemySandbox.cs" />
@@ -237,8 +239,11 @@
     <Compile Include="Assets\SetupHelper.cs" />
     <Compile Include="Assets\Resources\Keyframe Sequences\KeyframeSequenceConfig.cs" />
     <Compile Include="Assets\Testbed.cs" />
+    <Compile Include="Assets\Resources\Tests\BaseMoveTest.cs" />
     <Compile Include="Assets\GUIAttributes.cs" />
     <Compile Include="Assets\AbstractActivationManager.cs" />
+    <Compile Include="Assets\Resources\Tests\OverlapCircleAllTest.cs" />
+    <Compile Include="Assets\Resources\Tests\OverlapAreaAllTest.cs" />
     <Compile Include="Assets\CloudPack.cs" />
     <Compile Include="Assets\MinMaxRangeTest.cs" />
     <Compile Include="Assets\LogToJsonTest.cs" />
@@ -284,11 +289,7 @@
     <Compile Include="Assets\WaveConfig.cs" />
     <Compile Include="Assets\LayersManager.cs" />
     <Compile Include="Assets\SubMenuItemConfiguration.cs" />
-    <Compile Include="Assets\Resources\Tests\OverlapCircleAllTest.cs" />
-    <Compile Include="Assets\Resources\Tests\BaseMoveTest.cs" />
-    <Compile Include="Assets\IFocus.cs" />
-    <Compile Include="Assets\Resources\Tests\OverlapAreaAllTest.cs" />
-    <Compile Include="Assets\ThreatLevelAttributes.cs" />
+    <Compile Include="Assets\SignatureMonoBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\GreyScale.shader" />

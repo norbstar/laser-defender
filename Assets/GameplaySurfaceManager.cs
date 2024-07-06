@@ -121,7 +121,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         {
             gameplaySurfacePrefab = Instantiate(surfaceLayerPrefab, transform.position, Quaternion.identity) as GameObject;
             gameplaySurfacePrefab.transform.parent = transform;
-            gameplaySurfacePrefab.layer = (int) RenderLayer.SURFACE;
+            gameplaySurfacePrefab.layer = (int) RenderLayer.GAMEPLAY;
             gameplaySurfacePrefab.name = "Gameplay Surface Layer";
 
             //var surfaceLayerManager = gameplaySubsurfacePrefab.GetComponent<SurfaceLayerManager>() as SurfaceLayerManager;
@@ -154,9 +154,9 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
 
     private TrackingPointMapPack.Map GetTrackingPointMap(TrackingPointMapPack surfacePack, int id)
     {
-        TrackingPointMapPack.Pack pack = surfacePack.GetPack();
+        var pack = surfacePack.MapPack;
 
-        foreach (TrackingPointMapPack.Map map in pack.maps)
+        foreach (var map in pack.maps)
         {
             if (map.id == id)
             {
@@ -307,7 +307,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
     private IEnumerator Co_ActionActuators()
     {
         yield return StartCoroutine(Co_ActionActuators(RenderLayer.SUB_SURFACE, subSurfaceActuators));
-        yield return StartCoroutine(Co_ActionActuators(RenderLayer.SURFACE, surfaceActuators));
+        yield return StartCoroutine(Co_ActionActuators(RenderLayer.GAMEPLAY, surfaceActuators));
     }
 
     private IEnumerator Co_ActionActuators(RenderLayer layer, SortedList<float, GameObject> actuators)
@@ -358,7 +358,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
 
         int childLayer = gameObject.layer;
 
-        if (layer == (int) RenderLayer.SURFACE)
+        if (layer == (int) RenderLayer.GAMEPLAY)
         {
             if (childLayer == (int) RenderLayer.SUB_SURFACE)
             {
@@ -367,7 +367,7 @@ public class GameplaySurfaceManager : SurfaceManager, IActuate
         }
         else if (layer == (int) RenderLayer.SUB_SURFACE)
         {
-            if (childLayer == (int) RenderLayer.SURFACE)
+            if (childLayer == (int) RenderLayer.GAMEPLAY)
             {
                 return 1.1f;
             }

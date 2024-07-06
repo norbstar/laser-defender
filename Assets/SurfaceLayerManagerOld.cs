@@ -107,9 +107,9 @@ public class SurfaceLayerManagerOld : SurfaceManager, IActuate
 
     private TrackingPointMapPack.Map GetTrackingPointMap(TrackingPointMapPack surfacePack, int id)
     {
-        TrackingPointMapPack.Pack pack = surfacePack.GetPack();
+        var pack = surfacePack.MapPack;
 
-        foreach (TrackingPointMapPack.Map map in pack.maps)
+        foreach (var map in pack.maps)
         {
             if (map.id == id)
             {

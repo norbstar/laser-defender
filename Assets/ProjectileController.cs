@@ -8,14 +8,14 @@ public class ProjectileController : MonoBehaviour, IActuate
     public enum Type
     {
         LIGHT_BULLET,
-        LIGHT_PROTON,
-        SEEKING_LIGHT_PROTON,
+        LIGHT_MISSILE,
+        SEEKING_LIGHT_MISSILE,
         MEDIUM_BULLET,
-        MEDIUM_PROTON,
-        SEEKING_MEDIUM_PROTON,
+        MEDIUM_MISSILE,
+        SEEKING_MEDIUM_MISSILE,
         HEAVY_BULLET,
-        HEAVY_PROTON,
-        SEEKING_HEAVY_PROTON
+        HEAVY_MISSILE,
+        SEEKING_HEAVY_MISSILE
     }
 
     public enum Mode

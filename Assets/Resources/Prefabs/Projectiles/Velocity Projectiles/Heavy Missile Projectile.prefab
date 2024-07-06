@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7563035075014494880}
   - component: {fileID: 5031707839239712902}
   m_Layer: 0
-  m_Name: Heavy Proton Projectile
+  m_Name: Heavy Missile Projectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

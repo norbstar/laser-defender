@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -28,6 +29,7 @@ public class TrackingLayerManager : MonoBehaviour
     private SortedList<float, GameObject> actuators;
     private ActuatorManager actuatorManager;
     private float scrollSpeed;
+    private int highestID, lowestID;
 
     void Awake()
     {
@@ -36,6 +38,10 @@ public class TrackingLayerManager : MonoBehaviour
         startPosition = transform.position;
         actuatorManager = FindObjectOfType<ActuatorManager>(); // ActuatorManager.Instance;
     }
+
+    private int GetHighestID() => trackingPointMapPack.MapPack.maps.OrderByDescending(o => o.id).First().id;
+
+    private int GetLowestID() => trackingPointMapPack.MapPack.maps.OrderByDescending(o => o.id).Last().id;
 
     public void Initiate(int layer, TrackingPointMapPack trackingPointMapPack, float scrollSpeed, Color indicatorColor)
     {
@@ -61,8 +67,14 @@ public class TrackingLayerManager : MonoBehaviour
             }
         }
 
+        highestID = GetHighestID();
+        lowestID = GetLowestID();
         StartCoroutine(Co_Scroll());
     }
+
+    public void SetScrollSpeed(float scrollSpeed) => this.scrollSpeed = scrollSpeed;
+
+    public Vector3 GetLastPosition() => lastPosition;
 
     private void UpdateIdentifiers()
     {
@@ -71,10 +83,6 @@ public class TrackingLayerManager : MonoBehaviour
         bufferIdentifier.color = indicatorColor;
         bufferIdentifier.text = bufferCanvasId.ToString();
     }
-
-    public void SetScrollSpeed(float scrollSpeed) => this.scrollSpeed = scrollSpeed;
-
-    public Vector3 GetLastPosition() => lastPosition;
 
     private IEnumerator Co_Scroll()
     {
@@ -129,7 +137,7 @@ public class TrackingLayerManager : MonoBehaviour
 
     private TrackingPointMapPack.Map GetTrackingPointMap(int id)
     {
-        var pack = trackingPointMapPack.GetPack();
+        var pack = trackingPointMapPack.MapPack;
 
         foreach (var map in pack.maps)
         {
@@ -234,8 +242,18 @@ public class TrackingLayerManager : MonoBehaviour
             childTransform.parent = main.transform;
         }
 
-        ++primaryCanvasId;
-        bufferCanvasId = primaryCanvasId + 1;
+        // ++primaryCanvasId;
+
+        // int nextId = primaryCanvasId + 1;
+        int nextId = bufferCanvasId + 1;
+
+        if (trackingPointMapPack.LoopOn && nextId > highestID)
+        {
+            // primaryCanvasId = 0;
+            nextId = lowestID;
+        }
+
+        bufferCanvasId = nextId;
         transform.position = startPosition;
 
         StartCoroutine(Co_Scroll());

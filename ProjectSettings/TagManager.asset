@@ -35,10 +35,10 @@ TagManager:
   - 
   - Canvas Layer
   - Background Layer
-  - Gameplay Subsurface Layer
   - Gameplay Layer
+  - Player Layer
   - Foreground Layer
-  - 
+  - Sub-Surface Layer
   - 
   - 
   - 

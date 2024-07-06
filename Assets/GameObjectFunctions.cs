@@ -21,7 +21,7 @@ public class GameObjectFunctions
                 id = SortingLayer.NameToID("Gameplay Subsurface");
                 break;
 
-            case RenderLayer.SURFACE:
+            case RenderLayer.GAMEPLAY:
                 id = SortingLayer.NameToID("Gameplay Surface");
                 break;
 
